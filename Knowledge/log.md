@@ -29,3 +29,9 @@ Fichiers : Ideas/ideas_2026-07-31.md, OpenQuestions/open_questions_2026-07-31.md
 Source : https://kvcache.ai/blog/agentenv-open-sourced
 Classée dans Inspirations/agentic.md (nouvelle entrée).
 Cross-links : SynthTraces (synthetic_data.md), PI agents (agentic.md), autoarxiv (misc.md).
+
+## [2026-07-31] ingest | Graphify — dossier → graphe de connaissances
+Source : https://www.towardsdeeplearning.com/andrej-karpathy-asked-for-a-tool-48-hours-later-graphify-went-viral-10d8ead5f50e
+Page primaire rendue en JS (fetch vide, Chrome non connecté) : contenu recoupé via aitrovex + recherche web.
+Classée dans Inspirations/kb.md (nouvelle entrée).
+Cross-links : Karpathy LLM-wiki + QMD/PageFind/Airweave (kb.md), OKF (agentic.md), idée Lint frugal (Ideas/).
