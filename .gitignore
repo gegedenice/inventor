@@ -1,0 +1,25 @@
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Python / uv (projets dans Projects/)
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.env
+
+# Modèles / gros artefacts (à ne pas versionner)
+*.gguf
+*.safetensors
+*.bin
+*.parquet
+
+# Sorties temporaires
+*.log
+tmp/
