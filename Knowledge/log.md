@@ -19,3 +19,8 @@ Source : https://medium.com/google-cloud/open-knowledge-format-the-missing-layer
 Doublon de l'entrée OKF existante dans Inspirations/agentic.md (source primaire = blog Google Cloud) :
 entrée enrichie plutôt que dupliquée (description, why, 4 questions de scepticisme, cross-links concrets).
 Cross-links : Karpathy LLM-wiki (kb.md/Papers), QMD (kb.md), la base Knowledge/ elle-même comme bundle quasi-OKF.
+
+## [2026-07-31] ideas | passe toute la base
+6 idées, 9 questions, 8 signaux. Meilleure piste : Lint frugal du wiki via propositions
+atomiques (MPropositionneur), directement dogfoodable sur ce dépôt.
+Fichiers : Ideas/ideas_2026-07-31.md, OpenQuestions/open_questions_2026-07-31.md, WeakSignals/weak_signals_2026-07-31.md.

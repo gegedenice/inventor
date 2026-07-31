@@ -51,5 +51,14 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **medium_llm-rnn.md** — Memory Caching : mémoire croissante pour RNN, entre récurrence et attention pleine.
 - **medium_reading-research-papers.md** — lire les papiers de recherche à l'ère des LLM (méthode en trois passes).
 
+## Idées
+- **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
+
+## Questions ouvertes
+- **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
+
+## Signaux faibles
+- **weak_signals_2026-07-31.md** — 8 signaux (connaissance = artefact versionné, steering vs fine-tuning, propositions atomiques comme brique centrale, Pi couteau suisse, fusion runtime > merge, delta > temps réel, URL comme interface, le négatif est du signal).
+
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).
