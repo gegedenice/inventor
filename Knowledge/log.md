@@ -13,3 +13,9 @@ Ajout du skill `.skills/ingest/SKILL.md` (workflow « donne une URL, l'agent ran
 Source : https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 Entrée existante (vide) dans Inspirations/kb.md enrichie au lieu d'être dupliquée ; fulltext
 extrait dans Papers/karpathy_llm-wiki.md. Cross-links posés vers QMD, PageFind, Airweave.
+
+## [2026-07-31] ingest | OKF — analyse critique (Rahmat)
+Source : https://medium.com/google-cloud/open-knowledge-format-the-missing-layer-for-context-aware-ai-agents-3694b1c1df1c
+Doublon de l'entrée OKF existante dans Inspirations/agentic.md (source primaire = blog Google Cloud) :
+entrée enrichie plutôt que dupliquée (description, why, 4 questions de scepticisme, cross-links concrets).
+Cross-links : Karpathy LLM-wiki (kb.md/Papers), QMD (kb.md), la base Knowledge/ elle-même comme bundle quasi-OKF.

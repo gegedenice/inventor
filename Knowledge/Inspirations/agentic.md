@@ -76,13 +76,23 @@ Why is it interesting?
 
 ## OKF: Open Knowledge Format
 
+Spécification ouverte (Apache-2.0, Google Cloud Data Cloud — Sam McVeety, Amir Hormati —
+annoncée juin 2026) : le contexte métier d'une organisation représenté comme un dossier de
+fichiers Markdown à frontmatter YAML, liés comme un wiki. Un seul champ obligatoire : `type`.
+C'est un format, pas une plateforme ni un runtime.
+
 Why is it interesting?
-- Open standardized format
+- Open standardized format, sans SDK ni compte propriétaire : tout outil qui lit du texte lit un bundle OKF
+- Markdown = lisible par un humain (un·e analyste édite sans plateforme) ET parsable machine, sans scraping ni fine-tuning
+- Git-native : la connaissance reçoit PR, review, historique — « knowledge as code, not knowledge as archive »
+- Déplace la question : de « comment entraîner le modèle sur notre savoir ? » à « comment maintenir notre savoir pour que n'importe quel modèle le comprenne ? »
+- Passe du RAG (fragments récupérés) à un agent qui *hérite* d'une compréhension : relations, propriété, historique — pas seulement des chunks
 
 ### Resources
 
 - https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing?hl=en
 - POC: https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf
+- Analyse critique (R. Rahmat, Google Cloud Community, 2026-07): https://medium.com/google-cloud/open-knowledge-format-the-missing-layer-for-context-aware-ai-agents-3694b1c1df1c
 
 ### Takeaway
 
@@ -94,11 +104,17 @@ The value is practical: inspectable knowledge, version control, review, reuse an
 
 - Metadata in OKF in replacement of API or dump?
 - Graph in OKF format better for agent than complicated graph, SparQL, Shacl.. queries?
+- Fraîcheur : qui possède `weekly_active_users.md` après une réorg ? Les fichiers ne se mettent pas à jour seuls (le vrai test est la gouvernance, pas le format)
+- Autorité : si deux équipes publient des bundles contradictoires sur la même métrique, lequel l'agent croit-il ?
+- Passage à l'échelle : quelques centaines de fichiers = un wiki ; quelques millions = un problème de data engineering sans outillage mûr
+- Adoption hors Google : devient-il un standard multi-éditeur seulement si d'autres *produisent* au format, pas seulement consomment ?
 
 ### Random Connections
 
-- Karpathy LLM-wiki
-- QMD - Query Markup Documents
+- Karpathy LLM-wiki (cf. kb.md → `Papers/karpathy_llm-wiki.md`) : l'article cite le « LLM wiki » de Karpathy comme précurseur informel qu'OKF nomme et spécifie
+- QMD dans kb.md : moteur de recherche local sur markdown — brique de *consommation* plausible d'un bundle OKF
+- Cette base `Knowledge/` est elle-même un bundle quasi-OKF (markdown + frontmatter, `index.md`, `log.md`) → le repo Inventor comme dogfooding d'OKF
+- Le pattern `AGENTS.md` (cité dans l'article aux côtés des vaults Obsidian) : l'`AGENTS.md` d'Inventor en est une instance
 
 ---
 
