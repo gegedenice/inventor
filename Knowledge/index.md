@@ -52,4 +52,4 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **medium_reading-research-papers.md** — lire les papiers de recherche à l'ère des LLM (méthode en trois passes).
 
 ## Dossiers produits par l'agent
-- **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **Resources/** — vides pour l'instant, remplis par les passes de synthèse.
+- **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

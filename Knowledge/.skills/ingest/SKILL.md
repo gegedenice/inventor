@@ -91,7 +91,9 @@ En cas de doute : Inspiration.
 | rien de ce qui précède | `misc.md` |
 
 Préférer un fichier existant. Créer `Inspirations/<theme>.md` (titre `# <Theme>`) seulement
-si un vrai nouveau thème émerge.
+si un vrai nouveau thème émerge — et dans ce cas, ajouter aussi sa rubrique
+(`### <theme>.md — <domaine>`) dans `index.md`. Les fichiers thématiques ne sont pas figés :
+l'agent peut en créer de nouveaux quand la taxonomie l'exige.
 
 ### 4. Vérifier les doublons AVANT d'écrire
 
