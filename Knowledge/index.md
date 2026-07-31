@@ -14,6 +14,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Colab CLI** — délégation complète du fine-tuning à un agent sur Colab T4 depuis un seul prompt.
 - **Flue** — framework TypeScript bâti sur le harness minimal Pi.
 - **PI agents** — harnais d'agent minimal et atomique (pi-coding-agent, pi-agent-core, pi-ai).
+- **AgentENV** — environnement d'exécution microVM (Firecracker) pour l'Agentic RL à grande échelle : snapshots incrémentaux, forks copy-on-write, réutilisation mémoire.
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).

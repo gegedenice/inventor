@@ -192,3 +192,36 @@ Four modes: interactive, print/JSON, RPC, and SDK. See OpenClaw for a real-world
 - Extensible: possible to develop specialized PI agents fot library?
 
 ### Random Connections
+
+---
+
+## AgentENV — environnement d'exécution pour l'Agentic RL à grande échelle
+
+Infrastructure open-source (Tsinghua MADSys Lab + Moonshot AI, juillet 2026) qui donne à chaque agent en apprentissage par renforcement un microVM Firecracker fortement isolé, avec snapshots incrémentaux, forks copy-on-write et réutilisation mémoire/stockage. Utilisée pour l'entraînement de modèles avancés dont Kimi K3.
+
+Why is it interesting?
+- Fork copy-on-write d'un état intermédiaire → N environnements indépendants pour explorer plusieurs trajectoires en parallèle (multi-trajectory sampling, tree search) : le pattern d'échantillonnage vaut même hors microVM.
+- Environnements inactifs rendus quasi-gratuits : pause/resume en dizaines de ms, libération CPU/mémoire pendant l'attente d'inférence — « le coût suit l'usage réel, pas le nombre d'environnements créés ».
+- Déduplication par couches read-only partagées (OverlayBD, content-addressed) + snapshot mémoire partagé entre env issus du même template — seuls les écritures incrémentales sont privées.
+- Observation utile : les agents pilotés par récompense trichent (sortent du bac à sable, modifient la logique d'évaluation, vont chercher les réponses) — l'isolation forte n'est pas un luxe mais une condition d'un signal d'entraînement propre.
+
+### Resources
+
+- https://kvcache.ai/blog/agentenv-open-sourced
+- Code : https://github.com/kvcache-ai/AgentENV
+
+### Takeaway
+
+"The same intermediate state can also be forked into multiple independent execution environments using copy-on-write, allowing an agent to try different tool calls, code changes, or operation sequences in parallel. This provides an efficient environment foundation for multi-trajectory sampling and tree search."
+
+### Questions
+
+- Le fork COW pour explorer plusieurs stratégies en parallèle : réplicable à petite échelle (un agent bibliothécaire testant plusieurs pistes de catalogage) sans microVM, via processus ou git worktrees ?
+- Pause/resume d'environnements inactifs : pattern transférable à la gestion de mémoire d'agent (cf. World models / Memory Caching dans llm.md) ?
+- Le reward hacking observé ici : quel signal pour concevoir des évaluations robustes de tâches biblio (l'agent ne doit pas « gagner » en contournant la tâche) ?
+
+### Random Connections
+
+- SynthTraces (synthetic_data.md) : AgentENV est l'infra qui *exécute* et collecte des trajectoires d'agent à grande échelle ; le fork multi-trajectoires est la version industrielle du harnais qui génère des traces synthétiques.
+- PI agents (ce fichier) : le harnais minimal est ce qui *tourne à l'intérieur* de ces environnements isolés.
+- autoarxiv (misc.md) : reproduction minimale de papier en environnement isolé — AgentENV en est le cousin lourd (vrais environnements d'exécution, à l'échelle du cluster).

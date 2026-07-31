@@ -24,3 +24,8 @@ Cross-links : Karpathy LLM-wiki (kb.md/Papers), QMD (kb.md), la base Knowledge/ 
 6 idées, 9 questions, 8 signaux. Meilleure piste : Lint frugal du wiki via propositions
 atomiques (MPropositionneur), directement dogfoodable sur ce dépôt.
 Fichiers : Ideas/ideas_2026-07-31.md, OpenQuestions/open_questions_2026-07-31.md, WeakSignals/weak_signals_2026-07-31.md.
+
+## [2026-07-31] ingest | AgentENV — environnement d'exécution pour Agentic RL
+Source : https://kvcache.ai/blog/agentenv-open-sourced
+Classée dans Inspirations/agentic.md (nouvelle entrée).
+Cross-links : SynthTraces (synthetic_data.md), PI agents (agentic.md), autoarxiv (misc.md).
