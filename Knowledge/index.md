@@ -36,6 +36,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.
 - **Reading Research Papers in the age of LLMs** — techniques de lecture augmentée → fulltext `Papers/medium_reading-research-papers.md`.
+- **OCR de 30 000 papiers par un agent** — pipeline OCR de masse (PDF→Markdown) piloté par Codex : modèle OCR ouvert (Chandra-OCR-2) choisi via leaderboard, HF Jobs serverless + hf-mount/Buckets, ~850 $ vs API ; transposable à l'OCR d'un fonds patrimonial.
 
 ### llm.md — pré-entraînement / fine-tuning / architecture
 - **VLM trained without image encoder** — VLM sans encodeur d'image (embeddings gérés côté décodeur).

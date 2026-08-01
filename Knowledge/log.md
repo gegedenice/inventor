@@ -111,3 +111,8 @@ Cross-links : Orca/OpenSpace/PI (interface d'agents), PRINCE (approbation humain
 Source : https://promptcartography.com/blog/design-schemas-have-arrived.html
 Classée dans Inspirations/dataviz.md (nouvelle entrée).
 Cross-links : DeckGL (dataviz.md), OKF (agentic.md), SkillOpt/OpenSpace (skills-as-artifacts), Steering (llm.md/Papers).
+
+## [2026-08-01] ingest | OCR de 30 000 papiers par un agent (Codex + HF Jobs + hf-mount)
+Source : https://huggingface.co/blog/nielsr/ocr-papers-jobs
+Classée dans Inspirations/library.md (nouvelle entrée).
+Cross-links : HuggingFace ecosystem (llm.md), idée AirLLM×HF-buckets (Ideas/2026-08-01), autoarxiv (misc.md), Colibri/AirLLM (llm.md).
