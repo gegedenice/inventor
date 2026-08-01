@@ -106,3 +106,8 @@ Cross-links : idée URL-swap (Ideas/2026-07-31), AgentENV/Orca (agentic.md), Col
 Source : https://github.com/andrewyng/openworker
 Classée dans Inspirations/agentic.md (nouvelle entrée).
 Cross-links : Orca/OpenSpace/PI (interface d'agents), PRINCE (approbation humaine), aisuite↔pi-ai, question "interface ultime" (OpenQuestions passe 3).
+
+## [2026-08-01] ingest | Prompt Cartography — Design Schemas
+Source : https://promptcartography.com/blog/design-schemas-have-arrived.html
+Classée dans Inspirations/dataviz.md (nouvelle entrée).
+Cross-links : DeckGL (dataviz.md), OKF (agentic.md), SkillOpt/OpenSpace (skills-as-artifacts), Steering (llm.md/Papers).

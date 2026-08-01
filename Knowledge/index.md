@@ -23,6 +23,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).
+- **Prompt Cartography — Design Schemas** — chartes de style de carte réutilisables (Markdown/JSON) comme « style brief » pour piloter des agents cartographes ; artefact portable façon OKF/skill.
 
 ### kb.md — bases de connaissances, recherche, RAG
 - **PageFind** — moteur de recherche statique sur fichiers HTML.
