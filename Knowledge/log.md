@@ -60,3 +60,9 @@ Cross-links : VLM sans encodeur + MPropositionneur (llm.md), Deja + curseur reca
 
 ## [2026-08-01] chore | ajout manuel de ressources (utilisateur)
 Enrichissement de la ressource Shadowbroker dans Inspirations/misc.md (entrée OSINT platforms existante).
+
+## [2026-08-01] ingest | AirLLM — inférence couche par couche (Kimi K3 sur GPU 4 Go)
+Source : https://ai.gopubby.com/unbelievable-run-kimi-k3-2-8-trillion-parameters-on-a-single-4gb-gpu-23590e7a16c2
+Page primaire rendue en JS (fetch vide, Chrome non connecté) : technique recoupée via README AirLLM + recherche.
+Classée dans Inspirations/llm.md (nouvelle entrée).
+Cross-links : HF moonbot + HF ecosystem/hf-mount (stockage), Inkling-Small MoE (llm-training.md), Memory Caching (Papers/).

@@ -38,6 +38,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **SLM pre-training pipeline** — synthèse complète du pré-entraînement SLM, incl. données synthétiques.
 - **SLM extraction de propositions atomiques** — MPropositionneur-V2 (0.6B distillé), définition formelle des propositions atomiques.
 - **HuggingFace ecosystem** — inférence/fine-tuning distant + gestion agentique via `hf` cli.
+- **AirLLM** — inférence couche par couche (charger/calculer/libérer) : 70B sur 4 Go, 405B sur 8 Go, sans quantization ; goulot d'E/S disque. Ex. Kimi K3 (2.8T) sur un GPU 4 Go.
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.

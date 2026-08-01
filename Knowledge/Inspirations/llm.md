@@ -112,3 +112,36 @@ Why is it interesting?
 ### Random Connections
 
 ---
+
+## AirLLM — inférence couche par couche (modèle géant sur GPU minuscule)
+
+AirLLM exécute un très grand transformer en le découpant en couches : charger une couche depuis le disque, calculer, garder l'activation, libérer la couche, passer à la suivante — sans quantization, distillation ni pruning (70B sur 4 Go, 405B sur 8 Go). L'article gopubby l'applique à Kimi K3 (2.8T paramètres) sur un seul GPU 4 Go.
+
+Why is it interesting?
+- Renverse l'hypothèse « faire tenir tout le modèle en VRAM » → « faire tenir une seule couche à la fois » : un transformer est une pile séquentielle, une couche suffit pour traiter un token. Pic VRAM réduit de >95% sans perte de fidélité.
+- Transforme le goulot mémoire en goulot d'**E/S disque** : chaque forward relit tout le modèle depuis le disque → 5–30× plus lent selon la vitesse disque. Compromis assumé : latence contre capacité.
+- Détails réutilisables : shards de couches sauvés séparément (`layer_shards_saving_path`), *prefetching* qui recouvre chargement et calcul, `delete_original` pour économiser le disque, compression block-wise (poids seuls) pour ~3× de gain.
+- Frugalité radicale : servir un modèle frontière sur du matériel de récupération (souveraineté, coût, hors-ligne) — argument fort en bibliothèque.
+
+### Resources
+
+- https://ai.gopubby.com/unbelievable-run-kimi-k3-2-8-trillion-parameters-on-a-single-4gb-gpu-23590e7a16c2 (article Kimi K3, page rendue en JS)
+- Repo AirLLM : https://github.com/lyogavin/airllm
+- Explainers : https://explainx.ai/blog/airllm-run-70b-llm-4gb-gpu-inference-2026
+
+### Takeaway
+
+"AirLLM optimizes inference memory usage, allowing 70B large language models to run inference on a single 4GB GPU card without quantization, distillation and pruning. And you can run 405B Llama3.1 on 8GB vram now."
+
+### Questions
+
+- Idée utilisateur : pointer `layer_shards_saving_path` vers un stockage objet distant (HF buckets / hf-mount) → séparer stockage (illimité, partagé, versionné) et compute (n'importe quel petit nœud) ? Le prefetch masque-t-il la latence réseau ?
+- Pour un MoE (Kimi K3, Inkling-Small) : ne streamer que les experts réellement routés par token plutôt que toutes les couches — l'E/S s'effondre-t-elle ?
+- Même bascule « un à la fois » appliquée au KV-cache long contexte (cf. Memory Caching, medium_llm-rnn.md) plutôt qu'aux poids ?
+
+### Random Connections
+
+- HuggingFace moonbot (agentic.md) et HuggingFace ecosystem + hf-mount (ce fichier) : brique de stockage pour l'idée « shards de couches en HF buckets ».
+- Inkling-Small MoE (llm-training.md) : le streaming sélectif d'experts est le mariage naturel MoE × AirLLM.
+- Memory Caching RNN (Papers/medium_llm-rnn.md) : streamer le KV-cache comme AirLLM streame les couches.
+- Idée « fusion de logits » (Ideas/ideas_2026-07-31.md) : AirLLM rend plausible de charger séquentiellement plusieurs modèles sur un même petit GPU.
