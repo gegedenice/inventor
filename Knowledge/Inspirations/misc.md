@@ -2,12 +2,18 @@
 
 ## autoarxiv
 
-Turn any paper into running code (https://arxiv.org/abs/2606.25996 -> https://autoarxiv.org/abs/2606.25996), Just swap arxiv → autoarxiv in the paper url.
+Turn any paper into running code (https://arxiv.org/abs/2606.25996 -> https://autoarxiv.org/abs/2606.25996), Just swap arxiv → autoarxiv in the paper url. Outil d'alphaXiv, dans l'écosystème OpenResearch (agents de recherche gérés).
 
 Why is it interesting?
 - the principle of replacing just a part of an url to activate something else
+- reproductibilité en un changement d'URL : de « un week-end de debug » à une repro *minimale* (petit modèle, moins d'étapes, 1 GPU au lieu d'un cluster), live et loggée, avec estimation du coût d'une repro complète.
 
 ### Resources
+
+- alphaXiv : https://www.alphaxiv.org/
+- autoarxiv : https://autoarxiv.org/
+- Écosystème OpenResearch (managed research agents) : https://openresearch.sh/
+- Source (post X, Akshay Pachaar) : https://x.com/akshay_pachaar/status/2068672842733109327
 
 ### Takeaway
 
@@ -19,7 +25,15 @@ A lot of research code dies in setup before anyone verifies a single number. Thi
 
 ### Questions
 
+- Repro minimale automatique : la transposer à la vérification de claims bibliométriques/patrimoniaux (rejouer sur nos données une méthode décrite dans un article) ?
+- La convention « URL-swap → agent » : la généraliser pour router une notice / un DOI vers un agent d'enrichissement (cf. idée URL-swap du 2026-07-31) ?
+
 ### Random Connections
+
+- Idée « URL-swap : chaque permalien devient une porte d'entrée d'agent » (Ideas/ideas_2026-07-31.md) : autoarxiv en est le cas fondateur.
+- AgentENV / Orca (agentic.md) : autoarxiv = repro isolée à l'échelle d'un papier ; AgentENV industrialise l'exécution, Orca met des essais en concurrence.
+- Colibri / AirLLM (llm.md) : « repro minimale = petit modèle, 1 GPU » rejoint la frugalité d'inférence.
+- claim-delta-radar : vérifier si un claim tient = brique de veille sur la validité des résultats.
 
 ---
 

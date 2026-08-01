@@ -96,3 +96,8 @@ Cross-links : Steering (llm.md/Papers) + idée vecteurs-de-steering-comme-skills
 Source : https://github.com/HKUDS/OpenSpace
 Classée dans Inspirations/agentic.md (nouvelle entrée).
 Cross-links : SkillOpt (agentic.md, complémentaire), Karpathy LLM-wiki (kb.md), Markets of agents/PI packages, Smart Tool RAG↔QMD (kb.md).
+
+## [2026-08-01] ingest | autoarxiv (post LinkedIn) — doublon, entrée enrichie
+Source : https://x.com/akshay_pachaar/status/2068672842733109327 (repris en post LinkedIn)
+Doublon de l'entrée existante Inspirations/misc.md#autoarxiv : enrichie (provider alphaXiv, écosystème OpenResearch, Resources, Questions, Random Connections). Takeaway inchangé.
+Cross-links : idée URL-swap (Ideas/2026-07-31), AgentENV/Orca (agentic.md), Colibri/AirLLM (llm.md).
