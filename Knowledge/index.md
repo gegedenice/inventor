@@ -25,6 +25,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Karpathy LLM-wiki** — patron du wiki markdown persistant maintenu par l'agent → fulltext `Papers/karpathy_llm-wiki.md`.
 - **QMD** — moteur de recherche local sur markdown (BM25 + vecteur + re-rank LLM).
 - **Graphify** — slash-command qui transforme un dossier (code, docs, images) en graphe de connaissances interrogeable, sans vector DB (Leiden sur la topologie) ; implémente le patron Karpathy en multimodal.
+- **Deja** — prédicteur de commandes ZSH sans IA : 4 signaux (flou, fréquence×récence, répertoire courant, probabilité d'enchaînement) fondus en un score ; modèle de pertinence contextuelle frugal.
 
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.

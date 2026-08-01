@@ -123,3 +123,34 @@ Why is it interesting?
 - OKF (agentic.md) : Graphify sort un wiki markdown + `index.md` navigable par agent — un producteur possible de bundles quasi-OKF.
 - Idée « Lint frugal » (Ideas/ideas_2026-07-31.md) : les god nodes et connexions inattendues de Graphify sont une autre voie vers le health-check du wiki.
 - Hook `PreToolUse` (lit `GRAPH_REPORT.md` avant chaque Glob/Grep) : rejoint le principe AGENTS.md « lire l'index d'abord ».
+---
+
+## Deja — prédiction de commande sans IA (4 signaux fondus)
+
+Prédicteur de commandes ZSH (remplace zsh-autosuggestions) qui devine la prochaine commande **sans aucune IA**, par pure algorithmie : quatre signaux fondus en un score unique — correspondance floue, fréquence combinée à la récence (demi-vie 1 semaine), affinité avec le répertoire courant, probabilité d'enchaînement. Acceptation à la flèche droite. MIT, zsh, macOS/Linux.
+
+Why is it interesting?
+- Pertinence sans modèle ni embeddings : 4 features simples + une somme pondérée suffisent pour une prédiction locale à coût nul. Renverse « il faut un LLM pour l'autocomplétion ».
+- Le contexte comme feature de premier plan : le *répertoire courant* conditionne la suggestion — le lieu/l'état pèse autant que l'historique.
+- Probabilité d'enchaînement (ex. `make test` après `make build`) = modèle de Markov d'ordre 1 sur les séquences d'actions, ultra-léger.
+- Le flou est un curseur exposé à l'utilisateur (tight ≤1 / smart ≤4 / loose ≤8), pas un hyperparamètre caché : la tolérance recall/precision est mise dans la main de l'usager.
+
+### Resources
+
+- https://korben.info/deja-terminal-predictif.html
+- Repo : https://github.com/Giammarco-Ferranti/deja
+
+### Takeaway
+
+"Les quatre signaux, correspondance floue, fréquence combinée à la récence avec une demi-vie d'une semaine, affinité avec le répertoire courant et probabilité d'enchaînement, sont fondus dans un score unique."
+
+### Questions
+
+- Transposable à l'autocomplétion de notices (UNIMARC/EAD) : zone courante + historique du catalogueur + probabilité d'enchaînement de champs comme features, sans IA ?
+- Le curseur de flou (tight/smart/loose) : utile pour une recherche bibliographique tolérante aux fautes de frappe / translittérations, réglable à la volée ?
+
+### Random Connections
+
+- QMD / PageFind (ce fichier) : recherche locale ; Deja ajoute la dimension prédiction/ranking contextuel sans embeddings.
+- Graphify (ce fichier) : « la topologie EST la similarité » ; Deja « des features simples fondues en un score » — même famille « pertinence sans vector DB ».
+- Idée « Lint frugal » / MPropositionneur (Ideas/ideas_2026-07-31.md, llm.md) : même esprit « features simples > LLM » sur des tâches structurées.

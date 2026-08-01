@@ -35,3 +35,8 @@ Source : https://www.towardsdeeplearning.com/andrej-karpathy-asked-for-a-tool-48
 Page primaire rendue en JS (fetch vide, Chrome non connecté) : contenu recoupé via aitrovex + recherche web.
 Classée dans Inspirations/kb.md (nouvelle entrée).
 Cross-links : Karpathy LLM-wiki + QMD/PageFind/Airweave (kb.md), OKF (agentic.md), idée Lint frugal (Ideas/).
+
+## [2026-08-01] ingest | Deja — prédiction de commande sans IA
+Source : https://korben.info/deja-terminal-predictif.html
+Classée dans Inspirations/kb.md (nouvelle entrée).
+Cross-links : QMD/PageFind/Graphify (kb.md), idée Lint frugal (Ideas/).
