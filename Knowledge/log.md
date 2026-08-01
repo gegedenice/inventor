@@ -76,3 +76,8 @@ Source : https://githubdaily.medium.com/my-experience-migrating-from-cmux-to-orc
 Article member-only (intro seule) : faits sur Orca recoupés via repo stablyai/orca + recherche.
 Classée dans Inspirations/agentic.md (nouvelle entrée).
 Cross-links : AgentENV (fan-out/isolation), idée COW-fork via git worktrees (Ideas/2026-07-31), PRINCE, PI agents.
+
+## [2026-08-01] ideas | passe 3 (déclencheur Orca)
+2 idées, 3 questions, 3 signaux (append dans les fichiers 2026-08-01). Meilleure piste :
+répliquer la logique fan-out/comparer/fusionner d'Orca dans une UI « à cartes » non-terminal pour tâches biblio.
+Question de fond retenue : l'interface IA « ultime » = cockpit d'agents parallèles adapté aux workflows documentaires ?

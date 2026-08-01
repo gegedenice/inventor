@@ -30,3 +30,14 @@ Ciblée « pertinence sans IA » (déclencheur : Deja). Chaque question reliée 
   et donc quel gain d'E/S réel pour le streaming sélectif ? → idée MoE×AirLLM.
 - **Frugalité assumée en bibliothèque** : servir un modèle frontière sur matériel de récupération
   (hors-ligne, souverain) est-il un argument décisif pour les établissements ? → llm.md AirLLM.
+
+## Addendum passe 3 (Orca / interface IA)
+
+- **L'interface IA « ultime » pour bibliothèques/recherche/gouvernance** : est-ce un *cockpit d'agents
+  parallèles* (à la Orca) adapté aux workflows documentaires — poser une tâche, voir plusieurs agents
+  travailler isolément, comparer, valider — plutôt qu'un chatbot linéaire ? Quelles primitives (notice,
+  fonds, corpus, tableau de bord de pilotage) remplacent « fichier/worktree/PR » ? → agentic.md Orca.
+- **Unité d'isolement hors-dev** : git worktree marche pour du code ; quel est l'équivalent pour une
+  tâche biblio (brouillon de notice versionné ? bac à sable de métadonnées ?) → Orca, AgentENV.
+- **Coût de la mise en concurrence** : à partir de quand le bénéfice qualité du fan-out N-agents
+  justifie-t-il le coût ×N en bibliothèque (budget, énergie) ? → idées passe 3.
