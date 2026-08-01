@@ -262,3 +262,38 @@ Why is it interesting?
 - OKF (ce fichier) / Karpathy LLM-wiki (kb.md) : le « context engineering » rejoint « maintenir un savoir que le modèle comprend » ; les citations vers le doc source = la couche raw immuable.
 - Idées « RAG sans embeddings » et « autocomplétion sans IA » (Ideas/ideas_2026-08-01.md) : PRINCE est le contre-exemple *lourd* (OpenSearch vectoriel, multi-agents) — utile pour cadrer quand la frugalité suffit vs quand le harnais complet se justifie (domaine régulé).
 - Section NER/annotation de PRINCE : améliore la qualité des données en amont du RAG — rejoint MPropositionneur / claim-delta (llm.md).
+
+---
+
+## Orca — cockpit d'agents parallèles (fan-out puis « pick the winner »)
+
+Orca (Stably AI, YC W22, open-source) est un « ADE » (Agent Development Environment) : une application desktop/mobile qui orchestre une flotte d'agents de code en parallèle, chacun isolé dans son propre git worktree, puis laisse comparer les résultats côte à côte et fusionner le meilleur. Supporte 30+ agents (Claude Code, Codex, Grok, Pi…) avec l'abonnement de l'utilisateur. ~31k étoiles en 4 mois.
+
+Why is it interesting?
+- Le pattern clé : *fan-out* d'un même prompt vers N agents en worktrees isolés → comparaison côte à côte → merge du gagnant. Vérification par mise en concurrence, pas par un seul essai.
+- Orca ne remplace pas les agents : c'est une couche d'orchestration (isolation, monitoring, review, merge). Sépare « le cerveau » (les agents) de « la salle de contrôle » (Orca).
+- L'orchestration sort du terminal : compagnon mobile, contrôle à distance (voix, téléphone), revues de dépôt planifiées.
+- Git worktree comme isolation légère (vs microVM d'AgentENV) — exactement la piste « COW fork à petite échelle via git worktrees » notée le 2026-07-31.
+
+### Resources
+
+- https://githubdaily.medium.com/my-experience-migrating-from-cmux-to-orca-a-powerful-tool-for-multi-agent-parallel-verification-37e662b8c2c5 (récit de migration, member-only)
+- Repo : https://github.com/stablyai/orca
+- Product Hunt : https://www.producthunt.com/products/orca-5
+
+### Takeaway
+
+"Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop, mobile and VPS."
+
+### Questions
+
+- Le terminal n'est pas une interface pour bibliothécaires — peut-on répliquer la *logique* d'Orca (fan-out → comparer → garder le meilleur) dans une UI grand public (cartes, pas de shell) pour des tâches biblio (catalogage, enrichissement, rédaction de réponses) ?
+- Question plus large : à quoi ressemble l'« interface IA ultime » pour bibliothécaires / chercheurs / gouvernance universitaire — un cockpit d'agents parallèles adapté aux workflows documentaires ?
+- La mise en concurrence de plusieurs agents comme mécanisme de qualité : transposable à un contrôle de notices (N agents, garder le consensus, signaler les désaccords) ?
+
+### Random Connections
+
+- AgentENV (ce fichier) : même « fan-out puis choisir » ; Orca l'isole par git worktree (léger, desktop), AgentENV par microVM copy-on-write (lourd, cluster).
+- Idée « COW fork à petite échelle via git worktrees » (Ideas/ideas_2026-07-31.md) : Orca est cette idée productisée.
+- PRINCE (ce fichier) : la « Reflection » interne y vérifie une trajectoire ; Orca externalise la vérification en mettant des agents en concurrence + revue humaine.
+- PI agents (ce fichier) : Orca sait exécuter Pi parmi ses 30+ agents.

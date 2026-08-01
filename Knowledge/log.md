@@ -70,3 +70,9 @@ Cross-links : HF moonbot + HF ecosystem/hf-mount (stockage), Inkling-Small MoE (
 ## [2026-08-01] ideas | passe 2 (déclencheur AirLLM / Kimi K3)
 3 idées, 3 questions, 2 signaux (append dans les fichiers 2026-08-01). Meilleure piste (idée utilisateur) :
 inférence AirLLM avec shards de couches en HF buckets/hf-mount — découpler stockage et compute.
+
+## [2026-08-01] ingest | Orca — cockpit d'agents parallèles (fan-out / pick the winner)
+Source : https://githubdaily.medium.com/my-experience-migrating-from-cmux-to-orca-a-powerful-tool-for-multi-agent-parallel-verification-37e662b8c2c5
+Article member-only (intro seule) : faits sur Orca recoupés via repo stablyai/orca + recherche.
+Classée dans Inspirations/agentic.md (nouvelle entrée).
+Cross-links : AgentENV (fan-out/isolation), idée COW-fork via git worktrees (Ideas/2026-07-31), PRINCE, PI agents.
