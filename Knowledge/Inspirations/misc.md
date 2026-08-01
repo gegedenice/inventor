@@ -36,6 +36,9 @@ Why is it interesting?
 ![screenshot](img/crucix_live.png)
 - Shadowbroker: https://github.com/bigbodycobain/shadowbroker
 - Flowsint https://www.flowsint.io/: knowledge graph from connected OSINT tools
+- Shadowbroker https://github.com/bigbodycobain/shadowbroker: Shadowbroker pulls 60+ live intelligence feeds onto one map, then lets an AI agent work all of it through a single channel instead of wiring up each feed separately.
+  The agent reads every layer and runs the lookups itself. The risky queries stay on the server, so your browser never holds the keys or reaches outside APIs directly.
+  Self-hosted OSINT dashboard that aggregates 60+ live intelligence feeds onto one map, with a signed agent command channel over the same recon backends. 
 
 ### Takeaway
 
