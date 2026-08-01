@@ -50,3 +50,13 @@ Fichiers : Ideas/ideas_2026-08-01.md, OpenQuestions/open_questions_2026-08-01.md
 Source : https://martinfowler.com/articles/reliable-llm-bayer.html
 Classée dans Inspirations/agentic.md (entrée-pointeur) + fulltext Papers/martinfowler_reliable-agentic-ai.md.
 Cross-links : AgentENV + OKF (agentic.md), Karpathy LLM-wiki (kb.md), idées RAG-sans-embeddings/autocomplétion (Ideas/2026-08-01).
+
+## [2026-08-01] ingest | Inkling-Small (Thinking Machines) + ré-indexation
+Source : https://thinkingmachines.ai/news/inkling-small/
+Complète l'entrée-stub ajoutée à la main dans Inspirations/llm-training.md (nouveau fichier thématique).
+Ré-indexation : ajout de la rubrique llm-training.md (Inkling-Small, LLM from scratch) dans index.md ;
+vérif de la couverture de tout index.md vs les fichiers Inspirations/Papers (à jour).
+Cross-links : VLM sans encodeur + MPropositionneur (llm.md), Deja + curseur recall/precision (kb.md, Ideas/), dataviz radar.
+
+## [2026-08-01] chore | ajout manuel de ressources (utilisateur)
+Enrichissement de la ressource Shadowbroker dans Inspirations/misc.md (entrée OSINT platforms existante).
