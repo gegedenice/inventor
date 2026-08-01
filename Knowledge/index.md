@@ -40,6 +40,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **SLM extraction de propositions atomiques** — MPropositionneur-V2 (0.6B distillé), définition formelle des propositions atomiques.
 - **HuggingFace ecosystem** — inférence/fine-tuning distant + gestion agentique via `hf` cli.
 - **AirLLM** — inférence couche par couche (charger/calculer/libérer) : 70B sur 4 Go, 405B sur 8 Go, sans quantization ; goulot d'E/S disque. Ex. Kimi K3 (2.8T) sur un GPU 4 Go.
+- **Colibri** — runtime MoE en C pur (zéro dép.) : streame les experts *routés* depuis le disque (« JIT pour les poids »), GLM-5.2 744B sur ~25 Go RAM, CPU-only viable ; dashboard Atlas 3-D des experts par affinité de routage mesurée.
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.

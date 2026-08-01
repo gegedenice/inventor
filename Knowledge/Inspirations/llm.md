@@ -145,3 +145,39 @@ Why is it interesting?
 - Inkling-Small MoE (llm-training.md) : le streaming sélectif d'experts est le mariage naturel MoE × AirLLM.
 - Memory Caching RNN (Papers/medium_llm-rnn.md) : streamer le KV-cache comme AirLLM streame les couches.
 - Idée « fusion de logits » (Ideas/ideas_2026-07-31.md) : AirLLM rend plausible de charger séquentiellement plusieurs modèles sur un même petit GPU.
+
+---
+
+## Colibri — runtime MoE frugal : experts streamés du disque (« JIT pour les poids »)
+
+Moteur en C pur, zéro dépendance (Apache-2.0, ~20k étoiles) qui fait tourner GLM-5.2 (744B MoE) sur une machine grand public à ~25 Go de RAM en streamant les experts depuis le disque. Traite VRAM / RAM / NVMe comme une seule hiérarchie mémoire ; ne charge que les ~40B paramètres actifs par token (~11B changent d'un token à l'autre).
+
+Why is it interesting?
+- Va plus loin qu'AirLLM : ne streame pas *toutes* les couches mais seulement les **experts routés** (sparsité MoE) — c'est exactement l'idée « MoE × AirLLM » de la passe 2, réalisée et mesurée.
+- « JIT pour les poids » : les paramètres ne sont pas un état résident mais des *données mises en scène* (VRAM/RAM/NVMe) quand le routeur prouve qu'on en a besoin ; un cache d'apprentissage épingle les experts chauds → le moteur s'accélère à l'usage.
+- Placement ≠ précision : le placement ne décide que la *vitesse* ; les décisions du routeur et la précision des poids sont identiques que l'expert réponde depuis la VRAM ou le disque. Prefetch un layer en avance (routing 71,6 % prévisible).
+- CPU-only viable : pur C, pas de GPU requis (128 Go CPU ~1,8 tok/s ; 25 Go ~0,05–0,1 tok/s à froid). Argument frugalité/souveraineté : « tenir » un modèle frontière sur du matériel possédé, pas le louer derrière une API.
+- Dashboard « Atlas / Brain » : 19 456 experts en cortex vivant ; galaxie 3-D où la position = affinité de routage *mesurée*, pas un embedding appris (13 260 experts caractérisés, 1 041 spécialistes répliqués groupés par sujet : poésie, droit, chinois, SQL…).
+
+### Resources
+
+- https://github.com/JustVugg/colibri
+- Site + dashboard : https://justvugg.github.io/colibri
+- Container GLM-5.2 int4 (HF) : https://huggingface.co/mastouri/GLM-5.2-colibri-int4-g64-with-int8-mtp
+
+### Takeaway
+
+"Think of the core algorithm as a JIT, but for weights. (…) parameters are not resident state to be held, they are data to be staged across a heterogeneous storage hierarchy (VRAM / RAM / NVMe), exactly when the router proves they are needed."
+
+### Questions
+
+- Déploiement CPU-only en bibliothèque : le débit (~0,05–1,8 tok/s selon la RAM) suffit-il pour des tâches batch/asynchrones (enrichissement de notices la nuit) sur matériel possédé, sans GPU ni API ?
+- Le dashboard Atlas (carte par affinité de routage *mesurée*, pas embedding) : transposable pour cartographier un fonds documentaire ou le *comportement* d'un agent bibliothécaire (quels outils/« experts » s'activent sur quels sujets) ?
+- Le cache d'apprentissage qui épingle les experts chauds selon *votre* usage : transférable à un préchargement adaptatif de ressources documentaires (collections chaudes) ?
+
+### Random Connections
+
+- AirLLM (ce fichier) : Colibri est la version MoE-aware et mesurée du streaming disque — il réalise l'idée « MoE × AirLLM » (Ideas/ideas_2026-08-01, passe 2).
+- Inkling-Small (llm-training.md) / Kimi K3 (agentic.md) : MoE creux — cibles naturelles du staging d'experts.
+- Dataviz DeckGL (dataviz.md) : l'Atlas 3-D est un réseau sémantique de comportement *mesuré* — même famille « carte haute densité ».
+- Graphify (kb.md) : « position = affinité mesurée, pas embedding appris » ↔ « la topologie du graphe EST la similarité ».

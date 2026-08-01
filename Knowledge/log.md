@@ -81,3 +81,8 @@ Cross-links : AgentENV (fan-out/isolation), idée COW-fork via git worktrees (Id
 2 idées, 3 questions, 3 signaux (append dans les fichiers 2026-08-01). Meilleure piste :
 répliquer la logique fan-out/comparer/fusionner d'Orca dans une UI « à cartes » non-terminal pour tâches biblio.
 Question de fond retenue : l'interface IA « ultime » = cockpit d'agents parallèles adapté aux workflows documentaires ?
+
+## [2026-08-01] ingest | Colibri — runtime MoE frugal (experts streamés du disque)
+Source : https://github.com/JustVugg/colibri
+Classée dans Inspirations/llm.md (nouvelle entrée).
+Cross-links : AirLLM + idée MoE×AirLLM (Ideas/2026-08-01 passe 2), Inkling-Small/Kimi K3 (MoE), DeckGL (dataviz.md), Graphify (kb.md).
