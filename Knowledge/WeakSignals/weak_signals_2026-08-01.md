@@ -21,3 +21,12 @@ Déclencheur : Deja. Format : `- <signal> — <d'où il vient> — <pourquoi sur
 - **Frugalité assumée comme position** — « aucune IA, pure algorithmie » revendiqué. Surveiller :
   contre-tendance à l'IA-partout ; argument fort en bibliothèque (souveraineté, coût, explicabilité,
   RGPD) qui rejoint le steering (contrôle léger) et le pré-entraînement SLM (petits modèles).
+
+## Addendum passe 2 (AirLLM / Kimi K3)
+
+- **« Un à la fois » comme motif transversal** — AirLLM (couches), Memory Caching (segments de KV),
+  AgentENV (environnements pausés/repris). Surveiller : la même bascule « fit one at a time » se
+  répète à toutes les échelles (poids, contexte, environnement) — un principe d'ingénierie frugale.
+- **Découplage stockage/compute** — hf-mount + `layer_shards_saving_path` + HF buckets. Surveiller :
+  tendance à traiter les poids comme une donnée distante streamée, pas un blob local — rapproche
+  l'inférence LLM de l'architecture « données Parquet distantes » d'OpenAlex (library.md).

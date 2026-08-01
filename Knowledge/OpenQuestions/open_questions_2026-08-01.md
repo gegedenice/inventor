@@ -21,3 +21,12 @@ Ciblée « pertinence sans IA » (déclencheur : Deja). Chaque question reliée 
 - **Récence en bibliothèque** : la demi-vie d'une semaine de Deja est adaptée à un shell ; quelle
   demi-vie pour un catalogue (saisonnalité des acquisitions, campagnes de rétroconversion) ? →
   `kb.md` Deja.
+
+## Addendum passe 2 (AirLLM / Kimi K3)
+
+- **Prefetch vs latence réseau** : le recouvrement chargement/calcul d'AirLLM suffit-il à rendre
+  l'inférence sur shards distants (HF buckets) utilisable, au moins en batch ? → idée AirLLM×HF-buckets.
+- **Sparsité de routage MoE** : quel taux d'experts activés par token sur Kimi K3 / Inkling-Small,
+  et donc quel gain d'E/S réel pour le streaming sélectif ? → idée MoE×AirLLM.
+- **Frugalité assumée en bibliothèque** : servir un modèle frontière sur matériel de récupération
+  (hors-ligne, souverain) est-il un argument décisif pour les établissements ? → llm.md AirLLM.

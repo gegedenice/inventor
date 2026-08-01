@@ -63,7 +63,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
-- **ideas_2026-08-01.md** — passe ciblée « pertinence sans IA » (déclencheur Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision pour les autorités).
+- **ideas_2026-08-01.md** — passe 1 « pertinence sans IA » (Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision). Passe 2 « frugalité inférence » (AirLLM/Kimi K3) : 3 idées (shards de couches en HF buckets, MoE×AirLLM streaming sélectif, KV-cache streamé).
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).

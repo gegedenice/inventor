@@ -66,3 +66,7 @@ Source : https://ai.gopubby.com/unbelievable-run-kimi-k3-2-8-trillion-parameters
 Page primaire rendue en JS (fetch vide, Chrome non connecté) : technique recoupée via README AirLLM + recherche.
 Classée dans Inspirations/llm.md (nouvelle entrée).
 Cross-links : HF moonbot + HF ecosystem/hf-mount (stockage), Inkling-Small MoE (llm-training.md), Memory Caching (Papers/).
+
+## [2026-08-01] ideas | passe 2 (déclencheur AirLLM / Kimi K3)
+3 idées, 3 questions, 2 signaux (append dans les fichiers 2026-08-01). Meilleure piste (idée utilisateur) :
+inférence AirLLM avec shards de couches en HF buckets/hf-mount — découpler stockage et compute.
