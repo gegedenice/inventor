@@ -297,3 +297,38 @@ Why is it interesting?
 - Idée « COW fork à petite échelle via git worktrees » (Ideas/ideas_2026-07-31.md) : Orca est cette idée productisée.
 - PRINCE (ce fichier) : la « Reflection » interne y vérifie une trajectoire ; Orca externalise la vérification en mettant des agents en concurrence + revue humaine.
 - PI agents (ce fichier) : Orca sait exécuter Pi parmi ses 30+ agents.
+
+---
+
+## SkillOpt — entraîner le skill (le texte), pas les poids
+
+Optimiseur « text-space » de Microsoft (MIT, ~13k étoiles, arXiv 2605.23904) qui traite un *document de skill* en langage naturel comme l'état entraînable d'un agent LLM *gelé* : il l'améliore avec la discipline d'un optimiseur de deep learning (epochs, mini-batch, learning rate, portes de validation), sans jamais toucher aux poids. Livrable : un `best_skill.md` compact (300–2000 tokens) déployé tel quel sur le modèle inchangé.
+
+Why is it interesting?
+- Renverse « améliorer un agent = fine-tuner les poids » → « optimiser le *document de skill* avec rigueur ». Le savoir-faire reste en langage naturel : inspectable, versionnable, gouvernable.
+- Anti-régression rare pour du prompt-engineering : edits bornés add/delete/replace produits par un modèle-optimiseur, acceptés *seulement* s'ils améliorent strictement un score de validation held-out ; buffer d'edits rejetés + update lent/méta par epoch.
+- `best_skill.md` = artefact déployable qui tourne sur le modèle inchangé, **zéro appel d'inférence supplémentaire** au déploiement ; les skills transfèrent entre tailles de modèles et entre harnais (Codex ↔ Claude Code).
+- **SkillOpt-Sleep** : auto-évolution nocturne hors-ligne (récolte → mine → rejoue → consolide derrière une porte de validation) — l'esprit « Lint/consolidation » d'un wiki d'agent, discipliné.
+
+### Resources
+
+- https://github.com/microsoft/SkillOpt
+- Paper (arXiv) : https://arxiv.org/abs/2605.23904
+- Project page : https://microsoft.github.io/SkillOpt/
+
+### Takeaway
+
+"Train agent skills like you train neural networks — with epochs, (mini-)batchsize, learning rates, and validation gates — but without touching model weights."
+
+### Questions
+
+- Entraîner un `skill.md` de catalogage / référence (UNIMARC, RAMEAU, réponse de service public) avec une porte de validation sur un jeu de notices étalon, puis le figer et le déployer — sans fine-tuning ?
+- La porte de validation held-out (n'accepter un edit que s'il améliore le score) : à appliquer à nos propres skills Inventor (ingest, ideas) et à `AGENTS.md` pour éviter les régressions ?
+- SkillOpt-Sleep (consolidation nocturne) : le brancher sur `Knowledge/` pour faire évoluer skills + wiki la nuit (rejoint l'idée « Lint frugal ») ?
+
+### Random Connections
+
+- Steering (llm.md → `Papers/iaetbibliotheques_steering.md`) : deux voies « contrôler sans fine-tuner » — steering = arithmétique de vecteurs d'activation, SkillOpt = optimisation d'un document texte. L'idée « vecteurs de steering comme compétences » (Ideas/ideas_2026-07-31.md) est la version *vecteur* de la même intuition ; SkillOpt en est la version *texte*.
+- Karpathy LLM-wiki (kb.md) : SkillOpt-Sleep « harvest → consolidate behind a validation gate » = le Lint/consolidation du wiki, outillé.
+- OKF (ce fichier) : un `best_skill.md` versionné et gouverné est un artefact quasi-OKF (markdown déployable, inspectable).
+- PI packages / Orca / OpenClaw (ce fichier) : SkillOpt fournit des intégrations de harnais — skill entraîné puis déployé dans l'agent.

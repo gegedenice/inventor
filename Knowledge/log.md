@@ -86,3 +86,8 @@ Question de fond retenue : l'interface IA « ultime » = cockpit d'agents parall
 Source : https://github.com/JustVugg/colibri
 Classée dans Inspirations/llm.md (nouvelle entrée).
 Cross-links : AirLLM + idée MoE×AirLLM (Ideas/2026-08-01 passe 2), Inkling-Small/Kimi K3 (MoE), DeckGL (dataviz.md), Graphify (kb.md).
+
+## [2026-08-01] ingest | SkillOpt — entraîner le skill (texte), pas les poids
+Source : https://github.com/microsoft/SkillOpt
+Classée dans Inspirations/agentic.md (nouvelle entrée).
+Cross-links : Steering (llm.md/Papers) + idée vecteurs-de-steering-comme-skills (Ideas/2026-07-31), Karpathy LLM-wiki (kb.md), OKF (agentic.md).

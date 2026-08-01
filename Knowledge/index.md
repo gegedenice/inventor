@@ -17,6 +17,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **AgentENV** — environnement d'exécution microVM (Firecracker) pour l'Agentic RL à grande échelle : snapshots incrémentaux, forks copy-on-write, réutilisation mémoire.
 - **PRINCE (Bayer × Thoughtworks)** — étude de cas d'un agentic RAG + Text-to-SQL fiable en production sur des décennies de PDF précliniques ; context engineering + harness engineering, citations granulaires. → fulltext `Papers/martinfowler_reliable-agentic-ai.md`
 - **Orca** — ADE (cockpit) d'agents de code parallèles : fan-out d'un prompt vers N agents isolés en git worktrees, puis comparer et fusionner le meilleur ; 30+ agents, desktop/mobile/VPS.
+- **SkillOpt** — entraîne un *document de skill* (best_skill.md) pour un agent gelé avec la discipline d'un optimiseur (epochs, LR, portes de validation), sans toucher aux poids ; SkillOpt-Sleep pour l'auto-évolution nocturne.
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).
