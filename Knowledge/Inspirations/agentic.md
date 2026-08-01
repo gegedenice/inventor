@@ -225,3 +225,40 @@ Why is it interesting?
 - SynthTraces (synthetic_data.md) : AgentENV est l'infra qui *exécute* et collecte des trajectoires d'agent à grande échelle ; le fork multi-trajectoires est la version industrielle du harnais qui génère des traces synthétiques.
 - PI agents (ce fichier) : le harnais minimal est ce qui *tourne à l'intérieur* de ces environnements isolés.
 - autoarxiv (misc.md) : reproduction minimale de papier en environnement isolé — AgentENV en est le cousin lourd (vrais environnements d'exécution, à l'échelle du cluster).
+
+---
+
+## PRINCE — agentic RAG fiable en production (Bayer × Thoughtworks)
+
+Étude de cas Martin Fowler : un assistant de recherche agentique (RAG + Text-to-SQL) qui interroge des décennies de rapports d'études précliniques (PDF souvent scannés) chez Bayer. Relu sous deux angles : *context engineering* (ce que chaque agent voit, et ne voit pas) et *harness engineering* (l'échafaudage autour du modèle : orchestration LangGraph, reprise, observabilité, revue humaine).
+
+Why is it interesting?
+- Trajectoire **Search → Ask → Do** : des mots-clés/filtres au « ask » (RAG) puis au « do » (multi-agents rédigeant des documents réglementaires). Feuille de route transposable à un portail patrimonial / SIGB.
+- **Context discipline** : des fenêtres plus grandes n'ont PAS supprimé le besoin de trier ; chaque étape reçoit un contexte distinct (planning / retrieval / evidence / synthesis) pour limiter la pollution de contexte et rester évaluable.
+- **Fiabilité par le harnais, pas par le modèle** : persistance d'état (reprise au nœud échoué, pas de redémarrage complet), retries multi-niveaux, fallback inter-fournisseurs, agents nourris du contexte de l'erreur.
+- **Confiance par citations granulaires** : survol d'une phrase → source + numéro de page + citation exacte du rapport ; les étapes intermédiaires (requêtes, outils) sont affichées. Exactement l'exigence de traçabilité d'une bibliothèque.
+- Étape **Think & Plan** (process reflection) : évalue si la *trajectoire* progresse vers le but, distincte de la validation des *données* (Reflection agent) — améliore nettement la sélection d'outils quand ils se multiplient.
+- **Recherche hiérarchique** : passage d'un Researcher monolithique à des sous-agents par domaine (chacun ses outils, schémas, sources d'autorité) pour éviter les fuites inter-domaines.
+
+### Resources
+
+- https://martinfowler.com/articles/reliable-llm-bayer.html
+- fulltext in @../Papers/martinfowler_reliable-agentic-ai.md
+- Paper académique (Frontiers in AI) : https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2025.1636809/full
+
+### Takeaway
+
+"production-ready agentic AI is not only about better models or better prompts. Reliability comes from engineering both the context the model sees and the harness within which the model acts."
+
+### Questions
+
+- Text-to-SQL sur métadonnées structurées + RAG sur le PDF « gold standard » quand la métadonnée est lacunaire : patron directement applicable à un catalogue (notice incomplète) + document numérisé faisant foi ?
+- Les citations granulaires (source + page + extrait exact) sont-elles réplicables frugalement sur un corpus patrimonial pour garantir la vérifiabilité d'une réponse ?
+- « Context discipline » côté agent = pendant de « features simples > tout mettre dans le prompt » (cf. Deja, kb.md) ?
+
+### Random Connections
+
+- AgentENV (ce fichier) : PRINCE réclame états persistants + reprises ; AgentENV industrialise ce cycle état → exécution → snapshot → reprise (COW forks pour trajectoires alternatives).
+- OKF (ce fichier) / Karpathy LLM-wiki (kb.md) : le « context engineering » rejoint « maintenir un savoir que le modèle comprend » ; les citations vers le doc source = la couche raw immuable.
+- Idées « RAG sans embeddings » et « autocomplétion sans IA » (Ideas/ideas_2026-08-01.md) : PRINCE est le contre-exemple *lourd* (OpenSearch vectoriel, multi-agents) — utile pour cadrer quand la frugalité suffit vs quand le harnais complet se justifie (domaine régulé).
+- Section NER/annotation de PRINCE : améliore la qualité des données en amont du RAG — rejoint MPropositionneur / claim-delta (llm.md).

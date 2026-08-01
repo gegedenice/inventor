@@ -45,3 +45,8 @@ Cross-links : QMD/PageFind/Graphify (kb.md), idée Lint frugal (Ideas/).
 3 idées, 5 questions, 5 signaux. Meilleure piste : autocomplétion de notices UNIMARC/EAD par
 score fondu (4 signaux Deja) sans IA, calibré sur l'historique local du catalogue.
 Fichiers : Ideas/ideas_2026-08-01.md, OpenQuestions/open_questions_2026-08-01.md, WeakSignals/weak_signals_2026-08-01.md.
+
+## [2026-08-01] ingest | PRINCE — agentic RAG fiable en production (Bayer × Thoughtworks)
+Source : https://martinfowler.com/articles/reliable-llm-bayer.html
+Classée dans Inspirations/agentic.md (entrée-pointeur) + fulltext Papers/martinfowler_reliable-agentic-ai.md.
+Cross-links : AgentENV + OKF (agentic.md), Karpathy LLM-wiki (kb.md), idées RAG-sans-embeddings/autocomplétion (Ideas/2026-08-01).

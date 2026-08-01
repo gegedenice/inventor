@@ -15,6 +15,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Flue** — framework TypeScript bâti sur le harness minimal Pi.
 - **PI agents** — harnais d'agent minimal et atomique (pi-coding-agent, pi-agent-core, pi-ai).
 - **AgentENV** — environnement d'exécution microVM (Firecracker) pour l'Agentic RL à grande échelle : snapshots incrémentaux, forks copy-on-write, réutilisation mémoire.
+- **PRINCE (Bayer × Thoughtworks)** — étude de cas d'un agentic RAG + Text-to-SQL fiable en production sur des décennies de PDF précliniques ; context engineering + harness engineering, citations granulaires. → fulltext `Papers/martinfowler_reliable-agentic-ai.md`
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).
@@ -53,6 +54,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **medium_fused-tiny-local-llms.md** — fusion active au niveau des logits de 3 petits LLM locaux.
 - **medium_llm-rnn.md** — Memory Caching : mémoire croissante pour RNN, entre récurrence et attention pleine.
 - **medium_reading-research-papers.md** — lire les papiers de recherche à l'ère des LLM (méthode en trois passes).
+- **martinfowler_reliable-agentic-ai.md** — PRINCE (Bayer/Thoughtworks) : agentic RAG + Text-to-SQL en production, context & harness engineering, fiabilité et traçabilité.
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
