@@ -91,3 +91,8 @@ Cross-links : AirLLM + idée MoE×AirLLM (Ideas/2026-08-01 passe 2), Inkling-Sma
 Source : https://github.com/microsoft/SkillOpt
 Classée dans Inspirations/agentic.md (nouvelle entrée).
 Cross-links : Steering (llm.md/Papers) + idée vecteurs-de-steering-comme-skills (Ideas/2026-07-31), Karpathy LLM-wiki (kb.md), OKF (agentic.md).
+
+## [2026-08-01] ingest | OpenSpace — skills auto-évolutifs + communauté de partage
+Source : https://github.com/HKUDS/OpenSpace
+Classée dans Inspirations/agentic.md (nouvelle entrée).
+Cross-links : SkillOpt (agentic.md, complémentaire), Karpathy LLM-wiki (kb.md), Markets of agents/PI packages, Smart Tool RAG↔QMD (kb.md).

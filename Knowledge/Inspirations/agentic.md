@@ -332,3 +332,37 @@ Why is it interesting?
 - Karpathy LLM-wiki (kb.md) : SkillOpt-Sleep « harvest → consolidate behind a validation gate » = le Lint/consolidation du wiki, outillé.
 - OKF (ce fichier) : un `best_skill.md` versionné et gouverné est un artefact quasi-OKF (markdown déployable, inspectable).
 - PI packages / Orca / OpenClaw (ce fichier) : SkillOpt fournit des intégrations de harnais — skill entraîné puis déployé dans l'agent.
+
+---
+
+## OpenSpace — skills auto-évolutifs + communauté de partage
+
+Framework HKUDS (MIT, ~6,6k étoiles) pour rendre des agents « plus malins, moins coûteux, auto-évolutifs » : un moteur de skills qui, après chaque exécution, analyse la trajectoire et fait évoluer les compétences, les stocke avec un DAG de versions et des métriques de qualité, et permet de les partager via une *cloud skill community*.
+
+Why is it interesting?
+- Évolution des skills par **3 déclencheurs explicites** : FIX (réparer un skill qui a échoué), DERIVED (en dériver un nouveau), CAPTURED (capturer une procédure réussie) — analysé automatiquement après exécution.
+- Skills stockés avec **DAG de versions + métriques de qualité** (SQLite) : lignée et qualité tracées, pas un simple dossier de prompts.
+- **Cloud Skill Community** : upload/download/recherche de skills entre agents (« Agents Experience Sharing »), recherche hybride BM25+embedding — un marché de compétences mutualisées.
+- Low-cost revendiqué (~46 % de tokens en moins) ; *Smart Tool RAG* (BM25+embedding+LLM) pour sélectionner les outils ; backends unifiés (shell, GUI Computer Use, MCP, web) ; showcase « My Daily Monitor » = 60+ skills évolués, zéro code humain.
+
+### Resources
+
+- https://github.com/HKUDS/OpenSpace
+- Communauté : https://open-space.cloud/
+
+### Takeaway
+
+"OpenSpace: Make Your Agents: Smarter, Low-Cost, Self-Evolving"
+
+### Questions
+
+- Une communauté de skills partagés entre établissements : des bibliothèques pourraient-elles mutualiser des skills de catalogage/référence (upload/download, recherche hybride) au lieu que chacune réinvente ses prompts ?
+- Les déclencheurs FIX/DERIVED/CAPTURED : pour qu'un agent bibliothécaire *capture* automatiquement une chaîne d'enrichissement réussie en skill réutilisable ?
+- DAG de versions + métriques de qualité des skills : le chaînon manquant entre SkillOpt (entraînement discipliné) et notre base (Lint/consolidation) ?
+
+### Random Connections
+
+- SkillOpt (ce fichier) : même but « skills auto-évolutifs sans toucher aux poids ». SkillOpt = optimisation *disciplinée* d'un document unique derrière une porte de validation ; OpenSpace = évolution *multi-skills* (3 déclencheurs) + partage cloud + DAG de versions. Complémentaires.
+- Karpathy LLM-wiki (kb.md) : « les bonnes réponses refilées dans le wiki » = CAPTURED ; le DAG de versions outille la maintenance cumulative.
+- Markets of agents / PI packages (ce fichier) : la Cloud Skill Community est un marché de compétences partageables.
+- Smart Tool RAG (BM25+embedding+LLM) : rejoint QMD (kb.md) et l'idée « RAG sans embeddings » (Ideas/ideas_2026-08-01).
