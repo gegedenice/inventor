@@ -101,3 +101,8 @@ Cross-links : SkillOpt (agentic.md, complémentaire), Karpathy LLM-wiki (kb.md),
 Source : https://x.com/akshay_pachaar/status/2068672842733109327 (repris en post LinkedIn)
 Doublon de l'entrée existante Inspirations/misc.md#autoarxiv : enrichie (provider alphaXiv, écosystème OpenResearch, Resources, Questions, Random Connections). Takeaway inchangé.
 Cross-links : idée URL-swap (Ideas/2026-07-31), AgentENV/Orca (agentic.md), Colibri/AirLLM (llm.md).
+
+## [2026-08-01] ingest | OpenWorker — coworker local-first qui livre du travail fini
+Source : https://github.com/andrewyng/openworker
+Classée dans Inspirations/agentic.md (nouvelle entrée).
+Cross-links : Orca/OpenSpace/PI (interface d'agents), PRINCE (approbation humaine), aisuite↔pi-ai, question "interface ultime" (OpenQuestions passe 3).

@@ -366,3 +366,38 @@ Why is it interesting?
 - Karpathy LLM-wiki (kb.md) : « les bonnes réponses refilées dans le wiki » = CAPTURED ; le DAG de versions outille la maintenance cumulative.
 - Markets of agents / PI packages (ce fichier) : la Cloud Skill Community est un marché de compétences partageables.
 - Smart Tool RAG (BM25+embedding+LLM) : rejoint QMD (kb.md) et l'idée « RAG sans embeddings » (Ideas/ideas_2026-08-01).
+
+---
+
+## OpenWorker — un « coworker » local-first qui livre du travail fini
+
+Agent open-source (Andrew Ng, MIT) qui vit sur le bureau et rend des *livrables* — un document abouti, une réponse Slack avec les chiffres, un agenda mis à jour, une boîte mail triée — pas juste du chat. Tourne sur la machine de l'utilisateur, bring-your-own-model (OpenAI, Anthropic, Gemini, Inkling, GLM, Kimi, Qwen… ou 100 % local via Ollama). Bâti sur aisuite.
+
+Why is it interesting?
+- **« Deliver finished work, not chat »** : la sortie est un fichier ou une action, pas une to-do — l'agent est réorienté vers le livrable.
+- **Local-first + BYO-model** (jusqu'à Ollama entièrement local) : les données ne quittent la machine que via le modèle et les intégrations *choisis* — argument de souveraineté fort pour bibliothèques/universités.
+- **Actions à approbation** : écritures, envois et commandes shell sont gated ; les runs non surveillés parquent leurs demandes dans une inbox au lieu d'agir seuls — garde-fou humain natif.
+- 25+ connecteurs (GitHub, Slack, Jira, Notion, Linear, Outlook, Gmail, Google Calendar…) + terminal/fichiers + tout outil MCP ; **automations planifiées** (brief matinal, rapport hebdo, veille d'un canal).
+
+### Resources
+
+- https://github.com/andrewyng/openworker
+- Site : https://openworker.com
+- Socle : aisuite (API unifiée multi-provider + couche agents) — https://github.com/andrewyng/aisuite
+
+### Takeaway
+
+"OpenWorker is an open-source AI coworker that lives on your desktop and delivers finished work, not just chat: a polished document, a Slack reply with the numbers, an updated calendar, a triaged inbox."
+
+### Questions
+
+- Un coworker local-first pour bibliothécaires : livrer des *livrables* (rapport de pilotage, notice enrichie, réponse de référence) plutôt que du chat — quel jeu de connecteurs métier (SUDOC, HAL, SIGB, OpenAlex) faudrait-il ?
+- Souveraineté : le local-first + Ollama suffit-il aux exigences RGPD / données patrimoniales des établissements ?
+- Automations planifiées (brief matinal) : transposables à une veille documentaire / un tableau de pilotage quotidien (cf. claim-delta, OSINT) ?
+
+### Random Connections
+
+- Orca / OpenSpace / PI agents (ce fichier) : OpenWorker = coworker desktop orienté *livrable* ; Orca = cockpit dev multi-agent — deux réponses à l'idée « interface d'agents non-terminal » (Ideas/ideas_2026-08-01, passe 3).
+- PRINCE (ce fichier) : les actions à approbation = human-in-the-loop, même exigence de contrôle en domaine sensible.
+- aisuite ↔ pi-ai (ce fichier) / HuggingFace ecosystem (llm.md) : couches unifiées multi-provider.
+- Question ouverte « interface IA ultime pour bibliothécaires » (OpenQuestions/open_questions_2026-08-01.md, passe 3) : OpenWorker en est un candidat concret, orienté livrable.
