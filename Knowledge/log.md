@@ -40,3 +40,8 @@ Cross-links : Karpathy LLM-wiki + QMD/PageFind/Airweave (kb.md), OKF (agentic.md
 Source : https://korben.info/deja-terminal-predictif.html
 Classée dans Inspirations/kb.md (nouvelle entrée).
 Cross-links : QMD/PageFind/Graphify (kb.md), idée Lint frugal (Ideas/).
+
+## [2026-08-01] ideas | passe ciblée "pertinence sans IA" (déclencheur Deja)
+3 idées, 5 questions, 5 signaux. Meilleure piste : autocomplétion de notices UNIMARC/EAD par
+score fondu (4 signaux Deja) sans IA, calibré sur l'historique local du catalogue.
+Fichiers : Ideas/ideas_2026-08-01.md, OpenQuestions/open_questions_2026-08-01.md, WeakSignals/weak_signals_2026-08-01.md.

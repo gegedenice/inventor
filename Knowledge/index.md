@@ -56,12 +56,15 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
+- **ideas_2026-08-01.md** — passe ciblée « pertinence sans IA » (déclencheur Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision pour les autorités).
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
+- **open_questions_2026-08-01.md** — 5 questions (Markov des zones de catalogage, point de bascule features vs LLM, limites de la similarité sans embeddings, calibrage des crans de flou, demi-vie de récence en bibliothèque).
 
 ## Signaux faibles
 - **weak_signals_2026-07-31.md** — 8 signaux (connaissance = artefact versionné, steering vs fine-tuning, propositions atomiques comme brique centrale, Pi couteau suisse, fusion runtime > merge, delta > temps réel, URL comme interface, le négatif est du signal).
+- **weak_signals_2026-08-01.md** — 5 signaux (« pertinence sans vector DB » comme famille, le contexte courant comme feature, le compromis dans la main de l'usager, modèles de Markov d'actions, frugalité assumée comme position).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).
