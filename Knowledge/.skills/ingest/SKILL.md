@@ -3,9 +3,9 @@ name: inventor-ingest
 description: >
   Ingère une source (URL, PDF, dépôt GitHub, capture, ou note brute) dans la base
   Knowledge/ du dépôt git Inventor. Récupère le contenu, décide où il va, remplit le
-  template maison, détecte les doublons, met à jour index.md + log.md (et, pour les
-  sources techniques, les fiches StateOfTheArt/ + un candidat Experiments/), propose
-  des cross-links et commit atomiquement.
+  template maison, détecte les doublons, met à jour log.md (et, pour les sources
+  techniques, les fiches StateOfTheArt/ + un candidat Experiments/), propose des
+  cross-links et commit atomiquement. N'écrit PAS index.md (réconcilié par inventor-lint).
 ---
 
 # Skill : inventor-ingest
@@ -42,7 +42,7 @@ inventor/                  # racine du dépôt git
 ├── AGENTS.md              # schema : conventions + workflow (ne pas y ranger de contenu ingéré)
 ├── SOUL.md                # identité de l'agent
 └── Knowledge/
-    ├── index.md           # catalogue : 1 ligne par entrée — à tenir à jour
+    ├── index.md           # catalogue — réconcilié par inventor-lint (NE PAS l'écrire ici)
     ├── log.md             # journal append-only, préfixes datés grep-ables
     ├── Inspirations/      # 1 fichier thématique par domaine (voir routage)
     │   ├── agentic.md     # agents, frameworks, MCP, harnesses
@@ -112,9 +112,9 @@ En cas de doute : Inspiration.
 | rien de ce qui précède | `misc.md` |
 
 Préférer un fichier existant. Créer `Inspirations/<theme>.md` (titre `# <Theme>`) seulement
-si un vrai nouveau thème émerge — et dans ce cas, ajouter aussi sa rubrique
-(`### <theme>.md — <domaine>`) dans `index.md`. Les fichiers thématiques ne sont pas figés :
-l'agent peut en créer de nouveaux quand la taxonomie l'exige.
+si un vrai nouveau thème émerge. Les fichiers thématiques ne sont pas figés : l'agent peut
+en créer de nouveaux quand la taxonomie l'exige (la rubrique correspondante sera ajoutée à
+`index.md` par `inventor-lint`, pas ici).
 
 ### 4. Vérifier les doublons AVANT d'écrire
 
@@ -201,11 +201,11 @@ d'inférence / architectures) ? Si oui :
 Ne pas forcer : une source non technique (un billet biblio, un outil de dataviz) reste
 une simple Inspiration. Cette étape ne concerne que la lentille opérationnelle.
 
-### 7. Mettre à jour index.md et log.md
+### 7. Mettre à jour log.md (PAS index.md)
 
-- **index.md** : ajouter une ligne sous la bonne rubrique — `**<Titre>** — <résumé une ligne>`
-  (+ `→ fulltext Papers/...` si Paper). Garder l'ordre existant. Si un nouveau fichier
-  thématique a été créé (étape 3), ajouter aussi sa rubrique `### <fichier>.md — <domaine>`.
+`index.md` n'est plus écrit par ce skill : il est réconcilié par `inventor-lint`. Ici on ne
+touche qu'au journal.
+
 - **log.md** : ajouter en fin de fichier une entrée au format grep-able :
 
   ```markdown
@@ -225,7 +225,7 @@ Un commit git par source ingérée, pour un historique lisible :
 ```bash
 git add Knowledge/Inspirations/<fichier>.md Knowledge/Papers/<...>.md \
         Knowledge/StateOfTheArt/<fiche>.md Knowledge/Experiments/<...>.md \
-        Knowledge/index.md Knowledge/log.md
+        Knowledge/log.md
 git commit -m "ingest: <Titre> -> Inspirations/<fichier>.md"
 ```
 

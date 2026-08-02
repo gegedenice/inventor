@@ -99,12 +99,11 @@ matière première du prochain « radar » (cf. Crucix / claim-delta dans la bas
 
 ---
 
-## Mise à jour de la carte + commit
+## Journal + commit (PAS index.md)
 
-1. **index.md** : sous une rubrique dédiée (créer `## Idées`, `## Questions ouvertes`,
-   `## Signaux faibles` si absentes), ajouter une ligne par nouveau fichier daté avec
-   son résumé une ligne.
-2. **log.md** : ajouter en fin de fichier, format grep-able :
+`index.md` est réconcilié par `inventor-lint`, pas ici.
+
+1. **log.md** : ajouter en fin de fichier, format grep-able :
 
    ```markdown
    ## [AAAA-MM-JJ] ideas | passe <périmètre>
@@ -112,13 +111,13 @@ matière première du prochain « radar » (cf. Crucix / claim-delta dans la bas
    ```
 
    Utiliser la date réelle (`date +%F`).
-3. **Commit atomique** — une passe = un commit :
+2. **Commit atomique** — une passe = un commit :
 
    ```bash
    git add Knowledge/Ideas/ideas_<date>.md \
            Knowledge/OpenQuestions/open_questions_<date>.md \
            Knowledge/WeakSignals/weak_signals_<date>.md \
-           Knowledge/index.md Knowledge/log.md
+           Knowledge/log.md
    git commit -m "ideas: passe <date> (<n> idées)"
    ```
 

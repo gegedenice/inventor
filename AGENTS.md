@@ -85,13 +85,18 @@ reproducible test candidates and their results.
 # Skills
 
 * **inventor-ingest** — one source in (URL/PDF/repo/note): fetch, classify, fill template,
-  dedup, cross-link, update `index.md`/`log.md`, and — if the source is technical — update
-  the relevant `StateOfTheArt/` file and add an `Experiments/` candidate. One ingest = one commit.
+  dedup, cross-link, and — if the source is technical — update the relevant `StateOfTheArt/`
+  file and add an `Experiments/` candidate. One ingest = one commit.
 * **inventor-ideas** — divergent idea pass over the base (SOUL.md method), archived and committed.
 * **inventor-lab** — operational pass: refresh the state of the art, produce applied
   optimization ideas and experiment candidates, archived and committed.
+* **inventor-lint** — reconcile `index.md` with the real tree + health-check (orphans,
+  missing cross-links, duplicates/contradictions), report to `Syntheses/`, committed.
 
-`index.md` (catalog) and `log.md` (dated, grep-able journal) are kept current by every pass.
+**Ownership rule (separation of concerns).** `index.md` (the catalog) is written **only** by
+`inventor-lint`. Every other skill writes its own content + appends to `log.md` (the dated,
+grep-able journal). Run `inventor-lint` after manual edits or a batch of passes to bring the
+catalog back in sync — the index is a *derived* artifact, always rebuildable from the content.
 
 ---
 

@@ -106,11 +106,11 @@ dans la fiche `StateOfTheArt/` correspondante (implémentation ↔ recherche se 
 
 ---
 
-## Étape 4 — Carte + commit
+## Étape 4 — Journal + commit (PAS index.md)
 
-1. **index.md** : sous `## État de l'art`, garder les fiches à jour ; ajouter les
-   nouveaux `Ideas/applied_ideas_<date>.md` et `Experiments/<...>.md` sous leurs rubriques.
-2. **log.md** : entrée grep-able en fin de fichier :
+`index.md` est réconcilié par `inventor-lint`, pas ici.
+
+1. **log.md** : entrée grep-able en fin de fichier :
 
    ```markdown
    ## [AAAA-MM-JJ] lab | revue <périmètre>
@@ -118,11 +118,11 @@ dans la fiche `StateOfTheArt/` correspondante (implémentation ↔ recherche se 
    ```
 
    Date réelle (`date +%F`).
-3. **Commit atomique** :
+2. **Commit atomique** :
 
    ```bash
    git add Knowledge/StateOfTheArt/ Knowledge/Ideas/applied_ideas_<date>.md \
-           Knowledge/Experiments/ Knowledge/index.md Knowledge/log.md
+           Knowledge/Experiments/ Knowledge/log.md
    git commit -m "lab: revue <périmètre> (<n> fiches, <m> idées appliquées)"
    ```
 
