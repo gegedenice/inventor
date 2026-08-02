@@ -66,6 +66,35 @@ Knowledge should become more connected, more concise and more useful over time.
 
 ---
 
+# Two Lenses (single base, two intentions)
+
+The same source can serve two purposes. The Knowledge base is **one** — never file twice.
+
+* **Divergent lens (innovation)** — connect distant ideas into original opportunities for
+  the business. Handled by `inventor-ideas` (writes to `Ideas/`, `OpenQuestions/`,
+  `WeakSignals/`).
+* **Operational lens (engineering)** — deepen a technical domain, keep a **living state of
+  the art**, and derive optimizations testable in our own stack (CPU only, low memory).
+  Handled by `inventor-lab` (maintains `StateOfTheArt/`, writes `Ideas/applied_ideas_*` and
+  `Experiments/`).
+
+`StateOfTheArt/` holds **maintained** survey files (pretraining, posttraining,
+synthetic_data, inference_archi) — revised in place, not appended. `Experiments/` holds
+reproducible test candidates and their results.
+
+# Skills
+
+* **inventor-ingest** — one source in (URL/PDF/repo/note): fetch, classify, fill template,
+  dedup, cross-link, update `index.md`/`log.md`, and — if the source is technical — update
+  the relevant `StateOfTheArt/` file and add an `Experiments/` candidate. One ingest = one commit.
+* **inventor-ideas** — divergent idea pass over the base (SOUL.md method), archived and committed.
+* **inventor-lab** — operational pass: refresh the state of the art, produce applied
+  optimization ideas and experiment candidates, archived and committed.
+
+`index.md` (catalog) and `log.md` (dated, grep-able journal) are kept current by every pass.
+
+---
+
 # Responsibilities
 
 ## Human

@@ -1,24 +1,37 @@
 ---
-name: ingest
+name: inventor-ingest
 description: >
   Ingère une source (URL, PDF, dépôt GitHub, capture, ou note brute) dans la base
   Knowledge/ du dépôt git Inventor. Récupère le contenu, décide où il va, remplit le
-  template maison, détecte les doublons, met à jour index.md + log.md, propose des
-  cross-links et commit atomiquement. À utiliser dès qu'on dit « ingère »,
-  « ajoute ça », « range cette URL », « note cette source », ou qu'on colle
-  simplement un lien à classer dans la base Inventor.
+  template maison, détecte les doublons, met à jour index.md + log.md (et, pour les
+  sources techniques, les fiches StateOfTheArt/ + un candidat Experiments/), propose
+  des cross-links et commit atomiquement.
 ---
 
-# Skill : ingest
+# Skill : inventor-ingest
 
 Transforme une source brute en une note propre dans la base `Knowledge/`, avec un
 minimum d'effort humain. Objectif : **on donne une URL (ou un PDF, un repo, une note),
 l'agent fait tout le reste** — fetch, classement, résumé, liens, index, log, commit.
 
 Ce skill s'applique au dépôt git **Inventor** : le dossier connecté qui contient
-`AGENTS.md`, `SOUL.md` et `Knowledge/`. Il suppose un accès lecture/écriture à ce
-dépôt, un outil de récupération de contenu (fetch web, lecture PDF, clone git) et
-`git` disponible en ligne de commande.
+`AGENTS.md`, `SOUL.md` et `Knowledge/`. Si ce dossier n'est pas connecté à la session,
+demander à l'utilisateur de le connecter d'abord. Le skill suppose un accès
+lecture/écriture au dépôt, un outil de récupération de contenu (fetch web, lecture PDF,
+clone git) et `git` disponible en ligne de commande.
+
+## Les deux lentilles (important)
+
+Une même source peut servir **deux intentions** :
+- **Mémoire / inspiration** (toujours) — garder trace que ça existe, pour relier plus tard.
+- **Opérationnel** (si la source est technique) — nourrir un **état de l'art vivant** et,
+  si la technique est reproductible, un **candidat d'expérience**.
+
+Exemple : le billet Liquid « LFM2 encoders » mérite (1) une entrée dans `Inspirations/llm.md`
+(mémoire : ce SLM existe) **et** (2) une mise à jour de `StateOfTheArt/inference_archi.md`
+(la conversion causal decoder → bidirectional encoder, où elle se situe) **et** (3) un
+candidat dans `Experiments/` (« reproduire la conversion sur un petit modèle, mesurer X »).
+Un seul ingest, plusieurs retombées. Ne jamais ranger deux fois : on enrichit.
 
 ---
 
@@ -26,7 +39,7 @@ dépôt, un outil de récupération de contenu (fetch web, lecture PDF, clone gi
 
 ```
 inventor/                  # racine du dépôt git
-├── AGENTS.md              # schema : conventions + workflow (ne pas modifier ici)
+├── AGENTS.md              # schema : conventions + workflow (ne pas y ranger de contenu ingéré)
 ├── SOUL.md                # identité de l'agent
 └── Knowledge/
     ├── index.md           # catalogue : 1 ligne par entrée — à tenir à jour
@@ -40,15 +53,22 @@ inventor/                  # racine du dépôt git
     │   ├── synthetic_data.md
     │   └── misc.md        # tout le reste
     ├── Papers/            # fulltext (article/paper) avec frontmatter YAML
+    ├── StateOfTheArt/     # fiches d'état de l'art VIVANTES (maintenues, skill inventor-lab)
+    │   ├── pretraining.md
+    │   ├── posttraining.md
+    │   ├── synthetic_data.md
+    │   └── inference_archi.md
     ├── Resources/         # actifs réutilisables : datasets, jeux de poids, gros dumps
+    ├── Experiments/       # candidats d'expériences + repro/benchmarks (testables soi-même)
     ├── Syntheses/         # produit par l'agent
     ├── Ideas/             # produit par l'agent
-    ├── Experiments/       # produit par l'agent
-    └── OpenQuestions/     # produit par l'agent
+    ├── OpenQuestions/     # produit par l'agent
+    └── WeakSignals/       # produit par l'agent (skill inventor-ideas)
 ```
 
-Dossiers **peuplés par l'humain** (via ce skill) : `Inspirations/`, `Papers/`,
-`Resources/`. Les autres sont générés par les passes de synthèse de l'agent.
+Dossiers **peuplés par l'humain / ce skill** : `Inspirations/`, `Papers/`, `Resources/`,
+et — pour les sources techniques — `StateOfTheArt/` et `Experiments/`. Les autres sont
+générés par les passes d'idées de l'agent.
 
 ---
 
@@ -86,7 +106,8 @@ En cas de doute : Inspiration.
 | dataviz, dashboards, réseaux sémantiques | `dataviz.md` |
 | base de connaissances, recherche, RAG, indexation | `kb.md` |
 | bibliothèques, GLAM, OpenAlex, HAL, bibliométrie, patrimoine, métadonnées | `library.md` |
-| LLM : pré-entraînement, fine-tuning, architecture | `llm.md` |
+| LLM : architecture (encoders/decoders, MoE, world models), inférence, runtimes | `llm.md` |
+| LLM : pré-training / mid-training / post-training, fine-tuning, distillation, RL | `llm-training.md` |
 | génération de données synthétiques | `synthetic_data.md` |
 | rien de ce qui précède | `misc.md` |
 
@@ -162,18 +183,40 @@ Parcourir les entrées existantes et remplir **Random Connections** avec des ren
 concrets vers des notes voisines déjà présentes (« relie X dans agentic.md à Y dans
 kb.md »). C'est ce qui rend la base *plus connectée* dans le temps (cf. `AGENTS.md`).
 
+### 6bis. Lentille opérationnelle (état de l'art + expériences)
+
+Après avoir filé l'entrée Inspiration, se demander : **la source est-elle technique et
+opérationnelle** (pré-training, post-training, données synthétiques, optimisation
+d'inférence / architectures) ? Si oui :
+
+- **Mettre à jour la fiche `StateOfTheArt/` concernée** (`pretraining.md`,
+  `posttraining.md`, `synthetic_data.md` ou `inference_archi.md`) *en place*, pas en
+  empilant : ajouter/actualiser la ligne dans « Techniques / approches clés », ajouter une
+  entrée datée en haut de « Ce qui a bougé récemment », et référencer la source sous
+  « Sources dans la base ». Bumper la date « Dernière mise à jour ».
+- **Si la technique est reproductible/testable**, ajouter un candidat dans
+  `Experiments/` : `Experiments/<slug>.md` avec l'hypothèse, le plus petit test qui
+  tranche, la métrique visée, et le lien vers la source — sous les contraintes CPU/mémoire.
+
+Ne pas forcer : une source non technique (un billet biblio, un outil de dataviz) reste
+une simple Inspiration. Cette étape ne concerne que la lentille opérationnelle.
+
 ### 7. Mettre à jour index.md et log.md
 
 - **index.md** : ajouter une ligne sous la bonne rubrique — `**<Titre>** — <résumé une ligne>`
-  (+ `→ fulltext Papers/...` si Paper). Garder l'ordre existant.
+  (+ `→ fulltext Papers/...` si Paper). Garder l'ordre existant. Si un nouveau fichier
+  thématique a été créé (étape 3), ajouter aussi sa rubrique `### <fichier>.md — <domaine>`.
 - **log.md** : ajouter en fin de fichier une entrée au format grep-able :
 
   ```markdown
   ## [AAAA-MM-JJ] ingest | <Titre>
   Source : <url>
   <Classée dans Inspirations/<fichier>.md (+ Papers/... si fulltext) — ou « doublon, entrée enrichie »>.
+  <Fiche SOTA MàJ / candidat Experiments/ si lentille opérationnelle.>
   Cross-links : <1–3>.
   ```
+
+  Utiliser la date du jour réelle (via l'environnement / `date +%F`).
 
 ### 8. Commit atomique
 
@@ -181,13 +224,14 @@ Un commit git par source ingérée, pour un historique lisible :
 
 ```bash
 git add Knowledge/Inspirations/<fichier>.md Knowledge/Papers/<...>.md \
+        Knowledge/StateOfTheArt/<fiche>.md Knowledge/Experiments/<...>.md \
         Knowledge/index.md Knowledge/log.md
 git commit -m "ingest: <Titre> -> Inspirations/<fichier>.md"
 ```
 
-Si un `.git/index.lock` traîne et bloque (« Operation not permitted » / « index.lock
-exists ») : vérifier qu'aucun git ne tourne, puis le supprimer avant de recommencer.
-Ne jamais `git add -A` aveuglément : n'ajouter que les fichiers touchés par cet ingest.
+(N'ajouter que les fichiers réellement touchés par cet ingest.) Si un `.git/index.lock`
+traîne et bloque (« Operation not permitted » / « index.lock exists ») : vérifier
+qu'aucun git ne tourne, puis le supprimer avant de recommencer. Jamais de `git add -A` aveugle.
 
 ---
 
@@ -197,9 +241,9 @@ Terminer par 3–5 lignes max :
 
 - **Source** : titre + URL
 - **Classée dans** : `Inspirations/<fichier>.md` (+ `Papers/...`) — ou « doublon, entrée enrichie »
+- **Lentille opérationnelle** : fiche SOTA mise à jour + candidat Experiments/ (le cas échéant)
 - **Cross-links proposés** : 1–3
 - **Commit** : le message utilisé
-- **Question ouverte retenue** : la plus prometteuse
 
 Ne pas re-narrer chaque étape. L'humain veut le résultat.
 
@@ -208,6 +252,7 @@ Ne pas re-narrer chaque étape. L'humain veut le résultat.
 ## Principes (SOUL.md / AGENTS.md)
 
 - Effort humain minimal : une URL doit suffire.
+- Une source, éventuellement deux lentilles (mémoire + opérationnel) — mais un seul rangement.
 - Compresser, connecter, réutiliser — base plus dense, pas plus grosse.
 - Ne jamais dupliquer : enrichir l'existant.
 - Un ingest = un commit.

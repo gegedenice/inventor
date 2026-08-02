@@ -71,6 +71,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
 - **ideas_2026-08-01.md** — passe 1 « pertinence sans IA » (Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision). Passe 2 « frugalité inférence » (AirLLM/Kimi K3) : 3 idées (shards de couches en HF buckets, MoE×AirLLM streaming sélectif, KV-cache streamé). Passe 3 « interface d'agents » (Orca) : 2 idées (fan-out/comparer/fusionner en cartes non-terminal, consensus multi-agent pour QA de notices).
+- **applied_ideas_2026-08-02.md** — lentille lab (opérationnelle) : 4 optimisations appliquées (enrichissement de notices nocturne via Colibri CPU, SLM bibliothécaire distillé, shards AirLLM distants, jeu Q/R biblio synthétique).
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
@@ -79,6 +80,19 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 ## Signaux faibles
 - **weak_signals_2026-07-31.md** — 8 signaux (connaissance = artefact versionné, steering vs fine-tuning, propositions atomiques comme brique centrale, Pi couteau suisse, fusion runtime > merge, delta > temps réel, URL comme interface, le négatif est du signal).
 - **weak_signals_2026-08-01.md** — 5 signaux (« pertinence sans vector DB » comme famille, le contexte courant comme feature, le compromis dans la main de l'usager, modèles de Markov d'actions, frugalité assumée comme position).
+
+## Expériences (candidats — skill inventor-lab)
+- **exp_colibri_notices_nocturne.md** — bench débit CPU-only de Colibri pour l'enrichissement nocturne.
+- **exp_airllm_shards_distants.md** — shards de couches AirLLM sur stockage objet distant (prefetch vs latence).
+- **exp_distill_slm_bibliothecaire.md** — SLM spécialisé distillé d'un grand modèle, servable CPU.
+- **exp_slm_from_scratch_biblio.md** — petit SLM gpt2-style pour démo/POC bibliothèque.
+- **exp_synthdata_biblio_harness.md** — jeu Q/R de catalogage synthétique via harnais type SynthTraces.
+
+## État de l'art (fiches vivantes — skill inventor-lab)
+- **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
+- **StateOfTheArt/posttraining.md** — fine-tuning, distillation, alignement, steering.
+- **StateOfTheArt/synthetic_data.md** — génération/filtrage de données synthétiques.
+- **StateOfTheArt/inference_archi.md** — optimisation d'inférence & architectures.
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

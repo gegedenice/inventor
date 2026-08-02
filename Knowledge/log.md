@@ -116,3 +116,15 @@ Cross-links : DeckGL (dataviz.md), OKF (agentic.md), SkillOpt/OpenSpace (skills-
 Source : https://huggingface.co/blog/nielsr/ocr-papers-jobs
 Classée dans Inspirations/library.md (nouvelle entrée).
 Cross-links : HuggingFace ecosystem (llm.md), idée AirLLM×HF-buckets (Ideas/2026-08-01), autoarxiv (misc.md), Colibri/AirLLM (llm.md).
+
+## [2026-08-02] refactor | Lentille opérationnelle (état de l'art + expériences)
+Ajout de la couche StateOfTheArt/ (pretraining, posttraining, synthetic_data, inference_archi) —
+fiches vivantes maintenues en place. Nouveau skill inventor-lab. inventor-ingest gagne la
+lentille opérationnelle (MàJ fiche SOTA + candidat Experiments/ pour les sources techniques).
+Routage : llm.md (archi/inférence) vs llm-training.md (pré/mid/post-training). AGENTS.md documente
+les deux lentilles et les trois skills.
+
+## [2026-08-02] lab | revue toute la base (1re passe)
+4 fiches SOTA peuplées, 4 idées appliquées, 5 expériences proposées. Priorité : enrichissement
+de notices nocturne via Colibri CPU-only (souveraineté, coût API nul), à valider par un bench de débit.
+Fichiers : StateOfTheArt/*.md, Ideas/applied_ideas_2026-08-02.md, Experiments/exp_*.md.
