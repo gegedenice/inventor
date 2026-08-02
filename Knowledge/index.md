@@ -20,6 +20,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **SkillOpt** — entraîne un *document de skill* (best_skill.md) pour un agent gelé avec la discipline d'un optimiseur (epochs, LR, portes de validation), sans toucher aux poids ; SkillOpt-Sleep pour l'auto-évolution nocturne.
 - **OpenSpace** — skills auto-évolutifs (déclencheurs FIX/DERIVED/CAPTURED), DAG de versions + métriques de qualité, et *cloud skill community* pour partager les skills entre agents ; low-cost (~46 % tokens en moins).
 - **OpenWorker** — coworker desktop open-source (A. Ng) local-first, BYO-model (jusqu'à Ollama), qui livre du *travail fini* (docs, Slack, agenda) ; 25+ connecteurs + MCP, actions à approbation, automations planifiées ; bâti sur aisuite.
+- **Acontext** — couche de mémoire d'agent : capture automatiquement les apprentissages d'une session en *fichiers de skill Markdown* (progressive disclosure, sans embeddings, git/mount) ; « Skill is Memory ».
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).

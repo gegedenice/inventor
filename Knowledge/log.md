@@ -142,3 +142,6 @@ Source : https://github.com/memodb-io/Acontext
 Classée dans Inspirations/agentic.md (nouvelle entrée). Lentille opérationnelle : non (infra mémoire, hors SOTA pré/post-training/synth/inférence).
 Cross-links : SkillOpt + OpenSpace (skills auto-évolutifs), Karpathy LLM-wiki (kb.md), OKF, idée RAG-sans-embeddings.
 index.md : laissé à inventor-lint.
+
+## [2026-08-02] lint | reindex + health-check
+1 entrée ajoutée (Acontext -> agentic.md), 0 retirée. Health : stubs (Markets, Frameworks) et orphelines du rapport précédent résolus ; Acontext déjà bien cross-linké. Voir Syntheses/lint_2026-08-02b.md.
