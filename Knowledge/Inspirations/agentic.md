@@ -422,3 +422,38 @@ Why is it interesting?
 - PRINCE (ce fichier) : les actions à approbation = human-in-the-loop, même exigence de contrôle en domaine sensible.
 - aisuite ↔ pi-ai (ce fichier) / HuggingFace ecosystem (llm.md) : couches unifiées multi-provider.
 - Question ouverte « interface IA ultime pour bibliothécaires » (OpenQuestions/open_questions_2026-08-01.md, passe 3) : OpenWorker en est un candidat concret, orienté livrable.
+
+---
+
+## Acontext — les skills comme couche de mémoire d'agent
+
+Couche de mémoire open-source pour agents (memodb-io, Apache-2.0, ~3,5k étoiles) : elle **capture automatiquement** les apprentissages d'une exécution d'agent et les stocke comme **fichiers de skill Markdown** — lisibles, éditables, partageables entre agents, LLM et frameworks. Devise : « Skill is Memory, Memory is Skill ».
+
+Why is it interesting?
+- Mémoire = fichiers de skill inspectables/corrigibles par l'humain, pas une mémoire opaque qui pollue le contexte. Git, grep, mount, export ZIP, zéro lock-in.
+- Capture automatique : session → tâche réussie/échouée → *distillation* (ce qui a marché, ce qui a échoué, préférences) → agent de skill → mise à jour des skills selon un `SKILL.md` que *tu* structures.
+- **Progressive disclosure, pas de recherche sémantique top-k** : l'agent appelle `get_skill`/`get_skill_file` selon son raisonnement — même famille « pertinence sans embeddings ».
+- Auto-hébergeable (docker), SDK Python/TS ; « the agent learns from its mistakes and reuses what worked ».
+
+### Resources
+
+- https://github.com/memodb-io/Acontext
+- Site / docs : https://acontext.io · https://docs.acontext.io
+
+### Takeaway
+
+"Acontext is an open-source skill memory layer for AI agents. It automatically captures learnings from agent runs and stores them as agent skill files — files you can read, edit, and share across agents, LLMs, and frameworks."
+
+### Questions
+
+- Une mémoire d'agent bibliothécaire en fichiers de skill (un par fonds, par type de notice, par politique) : inspectable/corrigible par le catalogueur et partageable entre établissements ?
+- La *distillation* automatique des sessions en skills : capturer les procédures récurrentes d'un service (référence, catalogage) en skills réutilisables, sans les écrire à la main ?
+- Progressive disclosure vs RAG sémantique : sur un corpus documentaire, la récupération « par outil + raisonnement » bat-elle le top-k embeddings pour la précision et la traçabilité ?
+
+### Random Connections
+
+- SkillOpt / OpenSpace (ce fichier) : trio « skills auto-évolutifs comme artefacts » — SkillOpt *entraîne* un doc (porte de validation), OpenSpace *fait évoluer + partage* (DAG de versions), Acontext transforme la *mémoire* en skills capturés automatiquement. Complémentaires.
+- Karpathy LLM-wiki (kb.md) : « compiler la connaissance en fichiers, pas la re-dériver » — même intuition, ici pour la mémoire d'agent.
+- OKF (ce fichier) : skills Markdown portables, git/grep, zéro lock-in — famille « artefact texte gouvernable ».
+- Idée « RAG sans embeddings » + Graphify/Deja (Ideas/ideas_2026-08-01.md, kb.md) : la progressive disclosure est une pertinence sans vector DB.
+- World models / mémoire d'agent (llm.md) : réponse concrète à la question « world models pour la gestion de mémoire d'agent ».

@@ -136,3 +136,9 @@ Fichiers : StateOfTheArt/*.md, Ideas/applied_ideas_2026-08-02.md, Experiments/ex
 ## [2026-08-02] lint | correctifs santé (stubs + cross-links)
 Complété les 2 stubs (Markets of agents, Frameworks : description + « Why ») et posé les cross-links sûrs :
 moonbot→PI/HF-buckets, Frameworks→PI/Flue/OpenClaw, Markets→OpenSpace/PI packages, Orca→OpenWorker, Airweave (description + Questions + Random Connections). Résout les orphelines du rapport lint_2026-08-02.
+
+## [2026-08-02] ingest | Acontext — les skills comme couche de mémoire d'agent
+Source : https://github.com/memodb-io/Acontext
+Classée dans Inspirations/agentic.md (nouvelle entrée). Lentille opérationnelle : non (infra mémoire, hors SOTA pré/post-training/synth/inférence).
+Cross-links : SkillOpt + OpenSpace (skills auto-évolutifs), Karpathy LLM-wiki (kb.md), OKF, idée RAG-sans-embeddings.
+index.md : laissé à inventor-lint.
