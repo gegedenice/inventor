@@ -23,9 +23,18 @@ Why is it interesting?
 
 ### Random Connections
 
+- PI agents (ce fichier) : moonbot tourne sur le harnais Pi.
+- Idée « AirLLM × HF-buckets » (Ideas/ideas_2026-08-01.md) : les HF Buckets comme mémoire/stockage persistant d'agent.
+
 ---
 
 ## Markets of agents
+
+Deux signaux d'une économie d'agents naissante : une place de marché d'échange d'agents (ai4trade) et une conférence ouverte d'agents IA (agents4science, Stanford).
+
+Why is it interesting?
+- Les agents deviennent des acteurs *échangeables* et *publiants* : un marché + un lieu de publication scientifique par/pour agents.
+- Transfert biblio : empaqueter des « services » de bibliothécaire comme agents échangeables et partageables.
 
 ### Resources
 
@@ -40,7 +49,15 @@ Why is it interesting?
 
 ### Random Connections
 
+- OpenSpace *cloud skill community* / PI packages (ce fichier) : mutualisation et échange de compétences d'agents.
+
 ## Frameworks
+
+Deux réimplémentations minimalistes d'agents de code : ClawCodex (rebuild Python orienté production de Claude Code) et mini-swe-agent (agent SWE ultra-compact).
+
+Why is it interesting?
+- La tendance « rebuild minimal » : réécrire un agent complexe en noyau lisible et hackable — même esprit que le harnais Pi.
+- Un socle compact est plus simple à auditer et à adapter à des tâches biblio spécifiques.
 
 ### Resources
 
@@ -52,6 +69,9 @@ Why is it interesting?
 ### Questions
 
 ### Random Connections
+
+- PI agents / Flue (ce fichier) : même famille « harnais minimal, adaptable ».
+- OpenClaw (cité dans PI agents, ce fichier) : intégration réelle d'un harnais léger.
 
 ---
 
@@ -297,6 +317,7 @@ Why is it interesting?
 - Idée « COW fork à petite échelle via git worktrees » (Ideas/ideas_2026-07-31.md) : Orca est cette idée productisée.
 - PRINCE (ce fichier) : la « Reflection » interne y vérifie une trajectoire ; Orca externalise la vérification en mettant des agents en concurrence + revue humaine.
 - PI agents (ce fichier) : Orca sait exécuter Pi parmi ses 30+ agents.
+- OpenWorker (ce fichier) : autre réponse à « interface d'agents » — coworker desktop orienté *livrable* vs cockpit *dev*.
 
 ---
 

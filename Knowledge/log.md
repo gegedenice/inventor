@@ -132,3 +132,7 @@ Fichiers : StateOfTheArt/*.md, Ideas/applied_ideas_2026-08-02.md, Experiments/ex
 ## [2026-08-02] lint | reindex + health-check
 0 entrée ajoutée, 0 orpheline retirée (index déjà cohérent : 62 entrées, dont Expériences×5 et État de l'art×4 de la passe lab).
 6 constats de santé : 2 stubs (Markets of agents, Frameworks), 4 orphelines de cross-link (moonbot, Markets, Frameworks, Airweave, + OpenWorker entrante). Voir Syntheses/lint_2026-08-02.md.
+
+## [2026-08-02] lint | correctifs santé (stubs + cross-links)
+Complété les 2 stubs (Markets of agents, Frameworks : description + « Why ») et posé les cross-links sûrs :
+moonbot→PI/HF-buckets, Frameworks→PI/Flue/OpenClaw, Markets→OpenSpace/PI packages, Orca→OpenWorker, Airweave (description + Questions + Random Connections). Résout les orphelines du rapport lint_2026-08-02.

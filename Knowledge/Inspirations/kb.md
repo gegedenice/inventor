@@ -19,6 +19,8 @@ Why is it interesting?
 
 ## Airweave
 
+Couche de recherche auto-hébergée qui connecte apps, outils et bases, les synchronise en continu et les expose via une interface de recherche unifiée « LLM-friendly ».
+
 Why is it interesting?
 - self-hosted version
 
@@ -30,6 +32,16 @@ Why is it interesting?
 
 "Airweave connects to your apps, tools, and databases, continuously syncs their data, and exposes it through a unified, LLM-friendly search interface. 
 AI agents query Airweave to retrieve relevant, grounded, up-to-date context from multiple sources in a single request."
+
+### Questions
+
+- Une couche de recherche unifiée sur les sources d'un établissement (SIGB, HAL, OpenAlex, mails) : quel périmètre réaliste et souverain ?
+
+### Random Connections
+
+- Smart Tool RAG d'OpenSpace (agentic.md) : même idée de recherche unifiée multi-sources pour agents.
+- Idée « RAG sans embeddings » (Ideas/ideas_2026-08-01.md) : Airweave = la voie « couche de recherche managée », à comparer.
+- PageFind / QMD (ce fichier) : briques de recherche plus légères.
 
 ---
 
