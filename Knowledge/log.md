@@ -128,3 +128,7 @@ les deux lentilles et les trois skills.
 4 fiches SOTA peuplées, 4 idées appliquées, 5 expériences proposées. Priorité : enrichissement
 de notices nocturne via Colibri CPU-only (souveraineté, coût API nul), à valider par un bench de débit.
 Fichiers : StateOfTheArt/*.md, Ideas/applied_ideas_2026-08-02.md, Experiments/exp_*.md.
+
+## [2026-08-02] lint | reindex + health-check
+0 entrée ajoutée, 0 orpheline retirée (index déjà cohérent : 62 entrées, dont Expériences×5 et État de l'art×4 de la passe lab).
+6 constats de santé : 2 stubs (Markets of agents, Frameworks), 4 orphelines de cross-link (moonbot, Markets, Frameworks, Airweave, + OpenWorker entrante). Voir Syntheses/lint_2026-08-02.md.
