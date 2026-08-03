@@ -152,3 +152,9 @@ Classée dans Inspirations/llm.md (entrée-pointeur) + fulltext Papers/kimi3_arc
 Lentille opérationnelle : StateOfTheArt/inference_archi.md (KDA état fixe, LatentMoE, NoPE/AttnRes) + posttraining.md (QAT natif FP4) MàJ ; candidats Experiments/exp_steering_etat_recurrent.md + exp_qat_fp4_slm_biblio.md.
 Cross-links : Memory Caching (Papers), Colibri/AirLLM (llm.md), Steering (Papers) + idée vecteurs de steering.
 index.md : laissé à inventor-lint.
+
+## [2026-08-03] ideas | passe déclencheur Kimi K3 (attention linéaire / latent / QAT)
+3 idées, 5 questions, 5 signaux. Meilleure piste (angle utilisateur) : steering de l'état récurrent d'une
+attention linéaire (biais persistant à coût constant), + loger les vecteurs de steering dans le latent compressé (LatentMoE/MLA).
+Fichiers : Ideas/ideas_2026-08-03.md, OpenQuestions/open_questions_2026-08-03.md, WeakSignals/weak_signals_2026-08-03.md.
+index.md : laissé à inventor-lint.
