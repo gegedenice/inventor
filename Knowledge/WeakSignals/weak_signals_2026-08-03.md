@@ -32,3 +32,14 @@ Format : `- <signal> — <d'où il vient> — <pourquoi surveiller>`.
   streaming à niveaux — brique conceptuelle centrale de la fiche inference_archi.
 - **Ne jamais déquantizer** — MXFP4 multiplié depuis les nibbles. Surveiller : « opérer directement dans la
   représentation compressée » (poids 4-bit, latent, propositions) comme motif frugal récurrent.
+
+## Addendum passe 3 (compression de contexte)
+
+- **Découpler lisibilité humaine et décodabilité modèle** — BabelTele. Surveiller : émergence de
+  représentations *model-native* (denses, symboliques, multilingues) quand le lecteur est une machine —
+  frontière nouvelle entre ce qui doit rester lisible (métier, audit) et ce qui peut être comprimé.
+- **Compresser à l'entrée, pas seulement streamer les poids** — Nano-Capsulator/BabelTele vs AirLLM/Colibri.
+  Surveiller : la frugalité a deux leviers complémentaires — *moins de poids en mémoire* et *moins de tokens
+  en contexte* ; les combiner sur un nœud CPU biblio.
+- **Le texte compact comme alternative à l'embedding** — capsule NL transférable vs vecteur opaque. Surveiller :
+  « artefact texte inspectable » (OKF, skills, capsule) qui grignote le terrain des vector stores.

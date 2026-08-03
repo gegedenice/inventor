@@ -174,3 +174,6 @@ Rangement : PDFs primaires déplacés de Resources/ vers Papers/ (Papers = fullt
 Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ (compression de contexte / model-native) + candidat Experiments/exp_compression_contexte_notices.md.
 Cross-links : propositions atomiques (llm.md), Acontext/RAG-sans-embeddings, steering/latent, OKF.
 index.md : laissé à inventor-lint.
+
+## [2026-08-03] ideas | passe 3 (déclencheur Nano-Capsulator -> BabelTele)
+2 idées, 3 questions, 3 signaux (append aux fichiers 2026-08-03). Meilleure piste : "model-native dedans, lisible dehors" (contexte d'agent comprimé, sortie toujours traçable) — concilie frugalité et traçabilité biblio.

@@ -29,3 +29,13 @@
   unique (donne un modèle + un matériel → quoi garder résident vs streamer à chaque niveau) ? → llm.md.
 - **Dense vs MoE mid-size** : pour un modèle *dense* mid-size, seul le streaming de couches (AirLLM) aide
   (pas d'experts à exploiter) ; le gain frugal est-il alors suffisant, ou faut-il un MoE pour que ça vaille ?
+
+## Addendum passe 3 (compression de contexte : Nano-Capsulator / BabelTele)
+
+- **Garde-fou de fidélité** : la fidélité BabelTele dépend du couple compresseur/lecteur. Un aller-retour
+  compress→décompress→compare peut-il servir de *porte QA* avant de faire confiance à un contexte comprimé
+  (le désaccord = signal, cf. idée consensus multi-agent) ? → idées passe 3.
+- **Frontière lisible/model-native** : quelles zones d'un workflow biblio tolèrent le model-native (cache,
+  mémoire, comms agent↔agent) vs exigent le lisible (réponse usager, notice publiée, autorité) ? → kb.md.
+- **Capsule texte vs embedding** : une capsule texte compacte peut-elle remplacer un embedding pour le
+  contexte d'agent, avec l'avantage d'être éditable/transférable/versionnable ? → idée « notice à deux faces ».
