@@ -166,3 +166,37 @@ Why is it interesting?
 - QMD / PageFind (ce fichier) : recherche locale ; Deja ajoute la dimension prédiction/ranking contextuel sans embeddings.
 - Graphify (ce fichier) : « la topologie EST la similarité » ; Deja « des features simples fondues en un score » — même famille « pertinence sans vector DB ».
 - Idée « Lint frugal » / MPropositionneur (Ideas/ideas_2026-07-31.md, llm.md) : même esprit « features simples > LLM » sur des tâches structurées.
+
+---
+
+## Compression de contexte pour LLM : du lisible (Nano-Capsulator) au model-native (BabelTele)
+
+Deux papiers en lignée sur la **compression de contexte/prompt** — réduire tokens, latence et coût tout en préservant la sémantique et la transférabilité entre modèles. (1) **Nano-Capsulator** (Chuang et al., 2402) compresse en **langage naturel lisible** (« Capsule Prompt » : −81,4 % de longueur, jusqu'à 4,5× de latence en moins, transférable même sur LLM d'API). (2) **BabelTele** (Zhu et al., 2606) pousse la logique vers des **représentations non-lisibles par l'humain mais décodables par le LLM**.
+
+Why is it interesting?
+- Renversement radical (BabelTele) : « lisibilité humaine » et « décodabilité par le modèle » sont *découplables* — quand le lecteur est un autre modèle, on peut quitter le langage naturel pour du dense/symbolique/multilingue.
+- Densité mesurée : **99,5 % de fidélité sémantique à 27,9 % du volume** (jusqu'à −72,1 % d'empreinte de contexte) — levier direct de frugalité (moins de tokens = moins de calcul).
+- Nano-Capsulator compresse *sans soft-prompt* (fonction de reward + perte de préservation sémantique) → transférable, contrairement aux prompts continus.
+- Tension féconde pour la bibliothèque : la valeur métier tient souvent à la *traçabilité/lisibilité humaine* (autorité, vérification) ; le model-native optimise l'inverse — où placer le curseur ?
+
+### Resources
+
+- Nano-Capsulator (2402.18700) — https://arxiv.org/abs/2402.18700 — fulltext (PDF) in @../Papers/2402.18700v2.pdf
+- BabelTele (2606.19857) — https://arxiv.org/abs/2606.19857 — fulltext (PDF) in @../Papers/2606.19857v1.pdf
+
+### Takeaway
+
+"human readability, natural-language typicality, and model-side semantic recoverability can be partially decoupled (…) maintaining 99.5% semantic fidelity even when the text volume is condensed to 27.9% of its original length."
+
+### Questions
+
+- Compresser le *contexte* d'un agent bibliothécaire (notices, historique de session) pour tenir plus de fonds dans la fenêtre à moindre coût — **sans perdre le lien vers la source lisible** (traçabilité) ?
+- Communication inter-agents en représentation compressée (mémoire/canal) : gain réel vs risque d'opacité et de débogage impossible ?
+- Où le lisible reste-t-il *obligatoire* (réponse à l'usager, notice publiée) vs où le model-native est-il acceptable (caches, mémoire interne, comms machine↔machine) ?
+
+### Random Connections
+
+- SLM extraction de propositions atomiques (`llm.md`) : autre compression sémantique, mais *lisible et structurée* — opposé complémentaire de BabelTele.
+- Acontext / progressive disclosure (`agentic.md`) + idée « RAG sans embeddings » (`../Ideas/ideas_2026-08-01.md`) : compresser le contexte plutôt que le récupérer.
+- Steering / latent MLA (`llm.md`, `../Ideas/ideas_2026-08-03.md`) : BabelTele compresse au niveau *texte* ; le latent compresse au niveau *représentation* — deux étages du même geste.
+- OKF (`agentic.md`) : parie sur le markdown lisible-humain ; BabelTele parie sur l'inverse — deux visions de « l'artefact que consomme l'agent ».

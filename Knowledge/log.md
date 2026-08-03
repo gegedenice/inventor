@@ -167,3 +167,10 @@ index.md : laissé à inventor-lint.
 
 ## [2026-08-03] ideas | passe 2 (déclencheur kimi-k3-in-c)
 2 idées, 3 questions, 3 signaux (append dans les fichiers 2026-08-03). Réponses : (1) réplicable mid-size = oui, plus rapide (moins d'experts) — expérience cadrée ; (2) kimi-k3-in-c = union AirLLM (streaming couches) + Colibri (streaming experts) en C99. Meilleure piste : moteur MoE mid-size souverain en C.
+
+## [2026-08-03] ingest | Compression de contexte LLM : Nano-Capsulator (2402.18700) -> BabelTele (2606.19857)
+Sources : https://arxiv.org/abs/2402.18700 , https://arxiv.org/abs/2606.19857 (PDF fournis).
+Rangement : PDFs primaires déplacés de Resources/ vers Papers/ (Papers = fulltext/sources ; Resources = datasets/poids/gros dumps). Entrée dans Inspirations/kb.md pointant les 2 PDFs.
+Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ (compression de contexte / model-native) + candidat Experiments/exp_compression_contexte_notices.md.
+Cross-links : propositions atomiques (llm.md), Acontext/RAG-sans-embeddings, steering/latent, OKF.
+index.md : laissé à inventor-lint.
