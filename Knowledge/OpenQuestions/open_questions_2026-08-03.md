@@ -17,3 +17,15 @@
 - **Hybride 3:1 (KDA + MLA) transposable petit ?** Le ratio « 3 couches rapides à état fixe + 1 couche
   de récupération exacte » a-t-il un sens à l'échelle SLM biblio (long contexte de notices/fonds) ? →
   inference_archi.md.
+
+## Addendum passe 2 (kimi-k3-in-c)
+
+- **Seuil de réplicabilité mid-size** : à quelle taille de MoE (params actifs) et quelle RAM le streaming
+  d'experts en C passe-t-il sous ~1 s/token sur CPU — donc de « batch nocturne » à « interactif » ? →
+  `Experiments/exp_moe_streaming_midsize.md`.
+- **Taxonomie unifiée du streaming (lien théorique AirLLM/Colibri demandé)** : AirLLM streame les *couches*,
+  Colibri/kimi-k3-in-c les *experts routés*, Memory Caching le *KV*, KDA compresse l'*état* — même principe
+  « garder le chaud résident, streamer le froid » à 4 niveaux. Peut-on en faire un *planificateur de budget*
+  unique (donne un modèle + un matériel → quoi garder résident vs streamer à chaque niveau) ? → llm.md.
+- **Dense vs MoE mid-size** : pour un modèle *dense* mid-size, seul le streaming de couches (AirLLM) aide
+  (pas d'experts à exploiter) ; le gain frugal est-il alors suffisant, ou faut-il un MoE pour que ça vaille ?

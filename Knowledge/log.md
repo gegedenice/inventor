@@ -164,3 +164,6 @@ Source : https://github.com/FareedKhan-dev/kimi-k3-in-c
 Classée dans Inspirations/llm.md (nouvelle entrée). Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ (moteur MoE mono-fichier C99, MXFP4 sans déquant.) + candidat Experiments/exp_moe_streaming_midsize.md.
 Cross-links : AirLLM + Colibri (union), Kimi K3 architecture (Papers), idée MoE×AirLLM.
 index.md : laissé à inventor-lint.
+
+## [2026-08-03] ideas | passe 2 (déclencheur kimi-k3-in-c)
+2 idées, 3 questions, 3 signaux (append dans les fichiers 2026-08-03). Réponses : (1) réplicable mid-size = oui, plus rapide (moins d'experts) — expérience cadrée ; (2) kimi-k3-in-c = union AirLLM (streaming couches) + Colibri (streaming experts) en C99. Meilleure piste : moteur MoE mid-size souverain en C.

@@ -21,3 +21,14 @@ Format : `- <signal> — <d'où il vient> — <pourquoi surveiller>`.
 - **Préserveurs d'accuracy sous contrainte** — AttnRes (résidus par attention apprise), NoPE (position
   implicite). Surveiller : petites astuces qui rendent la sparsité/quantization *sûres* — à connaître avant
   de pousser un SLM biblio en très basse précision.
+
+## Addendum passe 2 (kimi-k3-in-c)
+
+- **La pile d'inférence frontière tient en C99 mono-fichier** — 176 Ko, zéro dépendance, AVX2, déterministe
+  cross-OS. Surveiller : un socle d'inférence *souverain, auditable, hors-ligne* devient réaliste pour un
+  établissement — argument RGPD/patrimoine fort, à côté de la frugalité.
+- **« Garder le chaud résident, streamer le froid » comme loi unique** — couches (AirLLM), experts (Colibri,
+  kimi-k3-in-c), KV (Memory Caching), état (KDA). Surveiller : convergence vers une théorie unifiée du
+  streaming à niveaux — brique conceptuelle centrale de la fiche inference_archi.
+- **Ne jamais déquantizer** — MXFP4 multiplié depuis les nibbles. Surveiller : « opérer directement dans la
+  représentation compressée » (poids 4-bit, latent, propositions) comme motif frugal récurrent.
