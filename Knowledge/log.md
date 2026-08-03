@@ -183,3 +183,6 @@ Note transversale Syntheses/synthese_spectre_lisible_modelnative.md reliant comp
 
 ## [2026-08-03] ideas | passe 4 (portée large de la compression : inférence, skills, latent)
 2 idées, 3 questions, 3 signaux. Meilleure piste : sonde latente prompt vs BabelTele (Experiments/exp_sonde_latente_babeltele.md) — expérience minimale retenue. + compression de skills (source lisible + capsule dérivée).
+
+## [2026-08-03] lint | reindex + health-check
+11 entrées ajoutées (Compression de contexte + Kimi K3 + kimi-k3-in-c ; 3 Papers ; ideas/OQ/WS 2026-08-03 ; 5 Experiments ; section Synthèses), 0 retirée. Santé : nouvelles entrées bien cross-linkées, axe transversal « spectre lisible↔model-native » émergent. Voir Syntheses/lint_2026-08-03.md.

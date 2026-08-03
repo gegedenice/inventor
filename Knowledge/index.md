@@ -33,6 +33,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **QMD** — moteur de recherche local sur markdown (BM25 + vecteur + re-rank LLM).
 - **Graphify** — slash-command qui transforme un dossier (code, docs, images) en graphe de connaissances interrogeable, sans vector DB (Leiden sur la topologie) ; implémente le patron Karpathy en multimodal.
 - **Deja** — prédicteur de commandes ZSH sans IA : 4 signaux (flou, fréquence×récence, répertoire courant, probabilité d'enchaînement) fondus en un score ; modèle de pertinence contextuelle frugal.
+- **Compression de contexte (Nano-Capsulator → BabelTele)** — compresser prompt/contexte pour LLM : NL lisible transférable (Nano-Capsulator) → non-lisible mais décodable (BabelTele, 99,5 % de sémantique à ~28 % du volume). → fulltext `Papers/2402.18700v2.pdf`, `Papers/2606.19857v1.pdf`
 
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.
@@ -47,6 +48,8 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **HuggingFace ecosystem** — inférence/fine-tuning distant + gestion agentique via `hf` cli.
 - **AirLLM** — inférence couche par couche (charger/calculer/libérer) : 70B sur 4 Go, 405B sur 8 Go, sans quantization ; goulot d'E/S disque. Ex. Kimi K3 (2.8T) sur un GPU 4 Go.
 - **Colibri** — runtime MoE en C pur (zéro dép.) : streame les experts *routés* depuis le disque (« JIT pour les poids »), GLM-5.2 744B sur ~25 Go RAM, CPU-only viable ; dashboard Atlas 3-D des experts par affinité de routage mesurée.
+- **Kimi K3 — masterclass d'efficacité** — architecture d'un MoE 2,78 T : Stable LatentMoE, attention hybride KDA (état fixe) + MLA, QAT natif FP4, NoPE, AttnRes. → fulltext `Papers/kimi3_architecture_efficiency.md`
+- **kimi-k3-in-c** — Kimi K3 (2,78 T) en inférence sur 1 CPU / 8,24 Go, C99 mono-fichier 176 Ko : dense résident + experts streamés + MXFP4 sans déquantization (union AirLLM+Colibri).
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.
@@ -68,19 +71,25 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **medium_llm-rnn.md** — Memory Caching : mémoire croissante pour RNN, entre récurrence et attention pleine.
 - **medium_reading-research-papers.md** — lire les papiers de recherche à l'ère des LLM (méthode en trois passes).
 - **martinfowler_reliable-agentic-ai.md** — PRINCE (Bayer/Thoughtworks) : agentic RAG + Text-to-SQL en production, context & harness engineering, fiabilité et traçabilité.
+- **kimi3_architecture_efficiency.md** — Kimi K3 (Moonshot) : LatentMoE, KDA+MLA, QAT FP4, NoPE, AttnRes — déployer un MoE 2,78 T efficacement.
+- **2402.18700v2.pdf** — Nano-Capsulator : compression de prompt en langage naturel transférable (PDF).
+- **2606.19857v1.pdf** — BabelTele : « LLMs Do Not Always Need Readable Language » — représentations model-native non-lisibles (PDF).
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
 - **ideas_2026-08-01.md** — passe 1 « pertinence sans IA » (Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision). Passe 2 « frugalité inférence » (AirLLM/Kimi K3) : 3 idées (shards de couches en HF buckets, MoE×AirLLM streaming sélectif, KV-cache streamé). Passe 3 « interface d'agents » (Orca) : 2 idées (fan-out/comparer/fusionner en cartes non-terminal, consensus multi-agent pour QA de notices).
 - **applied_ideas_2026-08-02.md** — lentille lab (opérationnelle) : 4 optimisations appliquées (enrichissement de notices nocturne via Colibri CPU, SLM bibliothécaire distillé, shards AirLLM distants, jeu Q/R biblio synthétique).
+- **ideas_2026-08-03.md** — 4 passes : (Kimi K3) steering de l'état récurrent, steering dans le latent MLA, état-signature de document ; (kimi-k3-in-c) moteur MoE mid-size en C, kernel matmul-nibbles ; (compression) model-native dedans/lisible dehors, notice à deux faces ; (portée large) compression de skills, sonde latente.
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
 - **open_questions_2026-08-01.md** — 5 questions (Markov des zones de catalogage, point de bascule features vs LLM, limites de la similarité sans embeddings, calibrage des crans de flou, demi-vie de récence en bibliothèque).
+- **open_questions_2026-08-03.md** — passes Kimi K3 / kimi-k3-in-c / compression : accès état-latent, seuil MoE mid-size, taxonomie unifiée du streaming, frontière lisible/model-native, texte vs latent…
 
 ## Signaux faibles
 - **weak_signals_2026-07-31.md** — 8 signaux (connaissance = artefact versionné, steering vs fine-tuning, propositions atomiques comme brique centrale, Pi couteau suisse, fusion runtime > merge, delta > temps réel, URL comme interface, le négatif est du signal).
 - **weak_signals_2026-08-01.md** — 5 signaux (« pertinence sans vector DB » comme famille, le contexte courant comme feature, le compromis dans la main de l'usager, modèles de Markov d'actions, frugalité assumée comme position).
+- **weak_signals_2026-08-03.md** — Kimi K3 / kimi-k3-in-c / compression : l'état-latent comme objet de 1re classe, « garder le chaud résident, streamer le froid » comme loi unique, ne jamais déquantizer, découpler lisibilité/décodabilité, spectre lisible↔model-native.
 
 ## Expériences (candidats — skill inventor-lab)
 - **exp_colibri_notices_nocturne.md** — bench débit CPU-only de Colibri pour l'enrichissement nocturne.
@@ -88,12 +97,21 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_distill_slm_bibliothecaire.md** — SLM spécialisé distillé d'un grand modèle, servable CPU.
 - **exp_slm_from_scratch_biblio.md** — petit SLM gpt2-style pour démo/POC bibliothèque.
 - **exp_synthdata_biblio_harness.md** — jeu Q/R de catalogage synthétique via harnais type SynthTraces.
+- **exp_steering_etat_recurrent.md** — steering de l'état récurrent d'une attention linéaire (biais persistant à coût constant).
+- **exp_qat_fp4_slm_biblio.md** — QAT natif basse précision pour un SLM biblio CPU (vs quantization a posteriori).
+- **exp_moe_streaming_midsize.md** — débit CPU du streaming d'experts sur un MoE mid-size (seuil batch→interactif).
+- **exp_compression_contexte_notices.md** — compression de contexte (brut / NL / model-native) sur des notices : fidélité vs tokens.
+- **exp_sonde_latente_babeltele.md** — CKA prompt vs prompt-BabelTele par couche : convergence latente ?
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
 - **StateOfTheArt/posttraining.md** — fine-tuning, distillation, alignement, steering.
 - **StateOfTheArt/synthetic_data.md** — génération/filtrage de données synthétiques.
 - **StateOfTheArt/inference_archi.md** — optimisation d'inférence & architectures.
+
+## Synthèses
+- **synthese_spectre_lisible_modelnative.md** — note transversale : le spectre lisible ↔ model-native (contexte, skills, mémoire, poids/latent) comme thème unifiant ; règle « source lisible + dérivé compressé ».
+- **lint_2026-08-02.md**, **lint_2026-08-02b.md** — rapports de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).
