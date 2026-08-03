@@ -177,3 +177,6 @@ index.md : laissé à inventor-lint.
 
 ## [2026-08-03] ideas | passe 3 (déclencheur Nano-Capsulator -> BabelTele)
 2 idées, 3 questions, 3 signaux (append aux fichiers 2026-08-03). Meilleure piste : "model-native dedans, lisible dehors" (contexte d'agent comprimé, sortie toujours traçable) — concilie frugalité et traçabilité biblio.
+
+## [2026-08-03] synthese | Spectre lisible ↔ model-native (transversal)
+Note transversale Syntheses/synthese_spectre_lisible_modelnative.md reliant compression de contexte (kb.md), skills (agentic.md), inférence/latent (llm.md, Papers Kimi K3). Cross-links ajoutés depuis llm.md (MPropositionneur) et agentic.md (SkillOpt). index.md : laissé à inventor-lint.

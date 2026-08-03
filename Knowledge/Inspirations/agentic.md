@@ -353,6 +353,7 @@ Why is it interesting?
 - Karpathy LLM-wiki (kb.md) : SkillOpt-Sleep « harvest → consolidate behind a validation gate » = le Lint/consolidation du wiki, outillé.
 - OKF (ce fichier) : un `best_skill.md` versionné et gouverné est un artefact quasi-OKF (markdown déployable, inspectable).
 - PI packages / Orca / OpenClaw (ce fichier) : SkillOpt fournit des intégrations de harnais — skill entraîné puis déployé dans l'agent.
+- Compression de skills (kb.md, Nano-Capsulator/BabelTele) : un skill est un prompt persistant → compressible, mais tension lisibilité/gouvernance — cf. `../Syntheses/synthese_spectre_lisible_modelnative.md` et idée passe 4 (2026-08-03).
 
 ---
 

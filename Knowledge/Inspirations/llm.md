@@ -87,6 +87,7 @@ Les résultats ? Des performances améliorées en extraction de triplets, en rec
 ### Random Connections
 
 - Karpathy LLM-wiki
+- Compression de contexte lisible↔model-native (kb.md, Nano-Capsulator/BabelTele) : les propositions atomiques en sont la variante *lisible et structurée* — cf. `../Syntheses/synthese_spectre_lisible_modelnative.md`
 
 ---
 
