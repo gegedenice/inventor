@@ -39,3 +39,12 @@
   mémoire, comms agent↔agent) vs exigent le lisible (réponse usager, notice publiée, autorité) ? → kb.md.
 - **Capsule texte vs embedding** : une capsule texte compacte peut-elle remplacer un embedding pour le
   contexte d'agent, avec l'avantage d'être éditable/transférable/versionnable ? → idée « notice à deux faces ».
+
+## Addendum passe 4 (portée large de la compression)
+
+- **Discret vs continu** : sur l'axe NL → capsule NL → model-native → soft-prompt → latent, où est le meilleur
+  compromis compacité / transférabilité / inspectabilité pour un usage biblio (souveraineté) ? → Synthèse spectre.
+- **Skill = source lisible + capsule dérivée** : la régénération automatique de la capsule tient-elle sans dérive,
+  et la capsule doit-elle rester NL (audit) ou peut-elle être model-native (frugalité max) ? → idée compression de skills.
+- **Où agir : texte ou latent ?** Si prompt et BabelTele convergent dans le latent, faut-il comprimer/steerer au
+  niveau latent plutôt que texte ? → `Experiments/exp_sonde_latente_babeltele.md`.

@@ -43,3 +43,13 @@ Format : `- <signal> — <d'où il vient> — <pourquoi surveiller>`.
   en contexte* ; les combiner sur un nœud CPU biblio.
 - **Le texte compact comme alternative à l'embedding** — capsule NL transférable vs vecteur opaque. Surveiller :
   « artefact texte inspectable » (OKF, skills, capsule) qui grignote le terrain des vector stores.
+
+## Addendum passe 4 (spectre lisible ↔ model-native)
+
+- **Un même geste à tous les étages** — contexte, skill, mémoire, poids/latent : compresser une représentation
+  du sens le long d'un axe lisible→model-native. Surveiller : c'est peut-être LE thème transversal d'Inventor
+  (cf. Synthèse) — à traiter comme tel dans les prochaines passes.
+- **Texte compact vs vecteur** — la capsule (texte, éditable, transférable) concurrence l'embedding (vecteur,
+  opaque, lié modèle) pour *skills* et *contexte*. Surveiller : bascule possible « artefact texte » > « vector store ».
+- **De l'observation à l'explication** — la sonde latente (CKA prompt/BabelTele) marque un glissement de la base
+  vers de la recherche *théorique* légère, pas seulement de la veille outillée. Surveiller : premières expériences « pourquoi ça marche ».

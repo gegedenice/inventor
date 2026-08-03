@@ -180,3 +180,6 @@ index.md : laissé à inventor-lint.
 
 ## [2026-08-03] synthese | Spectre lisible ↔ model-native (transversal)
 Note transversale Syntheses/synthese_spectre_lisible_modelnative.md reliant compression de contexte (kb.md), skills (agentic.md), inférence/latent (llm.md, Papers Kimi K3). Cross-links ajoutés depuis llm.md (MPropositionneur) et agentic.md (SkillOpt). index.md : laissé à inventor-lint.
+
+## [2026-08-03] ideas | passe 4 (portée large de la compression : inférence, skills, latent)
+2 idées, 3 questions, 3 signaux. Meilleure piste : sonde latente prompt vs BabelTele (Experiments/exp_sonde_latente_babeltele.md) — expérience minimale retenue. + compression de skills (source lisible + capsule dérivée).
