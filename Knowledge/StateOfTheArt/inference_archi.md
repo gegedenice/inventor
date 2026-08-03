@@ -1,6 +1,6 @@
 # État de l'art — Optimisation de l'inférence & architectures
 
-> Dernière mise à jour : 2026-08-02 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-08-03 · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -22,9 +22,13 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Mémoire croissante pour RNN (Memory Caching)** — émergent — compromis entre récurrence efficace et attention pleine coûteuse. — `../Papers/medium_llm-rnn.md`
 - **Fusion de logits multi-modèles (fused tiny local LLMs)** — émergent — combiner plusieurs petits modèles locaux au niveau des logits. — `../Papers/medium_fused-tiny-local-llms.md`
 - **World models (prédire l'état plutôt que le token)** — exploratoire — Cosmos, Qwen AgentWorld, JEPA. — `../Inspirations/llm.md`
+- **Attention linéaire à état fixe (Kimi Delta Attention, KDA)** — émergent — long contexte à mémoire constante : remplace l'attention standard par un état de taille fixe mis à jour par token ; le KV-cache ne croît plus. Mixé à MLA en 3:1 (3 KDA + 1 Gated MLA pour la récupération exacte). — `../Papers/kimi3_architecture_efficiency.md`
+- **Stable LatentMoE (routage en espace latent compressé)** — émergent — compresser les tokens (hidden→3 584 dims) avant de router aux experts : moins d'activation mémoire et de trafic inter-nœuds ; « obligatoire » au-delà de 1 T params. — `../Papers/kimi3_architecture_efficiency.md`
+- **NoPE + Attention Residuals** — exploratoire — préserver l'accuracy sous forte sparsité/quantization et étendre le contexte (index de séquence implicite ; résidus par attention apprise). — `../Papers/kimi3_architecture_efficiency.md`
 - **Infra d'inférence/stockage (HF jobs serving, endpoints, hf-mount)** — établi — servir/stocker à distance, séparer compute et stockage. — `../Inspirations/llm.md`
 
 ## Ce qui a bougé récemment
+- [2026-08-03] Ingest du rapport **Kimi K3** : entrée de l'**attention linéaire à état fixe (KDA)** — l'attention pleine n'est plus la seule voie au long contexte (rejoint Memory Caching) — et du **routage en latent compressé (LatentMoE)**. Ouvre l'axe « manipuler/steerer l'état récurrent ou le latent » (cf. passe d'idées 2026-08-03).
 - [2026-08-02] Première population depuis `Inspirations/`. Deux briques fortes entrées : **AirLLM** (streaming disque des couches) et **Colibri** (streaming d'experts MoE, CPU-only) — elles réalisent et *mesurent* l'idée « MoE × AirLLM » des passes d'idées.
 
 ## Questions ouvertes / à trancher
@@ -34,10 +38,12 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 ## Candidats d'expériences
 - `../Experiments/exp_colibri_notices_nocturne.md`
 - `../Experiments/exp_airllm_shards_distants.md`
+- `../Experiments/exp_steering_etat_recurrent.md`
 
 ## Sources dans la base
 - **AirLLM**, **Colibri**, **VLM sans encodeur**, **World models**, **HuggingFace ecosystem** — `../Inspirations/llm.md`
 - **Inkling-Small** (MoE, encoder-free, effort variable) — `../Inspirations/llm-training.md`
 - **Fused tiny local LLMs** — `../Papers/medium_fused-tiny-local-llms.md`
 - **Memory Caching (RNN)** — `../Papers/medium_llm-rnn.md`
+- **Kimi K3 architecture** (LatentMoE, KDA+MLA, NoPE, AttnRes) — `../Papers/kimi3_architecture_efficiency.md`
 - _À ingérer :_ Liquid LFM2 encoders (causal decoder → bidirectional encoder) — https://www.liquid.ai/blog/lfm2-5-encoders

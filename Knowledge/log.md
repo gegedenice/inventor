@@ -145,3 +145,10 @@ index.md : laissé à inventor-lint.
 
 ## [2026-08-02] lint | reindex + health-check
 1 entrée ajoutée (Acontext -> agentic.md), 0 retirée. Health : stubs (Markets, Frameworks) et orphelines du rapport précédent résolus ; Acontext déjà bien cross-linké. Voir Syntheses/lint_2026-08-02b.md.
+
+## [2026-08-03] ingest | Kimi K3 — architecture d'efficacité (LatentMoE, KDA+MLA, QAT FP4)
+Source : document utilisateur (analyse Kimi K3, type alpha_signal).
+Classée dans Inspirations/llm.md (entrée-pointeur) + fulltext Papers/kimi3_architecture_efficiency.md.
+Lentille opérationnelle : StateOfTheArt/inference_archi.md (KDA état fixe, LatentMoE, NoPE/AttnRes) + posttraining.md (QAT natif FP4) MàJ ; candidats Experiments/exp_steering_etat_recurrent.md + exp_qat_fp4_slm_biblio.md.
+Cross-links : Memory Caching (Papers), Colibri/AirLLM (llm.md), Steering (Papers) + idée vecteurs de steering.
+index.md : laissé à inventor-lint.

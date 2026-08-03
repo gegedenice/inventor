@@ -1,6 +1,6 @@
 # État de l'art — Post-training LLM/SLM
 
-> Dernière mise à jour : 2026-08-02 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-08-03 · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -20,8 +20,10 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Steering / modification de comportement sans fine-tuning** — émergent — infléchir un LLM à très bas coût, réversible. — `../Papers/iaetbibliotheques_steering.md`
 - **Alignement SFT + DPO (pipeline local)** — établi — aligner un petit modèle après pré-training (LLM Builder). — `../Inspirations/llm-training.md`
 - **Effort de raisonnement variable via RL (Inkling-Small)** — émergent — exposer un curseur coût/qualité sur un même modèle. — `../Inspirations/llm-training.md`
+- **QAT natif basse précision (Kimi K3, post-training en FP4)** — émergent — exécuter le post-training *nativement* en 4-bit (poids FP4, activations 8-bit) : le modèle s'adapte aux numériques bas, évitant la perte d'accuracy d'une quantization a posteriori. Offsette la « taxe d'échelle » mémoire. — `../Papers/kimi3_architecture_efficiency.md`
 
 ## Ce qui a bougé récemment
+- [2026-08-03] Ingest **Kimi K3** : le **QAT natif FP4** entre dans la fiche — entraîner *dans* la précision de déploiement plutôt que quantizer après coup. Piste directe pour un SLM biblio déployable CPU sans perte (cf. Colibri int4, candidat Experiments).
 - [2026-08-02] Première population depuis `Inspirations/`. Le patron **on-policy distillation** (Inkling-Small) recoupe et confirme la distillation 72B→0.6B de MPropositionneur : la voie « petit spécialisé distillé d'un grand » se dessine comme la plus prometteuse pour un contexte frugal.
 
 ## Questions ouvertes / à trancher
@@ -30,6 +32,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 
 ## Candidats d'expériences
 - `../Experiments/exp_distill_slm_bibliothecaire.md`
+- `../Experiments/exp_qat_fp4_slm_biblio.md`
 
 ## Sources dans la base
 - **Inkling-Small** (on-policy distillation + RL, effort variable) — `../Inspirations/llm-training.md`
@@ -37,3 +40,4 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Colab CLI** (fine-tuning QLoRA délégué) — `../Inspirations/agentic.md`
 - **Le Steering** — `../Papers/iaetbibliotheques_steering.md`
 - **LLM from scratch** (SFT + DPO local) — `../Inspirations/llm-training.md`
+- **Kimi K3 architecture** (QAT natif FP4) — `../Papers/kimi3_architecture_efficiency.md`

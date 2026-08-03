@@ -181,3 +181,37 @@ Why is it interesting?
 - Inkling-Small (llm-training.md) / Kimi K3 (agentic.md) : MoE creux — cibles naturelles du staging d'experts.
 - Dataviz DeckGL (dataviz.md) : l'Atlas 3-D est un réseau sémantique de comportement *mesuré* — même famille « carte haute densité ».
 - Graphify (kb.md) : « position = affinité mesurée, pas embedding appris » ↔ « la topologie du graphe EST la similarité ».
+
+---
+
+## Kimi K3 — masterclass d'efficacité (LatentMoE, KDA+MLA, QAT FP4, NoPE, AttnRes)
+
+Analyse d'ingénierie du Kimi K3 de Moonshot (MoE multimodal, 2,8 T total / ~104 B actifs, 16/896 experts, contexte 1 M) : une pile de choix qui rendent un modèle géant *déployable*. Fulltext gardé en base.
+
+Why is it interesting?
+- **Stable LatentMoE** : compresser les tokens dans un espace latent réduit (hidden down-projeté à 3 584 dims) *avant* le routage → moins de mémoire d'activation et de trafic inter-nœuds. « Pratiquement obligatoire » au-delà de 1 T params. (bâtit sur Nemotron 3.)
+- **Kimi Delta Attention (KDA)** : remplace l'attention standard par un *mécanisme linéaire à état de taille fixe mis à jour par token* → le KV-cache ne croît plus avec la longueur. Mixé à **MLA** (DeepSeek, KV compressé en un vecteur latent) en ratio **3:1** (3 KDA rapides + 1 Gated MLA pour la récupération exacte).
+- **QAT natif FP4** : pipeline de *post-training exécuté nativement en FP4* (poids 4-bit, activations 8-bit) → le modèle s'adapte à la basse précision, évitant la perte d'accuracy. (Unsloth : jusqu'à 1–2 bit GGUF, 1,56 To → ~594 Go @ ~79 % top-1.)
+- **AttnRes** (résidus par attention apprise entre couches, vs addition fixe) et **NoPE** (pas d'embedding positionnel ; index de séquence implicite) : préservent l'accuracy sous forte sparsité/quantization et étendent le contexte à 1 M.
+
+### Resources
+
+- Document fourni par l'utilisateur — fulltext in @../Papers/kimi3_architecture_efficiency.md
+- Contexte : Kimi K3 déjà cité dans AgentENV (agentic.md) et AirLLM (ce fichier).
+
+### Takeaway
+
+"Kimi Delta Attention (KDA), used in Kimi K3, replaces standard attention with a linear mechanism that keeps a fixed-size state that updates per token. This brings the computational complexity down and stops the KV cache from growing with sequence length."
+
+### Questions
+
+- L'état de taille fixe de KDA (mis à jour par token) est-il un *latent steerable* : injecter un vecteur dans cet état pour biaiser le comportement sur tout un long document, à coût constant ?
+- L'espace latent compressé de LatentMoE/MLA (3 584 dims) est-il un meilleur logement pour des vecteurs de steering (moins cher, plus robuste) que l'espace résiduel plein ?
+- QAT natif basse précision : distiller/fine-tuner un SLM bibliothécaire *directement* en 4-bit pour un déploiement CPU sans perte ?
+
+### Random Connections
+
+- Memory Caching RNN (`../Papers/medium_llm-rnn.md`) : KDA est l'instance production de « état récurrent de taille fixe vs attention pleine ».
+- Colibri / AirLLM (ce fichier) : Kimi K3 (2,8 T) est justement le modèle que Colibri/AirLLM cherchent à servir frugalement ; QAT FP4 réduit encore l'empreinte.
+- Le Steering (`../Papers/iaetbibliotheques_steering.md`) + idée « vecteurs de steering comme compétences » (Ideas/2026-07-31) : cible naturelle = l'état KDA / le latent MLA.
+- Inkling-Small (`llm-training.md`) : autre MoE frugal ; NoPE/AttnRes = autres « préserveurs d'accuracy ».
