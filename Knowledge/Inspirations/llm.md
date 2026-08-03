@@ -215,3 +215,36 @@ Why is it interesting?
 - Colibri / AirLLM (ce fichier) : Kimi K3 (2,8 T) est justement le modèle que Colibri/AirLLM cherchent à servir frugalement ; QAT FP4 réduit encore l'empreinte.
 - Le Steering (`../Papers/iaetbibliotheques_steering.md`) + idée « vecteurs de steering comme compétences » (Ideas/2026-07-31) : cible naturelle = l'état KDA / le latent MLA.
 - Inkling-Small (`llm-training.md`) : autre MoE frugal ; NoPE/AttnRes = autres « préserveurs d'accuracy ».
+
+---
+
+## kimi-k3-in-c — Kimi K3 (2,78 T) en C99 sur un seul CPU, 8,24 Go RAM
+
+Moteur d'inférence portable en C99 (FareedKhan-dev) qui fait tourner Kimi K3 (2,78 T params) sur **un seul CPU en 8,24 Go de RAM — sans BLAS, sans framework, sans GPU**. Binaire de 176 Ko, doublé d'un tutoriel « build every box from scratch ».
+
+Why is it interesting?
+- **Union frugale d'AirLLM et de Colibri** : partie dense résidente en RAM + 82 432 experts « endormis sur disque », seuls 16/896 réveillés par token (~3,7 % actifs). MXFP4 : on multiplie directement depuis les nibbles, **jamais de déquantization** (économise mémoire *et* calcul).
+- Implémente l'architecture Kimi K3 (cf. `Papers/kimi3_architecture_efficiency.md`) en kernels C lisibles : RMSNorm, **KDA** (69/93 couches), **MLA** (globale, 1 sur 4), **LatentMoE**, MXFP4 matmul.
+- Compromis assumé et mesuré : ~**32,7 s/token** (8 tokens en 261 s) — c'est la *capacité*, pas la vitesse ; AVX2+FMA suffisent ; sortie déterministe cross-OS. Le mur est l'E/S/capacité, pas le CPU.
+- Pédagogique et souverain : 176 Ko de binaire pour un modèle de 1,56 To, auditable, hors-ligne.
+
+### Resources
+
+- https://github.com/FareedKhan-dev/kimi-k3-in-c
+
+### Takeaway
+
+"only 16 of its 896 experts per layer fire for any given token and the rest sit asleep on disk. Keep the always-on part in memory, stream the sleeping experts, and it fits in 8.24 gigabytes on one CPU with no GPU."
+
+### Questions
+
+- **Réplicable pour des modèles mid-size ?** Pour un MoE moyen (Inkling-Small 276B/12B, ou 30–100B), la partie résidente est minuscule et les experts streamés bien moins nombreux → tok/s *bien* supérieur aux ~33 s/token de K3. Pour un *dense* mid-size, seul le streaming de couches (AirLLM) s'applique (pas de sparsité d'experts à exploiter). À mesurer.
+- MXFP4 « jamais déquantizé » : transposable à un runtime CPU biblio pour un SLM/MoE 4-bit natif (cf. QAT FP4 de Kimi K3) ?
+- 176 Ko en C99, zéro dépendance : socle d'inférence souverain/hors-ligne pour un établissement (auditable, RGPD) ?
+
+### Random Connections
+
+- AirLLM + Colibri (ce fichier) : kimi-k3-in-c *est* l'union des deux — streaming disque des poids (AirLLM) + streaming des experts MoE routés « JIT for weights » (Colibri), en C99 mono-fichier. Colibri = moteur C pour GLM-5.2 ; celui-ci = moteur C pour Kimi K3.
+- Kimi K3 architecture (`Papers/kimi3_architecture_efficiency.md`) : implémentation concrète de KDA/MLA/LatentMoE + MXFP4.
+- Idée « MoE × AirLLM : ne streamer que les experts routés » (`Ideas/ideas_2026-08-01.md`, passe 2) : réalisée et mesurée ici.
+- LLM from scratch (`llm-training.md`) : même veine « construire chaque brique soi-même » pour comprendre.

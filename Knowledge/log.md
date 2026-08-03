@@ -158,3 +158,9 @@ index.md : laissé à inventor-lint.
 attention linéaire (biais persistant à coût constant), + loger les vecteurs de steering dans le latent compressé (LatentMoE/MLA).
 Fichiers : Ideas/ideas_2026-08-03.md, OpenQuestions/open_questions_2026-08-03.md, WeakSignals/weak_signals_2026-08-03.md.
 index.md : laissé à inventor-lint.
+
+## [2026-08-03] ingest | kimi-k3-in-c — Kimi K3 en C99 sur 1 CPU (8,24 Go)
+Source : https://github.com/FareedKhan-dev/kimi-k3-in-c
+Classée dans Inspirations/llm.md (nouvelle entrée). Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ (moteur MoE mono-fichier C99, MXFP4 sans déquant.) + candidat Experiments/exp_moe_streaming_midsize.md.
+Cross-links : AirLLM + Colibri (union), Kimi K3 architecture (Papers), idée MoE×AirLLM.
+index.md : laissé à inventor-lint.

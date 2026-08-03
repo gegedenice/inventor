@@ -1,6 +1,6 @@
 # État de l'art — Optimisation de l'inférence & architectures
 
-> Dernière mise à jour : 2026-08-03 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-08-03 (b) · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -17,6 +17,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 
 - **Inférence couche-par-couche (AirLLM)** — établi — modèle géant sur petit GPU, batch tolérant à la latence ; goulot = E/S disque (70B/4 Go, 405B/8 Go, sans quantization). — `../Inspirations/llm.md`
 - **Streaming d'experts MoE, « JIT for weights » (Colibri)** — émergent — MoE géant sur RAM modeste, **CPU-only viable** (GLM-5.2 744B ~25 Go RAM ; ~1,8 tok/s @128 Go) ; ne streame que les experts routés. — `../Inspirations/llm.md`
+- **Moteur MoE mono-fichier C99 (kimi-k3-in-c)** — émergent — dense résident + experts routés streamés du disque + MXFP4 *sans déquantization* ; Kimi K3 2,78 T sur 1 CPU / 8,24 Go, binaire 176 Ko, AVX2 (mais ~33 s/token : capacité, pas vitesse). — `../Inspirations/llm.md`
 - **Architectures encoder-free multimodal** — émergent — éviter un pipeline d'encodeur lourd (VLM sans encodeur ; Inkling-Small : audio dMel + patches image). — `../Inspirations/llm.md`, `../Inspirations/llm-training.md`
 - **MoE à effort de raisonnement variable (Inkling-Small)** — émergent — balayer une courbe coût/perf avec un seul modèle (minimal→xhigh). — `../Inspirations/llm-training.md`
 - **Mémoire croissante pour RNN (Memory Caching)** — émergent — compromis entre récurrence efficace et attention pleine coûteuse. — `../Papers/medium_llm-rnn.md`
@@ -28,6 +29,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Infra d'inférence/stockage (HF jobs serving, endpoints, hf-mount)** — établi — servir/stocker à distance, séparer compute et stockage. — `../Inspirations/llm.md`
 
 ## Ce qui a bougé récemment
+- [2026-08-03b] Ingest **kimi-k3-in-c** : preuve de concept que l'union « AirLLM (streaming disque) + Colibri (experts MoE routés) + MXFP4 sans déquantization » tient en **176 Ko de C99, 8 Go RAM, sans GPU**. Confirme la piste « MoE × AirLLM » ; question ouverte = passage à un MoE mid-size (bien plus rapide).
 - [2026-08-03] Ingest du rapport **Kimi K3** : entrée de l'**attention linéaire à état fixe (KDA)** — l'attention pleine n'est plus la seule voie au long contexte (rejoint Memory Caching) — et du **routage en latent compressé (LatentMoE)**. Ouvre l'axe « manipuler/steerer l'état récurrent ou le latent » (cf. passe d'idées 2026-08-03).
 - [2026-08-02] Première population depuis `Inspirations/`. Deux briques fortes entrées : **AirLLM** (streaming disque des couches) et **Colibri** (streaming d'experts MoE, CPU-only) — elles réalisent et *mesurent* l'idée « MoE × AirLLM » des passes d'idées.
 
@@ -39,6 +41,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - `../Experiments/exp_colibri_notices_nocturne.md`
 - `../Experiments/exp_airllm_shards_distants.md`
 - `../Experiments/exp_steering_etat_recurrent.md`
+- `../Experiments/exp_moe_streaming_midsize.md`
 
 ## Sources dans la base
 - **AirLLM**, **Colibri**, **VLM sans encodeur**, **World models**, **HuggingFace ecosystem** — `../Inspirations/llm.md`
@@ -46,4 +49,5 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Fused tiny local LLMs** — `../Papers/medium_fused-tiny-local-llms.md`
 - **Memory Caching (RNN)** — `../Papers/medium_llm-rnn.md`
 - **Kimi K3 architecture** (LatentMoE, KDA+MLA, NoPE, AttnRes) — `../Papers/kimi3_architecture_efficiency.md`
+- **kimi-k3-in-c** (moteur C99 mono-fichier, experts streamés, MXFP4) — `../Inspirations/llm.md`
 - _À ingérer :_ Liquid LFM2 encoders (causal decoder → bidirectional encoder) — https://www.liquid.ai/blog/lfm2-5-encoders
