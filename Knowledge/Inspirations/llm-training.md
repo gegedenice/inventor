@@ -60,3 +60,37 @@ Why is it interesting?
 ### Random Connections
 
 ---
+
+---
+
+## Soup — fine-tuning / post-training LLM en une commande
+
+CLI open-source (Apache-2.0) qui ramène le fine-tuning et le post-training à « un YAML, une commande » : SFT, DPO/GRPO/PPO/KTO/ORPO/SimPO/IPO…, QLoRA, quantization auto, export GGUF/ONNX/AWQ, exécution locale (QLoRA sur son propre GPU ; CPU expérimental, très lent). « Zero SSH ».
+
+Why is it interesting?
+- Frugalité outillée : QLoRA local (7B sur 8 Go VRAM), batch/GPU/quantization auto, backends Unsloth/MLX, et une **pile d'efficacité mémoire** (activation offloading, gradient checkpointing, GaLore, ReLoRA, DeepSpeed/FSDP). C'est le **pendant *entraînement* du streaming d'inférence** (AirLLM/Colibri) : décharger/streamer en RAM/VRAM ce qui ne tient pas — « streaming in RAM/VRAM » côté train.
+- Gouvernance RL : v0.71.26 « closed-loop reward-hacking auto-mitigation » — *détecte* le reward hacking en cours d'entraînement, relève β (KL), *rollback* au dernier checkpoint sain, early-stop en dernier recours ; mode `log_only` pour observer d'abord.
+- Chaîne complète data → train → eval → serve : 100+ recettes de modèles, templates (chat, code, medical, reasoning, moe, longcontext…), `soup doctor`, export Ollama/llama.cpp.
+- Runs CPU possibles pour tester (quantization auto-désactivée) — utile pour prototyper une tâche biblio sans GPU.
+
+### Resources
+
+- https://github.com/MakazhanAlpamys/Soup
+- Site : https://trysoup.dev
+
+### Takeaway
+
+"Fine-tune and post-train LLMs in one command. No SSH, no config hell."
+
+### Questions
+
+- Soup comme outil *one-command* pour fine-tuner un SLM biblio (normalisation de vedettes, mots-clés) en QLoRA sur 8 Go / CPU — coût/qualité vs Colab CLI (fine-tuning délégué à un GPU distant) ?
+- Le « reward-hacking auto-mitigation » (détecter → corriger → continuer) : transposable comme garde-fou à d'autres boucles biblio (évals de qualité, consensus multi-agent) ?
+- « Streaming en RAM/VRAM pour l'entraînement » (activation offloading, GaLore) : jusqu'où repousse-t-il la taille entraînable sur matériel modeste ?
+
+### Random Connections
+
+- Colab CLI (agentic.md) : fine-tuning délégué à un GPU distant vs Soup local one-command — deux frugalités complémentaires.
+- AirLLM / Colibri / kimi-k3-in-c (llm.md) : streaming *à l'inférence* ; Soup apporte l'offloading/streaming *à l'entraînement* — même trend « ne pas tout tenir en mémoire ».
+- Inkling-Small (on-policy distillation) + QAT FP4 (llm-training.md, `../Papers/kimi3_architecture_efficiency.md`) : Soup outille QAT/DPO/distillation — la brique d'exécution de ces recettes.
+- Idée « SLM bibliothécaire distillé » (`../Experiments/exp_distill_slm_bibliothecaire.md`) : Soup rend son lancement trivial.

@@ -186,3 +186,10 @@ Note transversale Syntheses/synthese_spectre_lisible_modelnative.md reliant comp
 
 ## [2026-08-03] lint | reindex + health-check
 11 entrées ajoutées (Compression de contexte + Kimi K3 + kimi-k3-in-c ; 3 Papers ; ideas/OQ/WS 2026-08-03 ; 5 Experiments ; section Synthèses), 0 retirée. Santé : nouvelles entrées bien cross-linkées, axe transversal « spectre lisible↔model-native » émergent. Voir Syntheses/lint_2026-08-03.md.
+
+## [2026-08-05] ingest | Soup — fine-tuning/post-training LLM en une commande
+Source : https://github.com/MakazhanAlpamys/Soup
+Classée dans Inspirations/llm-training.md (nouvelle entrée). Lentille opérationnelle : StateOfTheArt/posttraining.md MàJ (orchestration one-command + offloading mémoire « streaming train » + garde-fou reward-hacking) + candidat Experiments/exp_soup_finetune_slm_biblio.md.
+Angle utilisateur : « layer streaming mais pour l'entraînement ; streaming RAM/VRAM = le nouveau trend » — capté (activation offloading/GaLore/DeepSpeed = pendant train d'AirLLM/Colibri).
+Cross-links : Colab CLI (agentic.md), AirLLM/Colibri/kimi-k3-in-c (llm.md), Inkling-Small + QAT (llm-training/Papers).
+index.md : laissé à inventor-lint.
