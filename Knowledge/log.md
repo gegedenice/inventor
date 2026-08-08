@@ -206,3 +206,9 @@ Classée dans Inspirations/kb.md (entrée-pointeur) + fulltext Papers/medium_okf
 Candidat testable directement sur notre base : Experiments/exp_fts5_index_knowledge.md (FTS5/BM25 sur Knowledge/).
 Cross-links : OKF (agentic.md, suite v0.2), Graphify + cycle-de-vie/ghost-nodes + Karpathy LLM-wiki + QMD/PageFind (kb.md).
 index.md : laissé à inventor-lint.
+
+## [2026-08-08] ingest | kimi-k3-in-c (re-soumis) — doublon, entrée enrichie
+Source : https://github.com/FareedKhan-dev/kimi-k3-in-c (déjà ingéré le 2026-08-03).
+Doublon de l'entrée Inspirations/llm.md#kimi-k3-in-c : enrichie avec l'angle utilisateur — (1) généralisation à un MoE mid-size (qui stocke >1T ?), (2) stocker les experts sur un HF bucket (hf-mount) plutôt qu'en local.
+Les 2 questions renvoient aux candidats existants : Experiments/exp_moe_streaming_midsize.md + exp_airllm_shards_distants.md. Aucun nouveau fichier.
+index.md : laissé à inventor-lint.

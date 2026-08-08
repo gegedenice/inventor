@@ -240,6 +240,7 @@ Why is it interesting?
 ### Questions
 
 - **Réplicable pour des modèles mid-size ?** Pour un MoE moyen (Inkling-Small 276B/12B, ou 30–100B), la partie résidente est minuscule et les experts streamés bien moins nombreux → tok/s *bien* supérieur aux ~33 s/token de K3. Pour un *dense* mid-size, seul le streaming de couches (AirLLM) s'applique (pas de sparsité d'experts à exploiter). À mesurer.
+- **Stocker les experts sur un HF bucket plutôt qu'en local ?** Personne ne garde 1,56 To en local — pointer le stockage des experts vers un montage distant (hf-mount / HF buckets) rendrait le modèle *empruntable* : compute local minuscule, poids distants mutualisés et versionnés. Reste le mur d'E/S réseau (le prefetch le masque-t-il pour du batch ?). Cf. idée « AirLLM × HF-buckets » et `../Experiments/exp_airllm_shards_distants.md`.
 - MXFP4 « jamais déquantizé » : transposable à un runtime CPU biblio pour un SLM/MoE 4-bit natif (cf. QAT FP4 de Kimi K3) ?
 - 176 Ko en C99, zéro dépendance : socle d'inférence souverain/hors-ligne pour un établissement (auditable, RGPD) ?
 
@@ -248,4 +249,5 @@ Why is it interesting?
 - AirLLM + Colibri (ce fichier) : kimi-k3-in-c *est* l'union des deux — streaming disque des poids (AirLLM) + streaming des experts MoE routés « JIT for weights » (Colibri), en C99 mono-fichier. Colibri = moteur C pour GLM-5.2 ; celui-ci = moteur C pour Kimi K3.
 - Kimi K3 architecture (`Papers/kimi3_architecture_efficiency.md`) : implémentation concrète de KDA/MLA/LatentMoE + MXFP4.
 - Idée « MoE × AirLLM : ne streamer que les experts routés » (`Ideas/ideas_2026-08-01.md`, passe 2) : réalisée et mesurée ici.
+- Les deux questions utilisateur (mid-size ? poids sur HF bucket ?) sont cadrées en expériences : `../Experiments/exp_moe_streaming_midsize.md` (généralisation MoE mid-size) et `../Experiments/exp_airllm_shards_distants.md` (poids streamés depuis un stockage objet distant).
 - LLM from scratch (`llm-training.md`) : même veine « construire chaque brique soi-même » pour comprendre.
