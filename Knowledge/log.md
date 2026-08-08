@@ -199,3 +199,10 @@ Source : https://medium.com/@UdaykiranEstari/your-ai-coding-knowledge-graph-is-l
 Classée dans Inspirations/kb.md (nouvelle entrée). Pas de lentille opérationnelle (maintenance de KB, hors SOTA training/inférence).
 Cross-links : Graphify + Karpathy LLM-wiki (kb.md) + inventor-lint, OKF (agentic.md, question fraîcheur), idée anti-bibliothèque (Ideas/2026-07-31).
 index.md : laissé à inventor-lint.
+
+## [2026-08-08] ingest | OKF v0.2 — le dossier a un plafond (échelle folder→index→search→graph)
+Source : https://medium.com/@davidroliver/okf-v0-2-quietly-admits-the-folder-has-a-ceiling-the-way-up-is-a-library-25fa54e872f9 (upload utilisateur).
+Classée dans Inspirations/kb.md (entrée-pointeur) + fulltext Papers/medium_okf-v02-folder-ceiling.md.
+Candidat testable directement sur notre base : Experiments/exp_fts5_index_knowledge.md (FTS5/BM25 sur Knowledge/).
+Cross-links : OKF (agentic.md, suite v0.2), Graphify + cycle-de-vie/ghost-nodes + Karpathy LLM-wiki + QMD/PageFind (kb.md).
+index.md : laissé à inventor-lint.

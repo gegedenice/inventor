@@ -233,3 +233,40 @@ Why is it interesting?
 - Karpathy LLM-wiki (ce fichier) + skill `inventor-lint` : l'opération Lint = health-check ; tombstones + freshness gates en sont l'outillage concret.
 - Idée « anti-bibliothèque / registre du réfuté » (`../Ideas/ideas_2026-07-31.md`) : les tombstones sont le mécanisme du « garder trace du supprimé ».
 - Deja (récence, ce fichier) / claim-delta (claims qui disparaissent) : la fraîcheur/disparition comme signal de première classe.
+
+---
+
+## OKF v0.2 : le dossier a un plafond — l'échelle folder → index → search → graph
+
+Analyse (David Oliver, Medium, 2026-07) de la v0.2 d'OKF (ajout de frontmatter *provenance / trust / lifecycle* + calcul attesté). Thèse : ces champs ne « paient » que si on peut les *interroger* à l'échelle du corpus — or un dossier de Markdown ne le peut plus passé un seuil. D'où une **échelle de vues dérivées**, chaque barreau forcé par la taille, le dossier restant canonique. Fulltext gardé en base.
+
+Why is it interesting?
+- **L'échelle** : dossier (l'agent marche l'arbre) → index curé (`index.md`) → **index de recherche généré** (BM25, puis hybride lexical+vecteur) → **property graph** (nœuds, arêtes *typées*, propriétés queryables → GraphRAG). Chaque vue est *dérivée* et jetable ; le Markdown reste la source de vérité.
+- Déclencheur **comportemental, pas numérique** : on monte d'un barreau quand l'agent gâche son contexte en listings de répertoire / faux positifs grep (~bas milliers de concepts).
+- **Design concret réutilisable** : index BM25 via **SQLite FTS5**, un seul `.db` portable, **reconstruit from scratch à chaque commit** (pas d'incrémental à rater → répond aux *ghost nodes*), chunké par *heading*, interrogé par un humain (`sqlite3`) ET un agent (outil MCP) — « un index, deux audiences ».
+- **Métamodèle graph-ready dès le frontmatter** (spec-compatible) : `id` stable + `aliases`, **liens typés** (`rel: depends_on/supersedes…`) sortis de la prose, `type` comme label, valeurs scalaires typées, hash des binaires → migration future = « un loader de 100 lignes », pas une fouille.
+- **Multimédia effondre l'échelle** : images/audio/vidéo échappent à grep/diff → vecteur + graphe *dès le jour 1*.
+- **Fédérer, pas centraliser** : chaque équipe garde son bundle ; un « library process » synchronise et construit les vues dérivées sur l'union (jamais n'édite les fichiers) ; accord minimal = 2 fichiers JSON (vocabulaires de types et de relations).
+
+### Resources
+
+- https://medium.com/@davidroliver/okf-v0-2-quietly-admits-the-folder-has-a-ceiling-the-way-up-is-a-library-25fa54e872f9
+- fulltext in @../Papers/medium_okf-v02-folder-ceiling.md
+
+### Takeaway
+
+"The folder isn't an alternative to a database. It is the larval form of one."
+
+### Questions
+
+- Notre `Knowledge/` approche-t-il le plafond du dossier ? Un index **FTS5/BM25 reconstruit à chaque commit**, interrogeable par `sqlite3` (humain) et MCP (agent), est-il le prochain barreau logique (cf. QMD, PageFind) ? → `../Experiments/exp_fts5_index_knowledge.md`
+- Rendre notre métamodèle *graph-ready* : ajouter `id` stables + liens **typés** (transformer les « Random Connections » en arêtes `rel:`) pour qu'une future vue graphe soit un simple loader ?
+- Fédération : plusieurs établissements gardant chacun leur bundle, un « library process » construisant index/graphe sur l'union — modèle pour un réseau documentaire (cf. OpenSpace cloud skill community, idée « notice à deux faces ») ?
+
+### Random Connections
+
+- OKF (agentic.md) : suite directe (v0.2) — répond à ses questions ouvertes de *fraîcheur* et de *passage à l'échelle*.
+- Graphify (ce fichier) : le barreau « property graph » de l'échelle (convergence vers GraphRAG).
+- Cycle de vie / ghost nodes (ce fichier) : « rebuild from scratch » = la réponse au périmé de l'incrémental.
+- Karpathy LLM-wiki (ce fichier) : `index.md` + `log.md` = « forme larvaire d'une base » (index=retrieval, edges=relations, log=history) — l'article le formalise.
+- QMD / PageFind (ce fichier) + idée « RAG sans embeddings » (`../Ideas/ideas_2026-08-01.md`) : FTS5/BM25 = pertinence lexicale sans vector DB, avant l'hybride.
