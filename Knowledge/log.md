@@ -193,3 +193,9 @@ Classée dans Inspirations/llm-training.md (nouvelle entrée). Lentille opérati
 Angle utilisateur : « layer streaming mais pour l'entraînement ; streaming RAM/VRAM = le nouveau trend » — capté (activation offloading/GaLore/DeepSpeed = pendant train d'AirLLM/Colibri).
 Cross-links : Colab CLI (agentic.md), AirLLM/Colibri/kimi-k3-in-c (llm.md), Inkling-Small + QAT (llm-training/Papers).
 index.md : laissé à inventor-lint.
+
+## [2026-08-08] ingest | Cycle de vie d'un knowledge graph (ghost nodes, tombstones) — Graphify + OKF
+Source : https://medium.com/@UdaykiranEstari/your-ai-coding-knowledge-graph-is-lying-to-you-graphify-okf-ac590c244158 (member-only : résumé depuis intro + TOC seulement).
+Classée dans Inspirations/kb.md (nouvelle entrée). Pas de lentille opérationnelle (maintenance de KB, hors SOTA training/inférence).
+Cross-links : Graphify + Karpathy LLM-wiki (kb.md) + inventor-lint, OKF (agentic.md, question fraîcheur), idée anti-bibliothèque (Ideas/2026-07-31).
+index.md : laissé à inventor-lint.

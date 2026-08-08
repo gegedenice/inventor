@@ -200,3 +200,36 @@ Why is it interesting?
 - Acontext / progressive disclosure (`agentic.md`) + idée « RAG sans embeddings » (`../Ideas/ideas_2026-08-01.md`) : compresser le contexte plutôt que le récupérer.
 - Steering / latent MLA (`llm.md`, `../Ideas/ideas_2026-08-03.md`) : BabelTele compresse au niveau *texte* ; le latent compresse au niveau *représentation* — deux étages du même geste.
 - OKF (`agentic.md`) : parie sur le markdown lisible-humain ; BabelTele parie sur l'inverse — deux visions de « l'artefact que consomme l'agent ».
+
+---
+
+## Cycle de vie d'un knowledge graph : ghost nodes, tombstones, freshness gates (Graphify + OKF)
+
+Retour d'expérience (Udaykiran Estari, Medium, 2026-07 — *article member-only : ici résumé depuis l'intro + le sommaire accessibles*) sur le point aveugle de Graphify/OKF : construire le graphe est facile, le **maintenir frais** ne l'est pas. Les mises à jour incrémentales (`--update`) laissent des *ghost nodes* — des nœuds pour du code (ou des entrées) supprimé — et l'agent devient « confidently wrong » sans alerte.
+
+Why is it interesting?
+- Déplace le sujet de « comment construire un knowledge graph » vers « comment l'empêcher de mentir au jour 45 » : dérive silencieuse, régressions de merge destructives, `--update` qui répond « already clean » alors que du périmé persiste.
+- Propose un **cycle de vie** emprunté à la cohérence de cache : hachage de contenu, invalidation, **tombstones** (marquer le supprimé au lieu de l'effacer), **freshness gates**, et **reconstructions CI planifiées** (ne pas se fier au seul incrémental).
+- Répond frontalement à la question « fraîcheur » qu'on avait posée sur OKF (« les fichiers ne se mettent pas à jour seuls ; le vrai test est la gouvernance »).
+
+### Resources
+
+- https://medium.com/@UdaykiranEstari/your-ai-coding-knowledge-graph-is-lying-to-you-graphify-okf-ac590c244158 (member-only ; corps complet non accédé — résumé depuis l'intro + TOC)
+
+### Takeaway
+
+"the knowledge graph it trusts still contains a node for a function your teammate deleted (…). Incremental updates reported 'already clean', but behind that green log line, stale nodes silently persisted."
+
+### Questions
+
+- Notre base `Knowledge/` a-t-elle ses propres *ghost nodes* (lignes d'index vers du supprimé, cross-links morts) ? C'est le rôle d'`inventor-lint` — faut-il y ajouter **tombstones** + une **freshness gate** ?
+- Tombstones pour un catalogue : *marquer* une notice/autorité supprimée plutôt que l'effacer (traçabilité, cf. idée « anti-bibliothèque du réfuté ») ?
+- Freshness gate + rebuild planifié : quand *reconstruire* une base documentaire qui grossit plutôt que l'incrémenter (au risque de la dérive) ?
+
+### Random Connections
+
+- Graphify (ce fichier) : cet article en est la critique « jour 45 » — le graphe dérive ; complète l'entrée Graphify.
+- OKF (agentic.md) : outille sa question ouverte de *fraîcheur* (qui possède/rafraîchit le fichier après une réorg).
+- Karpathy LLM-wiki (ce fichier) + skill `inventor-lint` : l'opération Lint = health-check ; tombstones + freshness gates en sont l'outillage concret.
+- Idée « anti-bibliothèque / registre du réfuté » (`../Ideas/ideas_2026-07-31.md`) : les tombstones sont le mécanisme du « garder trace du supprimé ».
+- Deja (récence, ce fichier) / claim-delta (claims qui disparaissent) : la fraîcheur/disparition comme signal de première classe.
