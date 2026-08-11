@@ -34,6 +34,9 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Graphify** — slash-command qui transforme un dossier (code, docs, images) en graphe de connaissances interrogeable, sans vector DB (Leiden sur la topologie) ; implémente le patron Karpathy en multimodal.
 - **Deja** — prédicteur de commandes ZSH sans IA : 4 signaux (flou, fréquence×récence, répertoire courant, probabilité d'enchaînement) fondus en un score ; modèle de pertinence contextuelle frugal.
 - **Compression de contexte (Nano-Capsulator → BabelTele)** — compresser prompt/contexte pour LLM : NL lisible transférable (Nano-Capsulator) → non-lisible mais décodable (BabelTele, 99,5 % de sémantique à ~28 % du volume). → fulltext `Papers/2402.18700v2.pdf`, `Papers/2606.19857v1.pdf`
+- **Cycle de vie d'un knowledge graph (ghost nodes, tombstones, freshness gates)** — maintenir un KG *frais* (Graphify/OKF) : l'incrémental laisse des *ghost nodes* ; cycle de vie emprunté au cache (hachage de contenu, tombstones, freshness gates, rebuild CI planifié).
+- **OKF v0.2 : le dossier a un plafond** — l'échelle folder → index → search → graph : vues dérivées jetables, index FTS5/BM25 reconstruit *from scratch* à chaque commit, métamodèle graph-ready dès le frontmatter. → fulltext `Papers/medium_okf-v02-folder-ceiling.md`
+- **ContextGem** — framework open-source (Apache-2.0) d'extraction structurée déclarative depuis documents : long-contexte (anti-RAG), références paragraphe/phrase + justifications automatiques, aspects/concepts, pipelines sérialisables.
 
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.
@@ -50,10 +53,12 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Colibri** — runtime MoE en C pur (zéro dép.) : streame les experts *routés* depuis le disque (« JIT pour les poids »), GLM-5.2 744B sur ~25 Go RAM, CPU-only viable ; dashboard Atlas 3-D des experts par affinité de routage mesurée.
 - **Kimi K3 — masterclass d'efficacité** — architecture d'un MoE 2,78 T : Stable LatentMoE, attention hybride KDA (état fixe) + MLA, QAT natif FP4, NoPE, AttnRes. → fulltext `Papers/kimi3_architecture_efficiency.md`
 - **kimi-k3-in-c** — Kimi K3 (2,78 T) en inférence sur 1 CPU / 8,24 Go, C99 mono-fichier 176 Ko : dense résident + experts streamés + MXFP4 sans déquantization (union AirLLM+Colibri).
+- **Needle 2** — modèle ouvert 45M en 14 Mo / ~28 Mo RAM (Cactus) : tool-calling + extraction contraints par grammaire byte-level (conformité au schéma garantie), confidence-gated escalation, mémoire bornée (256 tok + KV sinks), CQ2-bit ; « Simple Attention Network ».
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.
 - **LLM from scratch** — ressources pédagogiques pour entraîner un (S)LM de bout en bout (LLM Builder app, notebooks Colab, repos GitHub) pour démos de formation.
+- **Soup** — CLI open-source (Apache-2.0) : fine-tuning/post-training « un YAML, une commande » (SFT, DPO/GRPO/PPO…, QLoRA, export GGUF/ONNX/AWQ) ; pile d'efficacité mémoire = pendant *entraînement* du streaming d'inférence ; auto-mitigation du reward hacking en boucle fermée.
 
 ### misc.md — divers
 - **autoarxiv** — remplacer `arxiv`→`autoarxiv` dans l'URL pour lancer une repro par agent.
@@ -74,6 +79,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **kimi3_architecture_efficiency.md** — Kimi K3 (Moonshot) : LatentMoE, KDA+MLA, QAT FP4, NoPE, AttnRes — déployer un MoE 2,78 T efficacement.
 - **2402.18700v2.pdf** — Nano-Capsulator : compression de prompt en langage naturel transférable (PDF).
 - **2606.19857v1.pdf** — BabelTele : « LLMs Do Not Always Need Readable Language » — représentations model-native non-lisibles (PDF).
+- **medium_okf-v02-folder-ceiling.md** — OKF v0.2 : le dossier a un plafond — l'échelle folder → index → search → graph (David Oliver).
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
@@ -102,6 +108,9 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_moe_streaming_midsize.md** — débit CPU du streaming d'experts sur un MoE mid-size (seuil batch→interactif).
 - **exp_compression_contexte_notices.md** — compression de contexte (brut / NL / model-native) sur des notices : fidélité vs tokens.
 - **exp_sonde_latente_babeltele.md** — CKA prompt vs prompt-BabelTele par couche : convergence latente ?
+- **exp_fts5_index_knowledge.md** — index FTS5/BM25 reconstruit à chaque commit sur notre `Knowledge/` (dogfooding OKF v0.2).
+- **exp_soup_finetune_slm_biblio.md** — fine-tune one-command (Soup, QLoRA) d'un SLM biblio sur matériel modeste (vs Colab CLI).
+- **exp_needle_extraction_notices.md** — extraction de champs de notice avec Needle 2 (grammaire + confidence-gated escalation, CPU).
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
@@ -112,6 +121,8 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 ## Synthèses
 - **synthese_spectre_lisible_modelnative.md** — note transversale : le spectre lisible ↔ model-native (contexte, skills, mémoire, poids/latent) comme thème unifiant ; règle « source lisible + dérivé compressé ».
 - **lint_2026-08-02.md**, **lint_2026-08-02b.md** — rapports de health-check du wiki (skill inventor-lint).
+- **lint_2026-08-03.md** — rapport de health-check du wiki (skill inventor-lint).
+- **lint_2026-08-11.md** — rapport de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

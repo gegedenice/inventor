@@ -83,4 +83,5 @@ Why is it interesting?
 - autoarxiv (misc.md) : autre « papier → artefact » ; ici papier scanné → Markdown chattable.
 - Colibri / AirLLM (llm.md) : faire tourner un VLM d'OCR frugalement.
 - Reading Research Papers (ce fichier) : le Markdown de papier comme brique de lecture augmentée.
+- ContextGem (kb.md) : l'étape d'après ce pipeline — le texte océrisé → champs structurés + références paragraphe/phrase + justifications.
 

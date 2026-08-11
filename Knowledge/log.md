@@ -225,3 +225,6 @@ Source : https://github.com/shcherbak-ai/contextgem (docs contextgem.dev).
 Classée dans Inspirations/kb.md (nouvelle entrée). Pas de lentille opérationnelle : framework applicatif d'extraction, hors SOTA training/inférence (ne pas forcer) — testabilité biblio cadrée en Questions.
 Cross-links : Needle (llm.md, pôle opposé du spectre extraction), OCR 30 000 papiers (library.md, étape d'après), SLM propositions atomiques (llm.md), compression de contexte/BabelTele + OKF graph-ready (kb.md).
 index.md : laissé à inventor-lint.
+
+## [2026-08-11] lint | reindex + health-check
+10 entrées ajoutées, 0 orpheline retirée (retard depuis le lint 2026-08-03 : ingests 08-08 + 08-11) ; 3 constats de santé + 1 cross-link ajouté d'office (library.md OCR → ContextGem) (voir Syntheses/lint_2026-08-11.md).
