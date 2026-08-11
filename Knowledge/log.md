@@ -212,3 +212,10 @@ Source : https://github.com/FareedKhan-dev/kimi-k3-in-c (déjà ingéré le 2026
 Doublon de l'entrée Inspirations/llm.md#kimi-k3-in-c : enrichie avec l'angle utilisateur — (1) généralisation à un MoE mid-size (qui stocke >1T ?), (2) stocker les experts sur un HF bucket (hf-mount) plutôt qu'en local.
 Les 2 questions renvoient aux candidats existants : Experiments/exp_moe_streaming_midsize.md + exp_airllm_shards_distants.md. Aucun nouveau fichier.
 index.md : laissé à inventor-lint.
+
+## [2026-08-11] ingest | Needle 2 — modèle 45M en 14 Mo / 28 Mo RAM (tool-calling + extraction contraints par grammaire)
+Source : https://github.com/cactus-compute/needle (+ HF Cactus-Compute/needle2, arXiv:2607.18363).
+Classée dans Inspirations/llm.md (nouvelle entrée).
+Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « SLM on-device contraint par grammaire », entrée datée, sources, date bumpée) + candidat Experiments/exp_needle_extraction_notices.md (extraction de champs de notice, grammaire + confidence-gated escalation sur CPU).
+Cross-links : kimi-k3-in-c/Colibri/AirLLM (llm.md, famille frugale), ContextGem (kb.md, pôle opposé du spectre extraction), compression de contexte (kb.md), distill/QAT FP4 SLM biblio (Experiments).
+index.md : laissé à inventor-lint.

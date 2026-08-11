@@ -251,3 +251,40 @@ Why is it interesting?
 - Idée « MoE × AirLLM : ne streamer que les experts routés » (`Ideas/ideas_2026-08-01.md`, passe 2) : réalisée et mesurée ici.
 - Les deux questions utilisateur (mid-size ? poids sur HF bucket ?) sont cadrées en expériences : `../Experiments/exp_moe_streaming_midsize.md` (généralisation MoE mid-size) et `../Experiments/exp_airllm_shards_distants.md` (poids streamés depuis un stockage objet distant).
 - LLM from scratch (`llm-training.md`) : même veine « construire chaque brique soi-même » pour comprendre.
+
+---
+
+## Needle 2 — modèle 45M en 14 Mo / 28 Mo RAM : tool-calling + extraction contraints par grammaire
+
+Modèle ouvert (Cactus Compute, MIT) de 45 M params pour l'appel d'outils, l'usage d'appareil et l'extraction structurée : **un seul binaire de 14 Mo qui tient une session complète dans ~28 Mo de RAM**, inférence 100 % locale (aucun réseau). Architecture « Simple Attention Network », quantifié **CQ2-bit** (Cactus Quants), moteur maison. `pip install cactus-needle`. arXiv:2607.18363.
+
+Why is it interesting?
+- **Extraction = appel d'outil avec un seul outil** : on déclare le schéma du *record* comme unique outil et la grammaire byte-level n'admet qu'un appel de ce nom → **conformité au schéma garantie, pas demandée**. « text in, JSON out » : transposable direct à l'extraction de champs de notice (facture/CV/contrat → notice, métadonnées).
+- **Décodage contraint par une grammaire compilée depuis le schéma** : ranges, patterns, longueurs, énumérations (`Literal`, `Field`) deviennent des contraintes de décodage → le modèle *ne peut pas* émettre une valeur hors-schéma. Le `reasoning` (dérivation `'ten minutes' -> minutes 10`) reste libre et lisible, seule la sortie est contrainte.
+- **Confidence-gated escalation** : chaque réponse porte un score calibré (min de deux signaux : tête post-hoc + proba de décodage) ; « act above threshold, escalate below ». Motif idéal pour l'enrichissement nocturne : le petit modèle traite tout, escalade au gros seulement le douteux. Requête hors-sujet → appel vide `[]`, jamais de free-text inventé.
+- **Mémoire bornée ~28 Mo quelle que soit la longueur** : fenêtre glissante de 256 tokens + outils épinglés comme *KV sinks*. Souverain, hors-ligne, auditable — colle aux contraintes CPU/mémoire réduite de la base.
+- **Frontière taille/qualité repoussée vers le bas** : 5× à 70× plus petit que FunctionGemma 270M / LFM2.5 230M / Apple FM, 2 bits contre leur f16. **Tool retrieval** intégré (tête contrastive, top-5 outils/tour, index persistable) pour de gros catalogues. Fine-tuning LoRA fusionné à l'export → toujours un seul `.cact`.
+
+### Resources
+
+- https://github.com/cactus-compute/needle
+- https://huggingface.co/Cactus-Compute/needle2
+- https://arxiv.org/abs/2607.18363 (Simple Attention Network : Hadamard MLP, GQA, engram KV, hyper-connections)
+
+### Takeaway
+
+"The whole model is a single 14MB binary that runs a full session in about 28MB of RAM. [...] a byte-level grammar compiled from your schemas constrains every token."
+
+### Questions
+
+- **Grammaire byte-level depuis un profil de notice** : peut-on compiler la grammaire depuis un schéma MARC/Unimarc/EAD pour garantir qu'une extraction reste *conforme au format catalographique* (jamais de champ hors-schéma) ? Cf. `../Experiments/exp_needle_extraction_notices.md`.
+- **Escalade confidence-gated sur un fonds réel** : quel taux d'escalade (petit modèle → gros) sur un corpus biblio océrisé ? Le seuil calibré rend-il le batch nocturne CPU viable sans relire tout au gros modèle ?
+- **SLM d'extraction souverain sur CPU** : 14 Mo / 28 Mo RAM = brique d'extraction embarquable sur matériel modeste d'établissement (RGPD, hors-ligne). Le LoRA sur nos propres schémas suffit-il à égaler un gros LLM sur la tâche « texte → champs » ?
+
+### Random Connections
+
+- kimi-k3-in-c, Colibri, AirLLM (ce fichier) : même famille « souverain/frugal », mais Needle vise le **bas extrême** (14 Mo / 28 Mo) là où eux font tenir le *géant* sur petit matériel. Complémentaires sur l'axe frugalité.
+- SLM extraction de propositions atomiques (ce fichier) : même finalité « structurer du texte », ici par **grammaire + confidence** au lieu d'un pipeline de propositions.
+- ContextGem (`kb.md`) : **pôle opposé du spectre extraction** — gros LLM long-contexte avec justifications+références vs Needle petit/grammaire/on-device/confidence. Deux stratégies pour « texte → JSON structuré », à arbitrer selon coût/traçabilité.
+- Compression de contexte (Nano-Capsulator, BabelTele, `kb.md`) : Needle *borne* la mémoire (256 tokens + KV sinks) au lieu de *compresser* le contexte — deux réponses au coût du contexte.
+- Distillation SLM bibliothécaire + QAT FP4 (`../Experiments/exp_distill_slm_bibliothecaire.md`, `exp_qat_fp4_slm_biblio.md`) : Needle = preuve qu'un SLM quantifié natif (CQ2-bit) fait le travail d'extraction/outils.
