@@ -270,3 +270,39 @@ Why is it interesting?
 - Cycle de vie / ghost nodes (ce fichier) : « rebuild from scratch » = la réponse au périmé de l'incrémental.
 - Karpathy LLM-wiki (ce fichier) : `index.md` + `log.md` = « forme larvaire d'une base » (index=retrieval, edges=relations, log=history) — l'article le formalise.
 - QMD / PageFind (ce fichier) + idée « RAG sans embeddings » (`../Ideas/ideas_2026-08-01.md`) : FTS5/BM25 = pertinence lexicale sans vector DB, avant l'hybride.
+
+---
+
+## ContextGem — extraction structurée depuis documents, déclarative et référencée (long-contexte, anti-RAG assumé)
+
+Framework open-source (Shcherbak AI, Apache-2.0) d'extraction structurée depuis des documents via LLM : on décrit **en langage naturel *quoi* extraire**, le framework gère le *comment* (prompts dynamiques, modèles de validation Pydantic, mapping des références, justifications, pipelines multi-aspects). Deux primitives : **Aspects** (segments/thèmes/sections) et **Concepts** (entités, faits, dates, ratings, objets JSON, booléens, conclusions). LiteLLM → cloud *et* local (Ollama, LM Studio) ; texte + vision ; storage sérialisable.
+
+Why is it interesting?
+- **Références précises (paragraphe/phrase) + justifications automatiques** : chaque donnée extraite pointe sa source dans le document et porte sa justification. Traçabilité native — exactement ce qu'exige une métadonnée/notice auditable.
+- **Déclaratif, pas de prompt-engineering** : « you describe *what* to extract in natural language, and the framework handles *how* ». Abaisse le coût d'une chaîne d'extraction de notices (contrats, CV, factures, rapports → documents patrimoniaux) à quelques lignes.
+- **Anti-RAG assumé pour le document unique** : exploite le **long contexte** au lieu de chunk+retrieve → capte les concepts subtils (ex. « anomalies » dans un contrat) que le RAG rate par fragmentation. Complète, ne remplace pas, un RAG corpus-wide (pas de requête cross-documents — pour ça, LlamaIndex/Haystack restent adaptés).
+- **Pipelines d'extraction réutilisables et sérialisables** : un « profil » (aspects + concepts) rejouable à l'identique sur un lot de documents ; sauvegarde des résultats pour éviter de relancer des appels LLM coûteux.
+- **Extraction hiérarchique** : aspects contenant des concepts, sous-aspects → structure riche en un seul passage. Recommande ≥ `gpt-4o-mini` (les petits modèles peinent sur ses instructions détaillées).
+
+### Resources
+
+- https://github.com/shcherbak-ai/contextgem
+- https://contextgem.dev (docs) · https://deepwiki.com/shcherbak-ai/contextgem
+
+### Takeaway
+
+"You describe what to extract in natural language, and the framework handles how. [...] structured data with precise paragraph- and sentence-level references, automatic justifications, hierarchical multi-aspect extraction."
+
+### Questions
+
+- Un **pipeline ContextGem = un profil de notice rejouable** sur un fonds numérisé ? Les références paragraphe/phrase peuvent-elles matérialiser le lien *notice → source* (justifier chaque champ dans le document d'origine, EAD/Unimarc) ?
+- **Long-contexte vs RAG pour l'enrichissement de notices** : où est le seuil (taille du document, coût des tokens) au-delà duquel le doc-entier (ContextGem) cède au chunk+retrieve ? Peut-on hybrider (RAG pour trouver le doc, ContextGem pour l'extraire) ?
+- Le framework recommande ≥ gpt-4o-mini : nos briques CPU/SLM (Colibri, **Needle**) tiennent-elles la charge de ses « instructions détaillées », ou faut-il un gros modèle en local (Ollama) pour la partie extraction ? (cf. son guide *small models troubleshooting*)
+
+### Random Connections
+
+- **Needle** (`llm.md`) : pôle opposé du spectre extraction — ContextGem = gros LLM long-contexte, déclaratif, justifications+références ; Needle = SLM 14 Mo, grammaire byte-level, confidence, on-device. Même problème (« texte → JSON structuré »), deux stratégies à arbitrer selon coût/souveraineté/traçabilité.
+- OCR de 30 000 papiers par un agent (`library.md`) : ContextGem est **l'étape d'après** — texte océrisé → champs structurés + références + justifications.
+- SLM extraction de propositions atomiques (`llm.md`) : même finalité de structuration, approche framework-LLM vs SLM dédié.
+- Compression de contexte / BabelTele (ce fichier) : ContextGem *mise* sur le long-contexte brut là où la compression le *réduit* — tension coût/latence à instrumenter.
+- OKF v0.2 / métamodèle graph-ready + liens typés (ce fichier) : les concepts/références extraits par ContextGem = candidats naturels à des arêtes `rel:` typées et à un `id` stable.

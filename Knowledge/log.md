@@ -219,3 +219,9 @@ Classée dans Inspirations/llm.md (nouvelle entrée).
 Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « SLM on-device contraint par grammaire », entrée datée, sources, date bumpée) + candidat Experiments/exp_needle_extraction_notices.md (extraction de champs de notice, grammaire + confidence-gated escalation sur CPU).
 Cross-links : kimi-k3-in-c/Colibri/AirLLM (llm.md, famille frugale), ContextGem (kb.md, pôle opposé du spectre extraction), compression de contexte (kb.md), distill/QAT FP4 SLM biblio (Experiments).
 index.md : laissé à inventor-lint.
+
+## [2026-08-11] ingest | ContextGem — extraction structurée déclarative depuis documents (long-contexte, références + justifications)
+Source : https://github.com/shcherbak-ai/contextgem (docs contextgem.dev).
+Classée dans Inspirations/kb.md (nouvelle entrée). Pas de lentille opérationnelle : framework applicatif d'extraction, hors SOTA training/inférence (ne pas forcer) — testabilité biblio cadrée en Questions.
+Cross-links : Needle (llm.md, pôle opposé du spectre extraction), OCR 30 000 papiers (library.md, étape d'après), SLM propositions atomiques (llm.md), compression de contexte/BabelTele + OKF graph-ready (kb.md).
+index.md : laissé à inventor-lint.
