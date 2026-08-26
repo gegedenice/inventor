@@ -264,6 +264,8 @@ Why is it interesting?
 - **Confidence-gated escalation** : chaque réponse porte un score calibré (min de deux signaux : tête post-hoc + proba de décodage) ; « act above threshold, escalate below ». Motif idéal pour l'enrichissement nocturne : le petit modèle traite tout, escalade au gros seulement le douteux. Requête hors-sujet → appel vide `[]`, jamais de free-text inventé.
 - **Mémoire bornée ~28 Mo quelle que soit la longueur** : fenêtre glissante de 256 tokens + outils épinglés comme *KV sinks*. Souverain, hors-ligne, auditable — colle aux contraintes CPU/mémoire réduite de la base.
 - **Frontière taille/qualité repoussée vers le bas** : 5× à 70× plus petit que FunctionGemma 270M / LFM2.5 230M / Apple FM, 2 bits contre leur f16. **Tool retrieval** intégré (tête contrastive, top-5 outils/tour, index persistable) pour de gros catalogues. Fine-tuning LoRA fusionné à l'export → toujours un seul `.cact`.
+- **Architecture « Simple Attention Network » (recette dense pour petit modèle)** : le FFN est remplacé par un **Hadamard MLP** — transformée de Walsh-Hadamard fixe, orthonormale, appliquée en *n·log n* **sans poids à lire** ; attention **GQA** ; **mémoire clé-valeur « engram »** (lignes tirées de tables n-gram hachées, tirant à deux couches) ; **hyper-connexions multi-voies** ; routage doublement stochastique par itération de **Sinkhorn**. Chaque bloc porte sa règle de mise à jour, avec gates apprises et dépendantes de l'entrée. Réservoir de briques concrètes à voler pour un SLM biblio maison.
+- **Packaging : le *modèle* est un package pip auto-suffisant** — `pip install cactus-needle`, moteur d'inférence 14 Mo **baké dans le package**, poids **fetchés une fois depuis Hugging Face puis cachés**, « nothing else to build », zéro I/O réseau à l'inférence. Un modèle de fondation qui s'installe **comme une bibliothèque** : pas de fichiers de poids à gérer, pas de runtime à compiler. Patron de distribution souverain/reproductible pour livrer un SLM clé-en-main à un établissement.
 
 ### Resources
 
@@ -275,11 +277,14 @@ Why is it interesting?
 
 "The whole model is a single 14MB binary that runs a full session in about 28MB of RAM. [...] a byte-level grammar compiled from your schemas constrains every token."
 
+"weights baked into a single 14MB engine; no separate model files to manage, and inference does no network. [...] The inference engine is fetched once from Hugging Face and cached; there is nothing else to build."
+
 ### Questions
 
 - **Grammaire byte-level depuis un profil de notice** : peut-on compiler la grammaire depuis un schéma MARC/Unimarc/EAD pour garantir qu'une extraction reste *conforme au format catalographique* (jamais de champ hors-schéma) ? Cf. `../Experiments/exp_needle_extraction_notices.md`.
 - **Escalade confidence-gated sur un fonds réel** : quel taux d'escalade (petit modèle → gros) sur un corpus biblio océrisé ? Le seuil calibré rend-il le batch nocturne CPU viable sans relire tout au gros modèle ?
 - **SLM d'extraction souverain sur CPU** : 14 Mo / 28 Mo RAM = brique d'extraction embarquable sur matériel modeste d'établissement (RGPD, hors-ligne). Le LoRA sur nos propres schémas suffit-il à égaler un gros LLM sur la tâche « texte → champs » ?
+- **Distribuer un SLM biblio comme un package pip** : peut-on empaqueter notre propre SLM (moteur baké + poids fetchés/cachés depuis un HF bucket d'établissement) pour une installation « une commande, zéro build, hors-ligne ensuite » ? Renverse l'hypothèse « un modèle = des fichiers de poids + un runtime à assembler ». Cf. `HuggingFace ecosystem` (ce fichier).
 
 ### Random Connections
 
@@ -288,3 +293,4 @@ Why is it interesting?
 - ContextGem (`kb.md`) : **pôle opposé du spectre extraction** — gros LLM long-contexte avec justifications+références vs Needle petit/grammaire/on-device/confidence. Deux stratégies pour « texte → JSON structuré », à arbitrer selon coût/traçabilité.
 - Compression de contexte (Nano-Capsulator, BabelTele, `kb.md`) : Needle *borne* la mémoire (256 tokens + KV sinks) au lieu de *compresser* le contexte — deux réponses au coût du contexte.
 - Distillation SLM bibliothécaire + QAT FP4 (`../Experiments/exp_distill_slm_bibliothecaire.md`, `exp_qat_fp4_slm_biblio.md`) : Needle = preuve qu'un SLM quantifié natif (CQ2-bit) fait le travail d'extraction/outils.
+- HuggingFace ecosystem (ce fichier) : le moteur et les poids de Needle sont *fetchés une fois puis cachés* depuis HF — même brique hf-mount/serving, ici au service d'un **modèle-package** auto-suffisant plutôt que de shards de poids streamés (cf. AirLLM, `exp_airllm_shards_distants.md`).

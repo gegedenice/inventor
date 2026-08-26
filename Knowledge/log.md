@@ -228,3 +228,9 @@ index.md : laissé à inventor-lint.
 
 ## [2026-08-11] lint | reindex + health-check
 10 entrées ajoutées, 0 orpheline retirée (retard depuis le lint 2026-08-03 : ingests 08-08 + 08-11) ; 3 constats de santé + 1 cross-link ajouté d'office (library.md OCR → ContextGem) (voir Syntheses/lint_2026-08-11.md).
+
+## [2026-08-11] ingest | Needle 2 (re-soumis, angle archi + packaging) — doublon, entrée enrichie
+Source : https://github.com/cactus-compute/needle (déjà ingéré le 2026-08-11).
+Doublon de l'entrée Inspirations/llm.md#Needle-2 : enrichie sur deux angles demandés — (1) architecture « Simple Attention Network » (Hadamard MLP sans poids, GQA, mémoire engram n-gram hachée, hyper-connexions, routage Sinkhorn) ; (2) packaging = le modèle est un package pip auto-suffisant (moteur 14 Mo baké, poids fetchés/cachés depuis HF, zéro build, zéro réseau à l'inférence). +1 Takeaway (citation packaging), +1 Question (distribuer un SLM biblio en package pip), +1 cross-link (HuggingFace ecosystem).
+SOTA inference_archi.md déjà à jour (l'archi Simple Attention Network y figurait depuis le 1er ingest) — pas de re-stack. Aucun nouveau fichier.
+Cross-links : HuggingFace ecosystem (llm.md), AirLLM/exp_airllm_shards_distants (poids distants vs modèle-package).
