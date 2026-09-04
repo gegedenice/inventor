@@ -458,3 +458,40 @@ Why is it interesting?
 - OKF (ce fichier) : skills Markdown portables, git/grep, zéro lock-in — famille « artefact texte gouvernable ».
 - Idée « RAG sans embeddings » + Graphify/Deja (Ideas/ideas_2026-08-01.md, kb.md) : la progressive disclosure est une pertinence sans vector DB.
 - World models / mémoire d'agent (llm.md) : réponse concrète à la question « world models pour la gestion de mémoire d'agent ».
+
+---
+
+## Agent Plugins — empaqueter la *capacité* (Skill + MCP), pas le serveur MCP seul
+
+Éditorial (Andrii Tkachuk, Data Science Collective, 2026-08-30) sur un changement d'abstraction : arrêter de distribuer des serveurs MCP isolés pour distribuer des **Agent Plugins** — un paquet portable qui réunit le *savoir-faire* (Agent Skill) et l'*accès* (serveurs MCP). Le 6 août 2026, la spec ouverte **Agent Plugins 1.0** (Vercel + Amazon, Anysphere/Cursor, Microsoft, OpenAI, puis Google) fixe un cœur portable minimal à deux composants : `skills/` + `mcp.json` + `plugin.json`.
+
+Why is it interesting?
+- **La bonne unité de distribution est la capacité, pas l'intégration** : MCP répond « à quoi l'agent peut se connecter », la Skill « comment le travail doit être fait » ; le plugin empaquette les deux en « un vrai job » (`research_customer`, `investigate_incident`) plutôt qu'un outil brut. Raisonner en *opérations* stables, pas en commandes bas-niveau.
+- **Le dépôt Git *est* la marketplace** : on pousse `plugin.json` + `skills/` + `mcp.json`, on ajoute un `marketplace.json` (`.claude-plugin/marketplace.json`), on tag une release ; le client tire Skills + config MCP tout seul, zéro copie manuelle. Distribution souveraine, versionnée, sans hébergement.
+- **Plancher de portabilité honnête** : le cœur v1 ne standardise que Skills + MCP ; le reste (hooks, sous-agents, permissions) reste vendeur, isolé dans un namespace d'extension (`com.vendor.client/`). « Plugin » ne veut pas dire « portable partout » — Claude garde son propre layout.
+- **Discovery ≠ authorization** : cinq états distincts (*discoverable, installed, authorized, enabled, executable*) ; empaqueter simplifie la distribution mais ne doit pas effondrer la gouvernance. Un plugin mérite la vigilance d'une dépendance (qui le possède, quels MCP, exécute-t-il du code local, peut-il écrire ?).
+- **De la marketplace d'outils à la marketplace de capacités** : organiser autour d'*outcomes* (investiguer, préparer, réviser) ; viser un **registre de capacités** (propriétaire, risque, statut d'approbation), la plateforme décidant comment matérialiser pour chaque client.
+
+### Resources
+
+- https://medium.com/data-science-collective/stop-shipping-individual-mcp-servers-start-shipping-agent-plugins-8174d2a248b0
+- https://github.com/agentplugins/agent-plugins-spec (Agent Plugins Specification 1.0.0)
+- fulltext in @../Papers/medium_agent-plugins.md
+
+### Takeaway
+
+"MCP says 'here is a deployment tool.' A Skill says 'here is how our company deploys safely.' A plugin says 'here is the complete deployment capability.'"
+
+### Questions
+
+- **Empaqueter la chaîne Inventor comme un Agent Plugin** : nos skills `inventor-ingest`/`inventor-lint`/`inventor-ideas`/`inventor-lab` + leurs MCP (fetch, git, éventuel FTS5) forment une *capacité* « tenir un wiki de veille auto-enrichi » — la distribuer via un dépôt-marketplace pour qu'un autre établissement l'installe en une commande ?
+- **Registre de capacités pour un réseau documentaire** : décrire les capacités biblio (enrichir une notice, océriser un fonds, générer des mots-clés RAMEAU) par *outcome* + propriétaire + risque + approbation, plutôt que par outil — matériable pour Claude/Codex/agent interne (cf. « notice à deux faces », OpenSpace cloud community) ?
+- **Discovery ≠ authorization appliqué au catalogage** : un plugin d'enrichissement tournant sur un SIGB qui *permet* la suppression de notices mais ne doit jamais l'exécuter — comment matérialiser ces cinq états côté bibliothèque (RGPD, traçabilité) ?
+
+### Random Connections
+
+- OKF (ce fichier) : même famille « artefact texte portable, git/grep, zéro lock-in » — OKF standardise le *contexte*, Agent Plugins standardise la *capacité* (Skill+MCP). Deux plans du même mouvement de portabilité.
+- Acontext / SkillOpt / OpenSpace (ce fichier) : la Skill comme unité de 1re classe — Acontext la *capture* (mémoire→skill), SkillOpt l'*entraîne*, OpenSpace la *fait évoluer + partage* ; Agent Plugins la *distribue* (paquet versionné). OpenSpace « cloud skill community » = ébauche de la marketplace de capacités.
+- MCP andre.vote (ce fichier) : un MCP isolé — exactement l'unité « trop bas-niveau » que l'article dit d'empaqueter dans une capacité.
+- PRINCE (ce fichier) : capacité de production (RAG+Text-to-SQL, gouvernance, citations) — candidat naturel à l'empaquetage plugin ; illustre « discovery ≠ authorization ».
+- OpenWorker (ce fichier) : coworker local-first à 25+ connecteurs/MCP + approbations — consommateur type d'un plugin de capacité.

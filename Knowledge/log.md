@@ -234,3 +234,9 @@ Source : https://github.com/cactus-compute/needle (déjà ingéré le 2026-08-11
 Doublon de l'entrée Inspirations/llm.md#Needle-2 : enrichie sur deux angles demandés — (1) architecture « Simple Attention Network » (Hadamard MLP sans poids, GQA, mémoire engram n-gram hachée, hyper-connexions, routage Sinkhorn) ; (2) packaging = le modèle est un package pip auto-suffisant (moteur 14 Mo baké, poids fetchés/cachés depuis HF, zéro build, zéro réseau à l'inférence). +1 Takeaway (citation packaging), +1 Question (distribuer un SLM biblio en package pip), +1 cross-link (HuggingFace ecosystem).
 SOTA inference_archi.md déjà à jour (l'archi Simple Attention Network y figurait depuis le 1er ingest) — pas de re-stack. Aucun nouveau fichier.
 Cross-links : HuggingFace ecosystem (llm.md), AirLLM/exp_airllm_shards_distants (poids distants vs modèle-package).
+
+## [2026-08-11] ingest | Agent Plugins — empaqueter la capacité (Skill + MCP), pas le serveur MCP seul
+Source : https://medium.com/data-science-collective/stop-shipping-individual-mcp-servers-start-shipping-agent-plugins-8174d2a248b0 (Andrii Tkachuk, 2026-08-30 ; spec Agent Plugins 1.0, 2026-08-06).
+Classée dans Inspirations/agentic.md (nouvelle entrée-pointeur) + fulltext Papers/medium_agent-plugins.md. Pas de lentille opérationnelle : concept de distribution/empaquetage de capacités, hors SOTA training/inférence (testabilité biblio cadrée en Questions : empaqueter la chaîne Inventor en plugin, registre de capacités).
+Cross-links : OKF (portabilité contexte vs capacité), Acontext/SkillOpt/OpenSpace (la Skill comme unité, OpenSpace = ébauche de marketplace de capacités), MCP andre.vote (l'unité trop bas-niveau), PRINCE + OpenWorker.
+index.md : laissé à inventor-lint.
