@@ -294,3 +294,39 @@ Why is it interesting?
 - Compression de contexte (Nano-Capsulator, BabelTele, `kb.md`) : Needle *borne* la mémoire (256 tokens + KV sinks) au lieu de *compresser* le contexte — deux réponses au coût du contexte.
 - Distillation SLM bibliothécaire + QAT FP4 (`../Experiments/exp_distill_slm_bibliothecaire.md`, `exp_qat_fp4_slm_biblio.md`) : Needle = preuve qu'un SLM quantifié natif (CQ2-bit) fait le travail d'extraction/outils.
 - HuggingFace ecosystem (ce fichier) : le moteur et les poids de Needle sont *fetchés une fois puis cachés* depuis HF — même brique hf-mount/serving, ici au service d'un **modèle-package** auto-suffisant plutôt que de shards de poids streamés (cf. AirLLM, `exp_airllm_shards_distants.md`).
+
+---
+
+## SwarmLLM — inférence P2P d'un LLM à travers des onglets de navigateur (pool de mémoire, pas streaming disque)
+
+Moteur d'inférence pair-à-pair (Nehanth Narendrula, MIT) qui fait tourner un LLM **réparti sur les appareils d'une pièce** (portables, téléphones, PC), chacun dans un onglet : chaque device tient une **tranche de couches**, un vecteur d'activation de **10 Ko** (5 120 × f16) circule entre eux en **WebRTC direct**, la réponse s'affiche sur tous les écrans. Rien à installer, aucun serveur ne « pense ». Démo : Qwen 3.8 27B (15 Go Q4_0) sur un MacBook + un iPhone, 10,7 tok/s.
+
+Why is it interesting?
+- **Renverse l'hypothèse frugale de la base** : au lieu de faire tenir un géant sur *une* petite machine en streamant les poids du disque (AirLLM/Colibri/kimi-k3-in-c), on **met en commun la RAM/VRAM de plusieurs appareils modestes** via le réseau — un 27B tourne sur des machines qui, seules, ne le tiendraient pas. La ressource partagée n'est plus le disque local mais le parc.
+- **Moteur WebGPU écrit from scratch** (~50 kernels WGSL, pas WebLLM/MLC/llama.cpp) **au memory-roofline** : 9,0 tok/s plain, 16 tok/s en spéculatif sur un GB10 — *au-dessus* de llama.cpp natif (8,0) sur le même fichier/GPU, parce que le décodage est memory-bound et que le kernel lit à la bande passante max mesurée (183/184 Go/s). Recette : lire moins d'octets (blocs 4-bit, scales f16) et bien (64 threads balaient une ligne, déquantization en registres, réduction en mémoire partagée, un seul command-submit par token).
+- **Bit-exact par construction** : chaque optimisation est gated sur des golden tests ; le chemin **MTP speculative decoding** produit le *même* flux que le décodage plain (vérification en une passe batchée + rollback exact de l'état récurrent). La vitesse ne coûte pas la reproductibilité.
+- **Cross-réseau et souverain-par-pièce** : les rooms franchissent les réseaux (WebRTC), le prefill envoie 16 tokens par aller-retour, le décodage enchaîne des brouillons spéculatifs pour qu'un lien lent avance quand même. « Rien ne quitte la pièce » — mais attention : les activations mi-modèle **ne sont pas privées** face à un pair déterminé (cf. SECURITY.md).
+
+### Resources
+
+- https://github.com/Nehanth/swarmllm
+- https://swarmllm.ai (démo, room) · docs/architecture.md, docs/kernels.md, docs/bench-log.md
+- Post LinkedIn (annonce, roadmap : multi-turn, rooms survivant au départ d'un device, contexte long, prefill plus rapide, plus de modèles)
+
+### Takeaway
+
+"Every device brings a slice. Together they run the whole model. [...] a 10 KB activation vector passes between them over direct WebRTC connections. Nothing to install, no accounts, no server does any thinking."
+
+### Questions
+
+- **Mutualiser le parc d'un établissement** : pooler les postes hétérogènes d'une bibliothèque (onglets navigateur) pour faire tourner un modèle mid-size sur l'enrichissement de notices nocturne — quel tok/s vs le streaming disque mono-machine (Colibri/AirLLM), et le prefill série (DeltaNet) est-il rédhibitoire ? Cf. `../Experiments/exp_swarm_notices_p2p.md`.
+- **Souveraineté vs pairs** : « rien ne quitte la pièce » tient en intra-établissement (RGPD), mais les activations mi-modèle sont lisibles par un pair déterminé — acceptable entre postes d'un même service, pas en room ouverte. Où placer la frontière ?
+- **WebGPU comme runtime souverain** : un moteur WGSL maison au memory-roofline, sans dépendance native, tournant dans un onglet — socle d'inférence auditable/hors-install pour du matériel possédé, là où kimi-k3-in-c vise le C99/CPU ?
+
+### Random Connections
+
+- AirLLM / Colibri / kimi-k3-in-c (ce fichier) : même famille « faire tourner un géant sur du petit matériel », mais **axe orthogonal** — eux streament les poids/experts depuis le *disque d'une machine*, SwarmLLM **répartit les couches sur plusieurs machines** via le réseau. Complémentaires : pooler + streamer.
+- Kimi K3 — KDA / attention linéaire à état fixe (ce fichier, `../Papers/kimi3_architecture_efficiency.md`) : Qwen 3.8 27B ici est **hybride Gated-DeltaNet + attention** (même famille récurrente à état fixe que KDA) ; le « rollback exact de l'état récurrent » pour la spéculation rejoint l'idée de manipuler l'état récurrent (`exp_steering_etat_recurrent.md`).
+- Fused tiny local LLMs (`../Papers/medium_fused-tiny-local-llms.md`) : autre façon d'assembler plusieurs machines/modèles — ici on **splitte un gros modèle**, là on **fusionne des petits**.
+- HuggingFace ecosystem (ce fichier) : poids/tokenizer Qwen hébergés sur HF, chaque device ne télécharge que ses couches (cachées) — séparer stockage distant et compute local, comme hf-mount.
+- Idée « KV-cache streamé » / frugalité inférence (`../Ideas/ideas_2026-08-01.md`, passe 2) : le vecteur d'activation 10 Ko sur le fil est le pendant *réseau* du streaming ; nouvelle unité à faire circuler.

@@ -240,3 +240,10 @@ Source : https://medium.com/data-science-collective/stop-shipping-individual-mcp
 Classée dans Inspirations/agentic.md (nouvelle entrée-pointeur) + fulltext Papers/medium_agent-plugins.md. Pas de lentille opérationnelle : concept de distribution/empaquetage de capacités, hors SOTA training/inférence (testabilité biblio cadrée en Questions : empaqueter la chaîne Inventor en plugin, registre de capacités).
 Cross-links : OKF (portabilité contexte vs capacité), Acontext/SkillOpt/OpenSpace (la Skill comme unité, OpenSpace = ébauche de marketplace de capacités), MCP andre.vote (l'unité trop bas-niveau), PRINCE + OpenWorker.
 index.md : laissé à inventor-lint.
+
+## [2026-09-09] ingest | SwarmLLM — inférence P2P layer-shardée d'un LLM dans des onglets de navigateur
+Source : https://github.com/Nehanth/swarmllm (Nehanth Narendrula, MIT ; swarmllm.ai).
+Classée dans Inspirations/llm.md (nouvelle entrée).
+Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « inférence P2P layer-shardée navigateur/WebRTC », entrée datée = axe orthogonal pooling-réseau vs streaming-disque, sources, date bumpée 2026-09-09) + candidat Experiments/exp_swarm_notices_p2p.md (mutualiser le parc d'un établissement, mesurer débit vs mono-machine).
+Cross-links : AirLLM/Colibri/kimi-k3-in-c (axe orthogonal), Kimi K3 KDA/Gated-DeltaNet (état récurrent + rollback spéculatif), fused tiny local LLMs (splitter vs fusionner), HuggingFace ecosystem (poids HF, couches cachées par device).
+index.md : laissé à inventor-lint.

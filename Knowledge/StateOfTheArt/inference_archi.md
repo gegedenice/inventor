@@ -1,6 +1,6 @@
 # État de l'art — Optimisation de l'inférence & architectures
 
-> Dernière mise à jour : 2026-08-11 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-09-09 · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -28,9 +28,11 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Stable LatentMoE (routage en espace latent compressé)** — émergent — compresser les tokens (hidden→3 584 dims) avant de router aux experts : moins d'activation mémoire et de trafic inter-nœuds ; « obligatoire » au-delà de 1 T params. — `../Papers/kimi3_architecture_efficiency.md`
 - **NoPE + Attention Residuals** — exploratoire — préserver l'accuracy sous forte sparsité/quantization et étendre le contexte (index de séquence implicite ; résidus par attention apprise). — `../Papers/kimi3_architecture_efficiency.md`
 - **SLM on-device contraint par grammaire (Needle 2 / Simple Attention Network)** — émergent — tool-calling + extraction structurée en **14 Mo / ~28 Mo RAM**, décodage contraint par grammaire byte-level (conformité au schéma garantie), confidence-gated (escalade sous seuil), mémoire bornée (fenêtre 256 tokens + KV sinks) ; CQ2-bit, Hadamard MLP + engram KV + GQA + hyper-connections ; extraction = tool-calling avec un seul outil. — `../Inspirations/llm.md`
+- **Inférence P2P layer-shardée dans le navigateur (SwarmLLM)** — émergent — **pooler la mémoire de plusieurs appareils** (portables/téléphones) plutôt que streamer d'un seul disque : chaque device tient une tranche de couches, activation 10 Ko sur WebRTC ; moteur WebGPU maison (~50 kernels WGSL) au memory-roofline (9→16 tok/s spéculatif sur GB10, > llama.cpp natif) ; MTP speculative decoding **bit-exact** ; goulot = prefill série (DeltaNet) + confidentialité des activations entre pairs. — `../Inspirations/llm.md`
 - **Infra d'inférence/stockage (HF jobs serving, endpoints, hf-mount)** — établi — servir/stocker à distance, séparer compute et stockage. — `../Inspirations/llm.md`
 
 ## Ce qui a bougé récemment
+- [2026-09-09] Ingest **SwarmLLM** : ouvre un **axe orthogonal** à tout le reste de la fiche. Jusqu'ici « garder le chaud résident, streamer le froid » depuis le *disque d'une machine* (AirLLM/Colibri/kimi-k3-in-c) ; ici on **répartit les couches sur plusieurs machines** via WebRTC — la ressource mutualisée devient le *parc*, pas le disque local. Confirme aussi WebGPU/WGSL maison comme runtime viable (memory-roofline, > llama.cpp natif sur le même GPU) et le speculative decoding **bit-exact** comme acquis. Deux réserves : prefill série (récurrence Gated-DeltaNet) et activations non privées entre pairs.
 - [2026-08-11] Ingest **Needle 2** : le curseur de la frugalité descend à l'extrême bas (14 Mo / ~28 Mo RAM) — non plus « faire tenir le géant sur petit matériel » (AirLLM/Colibri/kimi-k3-in-c) mais **un modèle minuscule complet, on-device**. Apporte deux briques neuves : décodage **contraint par grammaire compilée depuis le schéma** (conformité garantie, pas demandée) et **confidence-gated escalation** (petit modèle partout, gros modèle seulement sous seuil) — motif directement applicable à l'extraction/enrichissement de notices en batch nocturne CPU.
 - [2026-08-03c] Ingest **Nano-Capsulator → BabelTele** : nouvel axe d'efficacité *à l'entrée* (compresser le contexte), complémentaire du streaming *des poids*. BabelTele découple lisibilité humaine et décodabilité modèle — tension à surveiller pour la traçabilité biblio.
 - [2026-08-03b] Ingest **kimi-k3-in-c** : preuve de concept que l'union « AirLLM (streaming disque) + Colibri (experts MoE routés) + MXFP4 sans déquantization » tient en **176 Ko de C99, 8 Go RAM, sans GPU**. Confirme la piste « MoE × AirLLM » ; question ouverte = passage à un MoE mid-size (bien plus rapide).
@@ -48,6 +50,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - `../Experiments/exp_moe_streaming_midsize.md`
 - `../Experiments/exp_compression_contexte_notices.md`
 - `../Experiments/exp_needle_extraction_notices.md`
+- `../Experiments/exp_swarm_notices_p2p.md`
 
 ## Sources dans la base
 - **AirLLM**, **Colibri**, **VLM sans encodeur**, **World models**, **HuggingFace ecosystem** — `../Inspirations/llm.md`
@@ -57,5 +60,6 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Kimi K3 architecture** (LatentMoE, KDA+MLA, NoPE, AttnRes) — `../Papers/kimi3_architecture_efficiency.md`
 - **kimi-k3-in-c** (moteur C99 mono-fichier, experts streamés, MXFP4) — `../Inspirations/llm.md`
 - **Needle 2** (SLM 14 Mo on-device, grammaire byte-level, confidence-gated, CQ2-bit) — `../Inspirations/llm.md`
+- **SwarmLLM** (inférence P2P layer-shardée navigateur/WebRTC, moteur WebGPU/WGSL maison, MTP spéculatif bit-exact) — `../Inspirations/llm.md`
 - **Compression de contexte (Nano-Capsulator, BabelTele)** — `../Inspirations/kb.md` + `../Papers/2402.18700v2.pdf`, `../Papers/2606.19857v1.pdf`
 - _À ingérer :_ Liquid LFM2 encoders (causal decoder → bidirectional encoder) — https://www.liquid.ai/blog/lfm2-5-encoders
