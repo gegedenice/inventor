@@ -306,3 +306,39 @@ Why is it interesting?
 - SLM extraction de propositions atomiques (`llm.md`) : même finalité de structuration, approche framework-LLM vs SLM dédié.
 - Compression de contexte / BabelTele (ce fichier) : ContextGem *mise* sur le long-contexte brut là où la compression le *réduit* — tension coût/latence à instrumenter.
 - OKF v0.2 / métamodèle graph-ready + liens typés (ce fichier) : les concepts/références extraits par ContextGem = candidats naturels à des arêtes `rel:` typées et à un `id` stable.
+
+---
+
+## LLM Wiki (nashsu) — le patron Karpathy implémenté en app desktop (Ingest/Query/Lint, graphe 4-signaux)
+
+Application desktop cross-platform (nash_su, Tauri v2 Rust + React, GPL-3.0, ~17,5k étoiles) qui **implémente concrètement le patron « LLM Wiki » de Karpathy** : le LLM lit tes documents, construit un wiki structuré et interlié, et le tient à jour — au lieu du RAG classique (re-répondre de zéro à chaque requête), la connaissance est *compilée une fois puis maintenue*. C'est, à peu de choses près, **la version produit de ce qu'Inventor fait à la main via skills**.
+
+Why is it interesting?
+- **Même squelette qu'Inventor** : garde fidèlement l'architecture Karpathy — trois couches (Raw Sources immuables → Wiki généré → Schema/règles), **trois opérations Ingest / Query / Lint**, `index.md` comme catalogue, `log.md` comme journal parseable, `[[wikilink]]`, frontmatter YAML, « human curates, LLM maintains ». Autrement dit : nos `inventor-ingest` / `inventor-lint` / `index.md` / `log.md` ont un jumeau packagé, dont on peut voler les extensions.
+- **Ingest en deux temps (chain-of-thought)** : étape 1 *analyse* (entités, concepts, connexions, **contradictions/tensions** avec l'existant, recommandations de structure), étape 2 *génération* des pages — valide et raffine l'approche d'`inventor-ingest`. Cache incrémental SHA256 (skip des sources inchangées), file d'ingest persistante avec reprise sur crash.
+- **Graphe de connaissances à modèle de pertinence 4-signaux, sans LLM** : lien direct ×3, **recouvrement de source** ×4 (pages partageant une même source via `sources[]`), **Adamic-Adar** ×1,5 (voisins communs), affinité de type ×1 — puis **détection de communautés Louvain** et *graph insights* : connexions surprenantes, **lacunes de connaissance** (pages isolées deg≤1, communautés peu cohésives <0,15, **bridge nodes** reliant 3+ clusters). Exactement l'outillage qui manquait à notre health-check d'`inventor-lint`.
+- **`purpose.md` = l'âme du wiki** : le *pourquoi* (buts, questions clés, thèse évolutive) distinct du `schema.md` (le *comment*) — pendant direct de nos `SOUL.md`/`AGENTS.md`, lu à chaque ingest/query. **Exposé aussi comme API HTTP locale (`127.0.0.1:19828`) + serveur MCP + agent skill** (`npx skills add …`) : le wiki devient une capacité interrogeable par Claude Code/Codex.
+
+### Resources
+
+- https://github.com/nashsu/llm_wiki
+- Patron d'origine (Karpathy) : https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- Agent skill : https://github.com/nashsu/llm_wiki_skill
+
+### Takeaway
+
+"Instead of traditional RAG (retrieve-and-answer from scratch every time), the LLM incrementally builds and maintains a persistent wiki from your sources. Knowledge is compiled once and kept current, not re-derived on every query."
+
+### Questions
+
+- **Voler le graphe 4-signaux + Louvain pour `inventor-lint`** : remplacer notre détection d'orphelins (heuristique « titre absent ailleurs », trop bruyante — cf. `../Syntheses/lint_2026-08-11.md`) par un vrai graphe sur `Knowledge/` (liens `[[...]]` + recouvrement de `sources:` + Adamic-Adar) → bridge nodes, pages isolées, communautés peu cohésives détectés *déterministement*, sans vector DB. Cf. `../Experiments/exp_kg_relevance_lint.md`.
+- **Ingest en deux temps chez nous** : séparer l'analyse (contradictions/tensions) de la génération dans `inventor-ingest` améliorerait-il la qualité des cross-links et le repérage des doublons ?
+- **`purpose.md` explicite** : formaliser un `purpose.md` distinct de `SOUL.md`/`AGENTS.md` (buts + questions clés + thèse évolutive, relu à chaque passe) aiderait-il les passes d'idées à rester dirigées ?
+
+### Random Connections
+
+- **Karpathy LLM-wiki** (ce fichier, `../Papers/karpathy_llm-wiki.md`) : LLM Wiki en est **l'implémentation concrète** (l'article = le patron abstrait ; ce repo = l'app avec extensions). Le couple index/log/wikilinks/frontmatter est identique à Inventor.
+- **Deja** (ce fichier) : le **modèle de pertinence 4-signaux** de LLM Wiki est le cousin structurel des 4 signaux fondus de Deja — « pertinence par fusion de signaux frugaux », ici sur un graphe de pages plutôt que sur des commandes.
+- **OKF v0.2** (ce fichier) : LLM Wiki *réalise* le barreau « property graph » de l'échelle OKF (nœuds, liens typés, communautés) tout en gardant le Markdown canonique et Obsidian-compatible.
+- **Graphify** (ce fichier) : même finalité « dossier → graphe interrogeable sans vector DB (topologie) », ici intégré à un cycle Ingest/Query/Lint complet.
+- **Agent Plugins** (`agentic.md`) : LLM Wiki se distribue aussi comme *capacité* (API locale + MCP + agent skill « npx skills add ») — la thèse « empaqueter la capacité, pas le serveur MCP seul ».

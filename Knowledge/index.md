@@ -21,6 +21,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **OpenSpace** — skills auto-évolutifs (déclencheurs FIX/DERIVED/CAPTURED), DAG de versions + métriques de qualité, et *cloud skill community* pour partager les skills entre agents ; low-cost (~46 % tokens en moins).
 - **OpenWorker** — coworker desktop open-source (A. Ng) local-first, BYO-model (jusqu'à Ollama), qui livre du *travail fini* (docs, Slack, agenda) ; 25+ connecteurs + MCP, actions à approbation, automations planifiées ; bâti sur aisuite.
 - **Acontext** — couche de mémoire d'agent : capture automatiquement les apprentissages d'une session en *fichiers de skill Markdown* (progressive disclosure, sans embeddings, git/mount) ; « Skill is Memory ».
+- **Agent Plugins** — empaqueter la *capacité* (Skill + MCP), pas le serveur MCP isolé : spec ouverte Agent Plugins 1.0 (Vercel + Amazon/Cursor/MS/OpenAI/Google), le dépôt Git *est* la marketplace, plancher de portabilité, « discovery ≠ authorization ». → fulltext `Papers/medium_agent-plugins.md`
 
 ### dataviz.md — visualisation, dashboards
 - **Dataviz with DeckGL** — dataviz WebGPU haute densité (ex. réseau sémantique arXiv).
@@ -37,6 +38,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Cycle de vie d'un knowledge graph (ghost nodes, tombstones, freshness gates)** — maintenir un KG *frais* (Graphify/OKF) : l'incrémental laisse des *ghost nodes* ; cycle de vie emprunté au cache (hachage de contenu, tombstones, freshness gates, rebuild CI planifié).
 - **OKF v0.2 : le dossier a un plafond** — l'échelle folder → index → search → graph : vues dérivées jetables, index FTS5/BM25 reconstruit *from scratch* à chaque commit, métamodèle graph-ready dès le frontmatter. → fulltext `Papers/medium_okf-v02-folder-ceiling.md`
 - **ContextGem** — framework open-source (Apache-2.0) d'extraction structurée déclarative depuis documents : long-contexte (anti-RAG), références paragraphe/phrase + justifications automatiques, aspects/concepts, pipelines sérialisables.
+- **LLM Wiki (nashsu)** — app desktop (Tauri) implémentant le patron LLM Wiki de Karpathy (Ingest/Query/Lint, `index.md`/`log.md`/`[[wikilinks]]`) : ingest en 2 temps, graphe de pertinence 4-signaux + Louvain + graph insights, API locale/MCP/agent skill. Jumeau packagé d'Inventor.
 
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.
@@ -54,6 +56,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Kimi K3 — masterclass d'efficacité** — architecture d'un MoE 2,78 T : Stable LatentMoE, attention hybride KDA (état fixe) + MLA, QAT natif FP4, NoPE, AttnRes. → fulltext `Papers/kimi3_architecture_efficiency.md`
 - **kimi-k3-in-c** — Kimi K3 (2,78 T) en inférence sur 1 CPU / 8,24 Go, C99 mono-fichier 176 Ko : dense résident + experts streamés + MXFP4 sans déquantization (union AirLLM+Colibri).
 - **Needle 2** — modèle ouvert 45M en 14 Mo / ~28 Mo RAM (Cactus) : tool-calling + extraction contraints par grammaire byte-level (conformité au schéma garantie), confidence-gated escalation, mémoire bornée (256 tok + KV sinks), CQ2-bit ; « Simple Attention Network ».
+- **SwarmLLM** — inférence P2P layer-shardée d'un LLM dans des onglets de navigateur : chaque device tient une tranche de couches, activation 10 Ko sur WebRTC ; moteur WebGPU/WGSL maison au memory-roofline, MTP speculative decoding bit-exact ; pooler le parc vs streamer d'un disque.
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.
@@ -80,6 +83,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **2402.18700v2.pdf** — Nano-Capsulator : compression de prompt en langage naturel transférable (PDF).
 - **2606.19857v1.pdf** — BabelTele : « LLMs Do Not Always Need Readable Language » — représentations model-native non-lisibles (PDF).
 - **medium_okf-v02-folder-ceiling.md** — OKF v0.2 : le dossier a un plafond — l'échelle folder → index → search → graph (David Oliver).
+- **medium_agent-plugins.md** — Agent Plugins : empaqueter Skill + MCP en capacité portable (spec 1.0, 2026) — de la marketplace d'outils à la marketplace de capacités (Andrii Tkachuk).
 
 ## Idées
 - **ideas_2026-07-31.md** — passe 1 (toute la base) : 6 idées CPU (vecteurs de steering portables, Lint frugal par propositions atomiques, URL-swap d'enrichissement de notices, fusion de logits pour catalogage, radar claim-delta OpenAlex, anti-bibliothèque du réfuté).
@@ -111,6 +115,8 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_fts5_index_knowledge.md** — index FTS5/BM25 reconstruit à chaque commit sur notre `Knowledge/` (dogfooding OKF v0.2).
 - **exp_soup_finetune_slm_biblio.md** — fine-tune one-command (Soup, QLoRA) d'un SLM biblio sur matériel modeste (vs Colab CLI).
 - **exp_needle_extraction_notices.md** — extraction de champs de notice avec Needle 2 (grammaire + confidence-gated escalation, CPU).
+- **exp_swarm_notices_p2p.md** — mutualiser le parc d'un établissement (SwarmLLM P2P navigateur) pour l'inférence : débit agrégé vs streaming disque mono-machine.
+- **exp_kg_relevance_lint.md** — graphe de pertinence 4-signaux + Louvain sur `Knowledge/` pour muscler le health-check d'inventor-lint (orphelins/bridge nodes déterministes, sans vector DB).
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
@@ -123,6 +129,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **lint_2026-08-02.md**, **lint_2026-08-02b.md** — rapports de health-check du wiki (skill inventor-lint).
 - **lint_2026-08-03.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-08-11.md** — rapport de health-check du wiki (skill inventor-lint).
+- **lint_2026-09-12.md** — rapport de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

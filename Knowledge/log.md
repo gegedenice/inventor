@@ -247,3 +247,15 @@ Classée dans Inspirations/llm.md (nouvelle entrée).
 Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « inférence P2P layer-shardée navigateur/WebRTC », entrée datée = axe orthogonal pooling-réseau vs streaming-disque, sources, date bumpée 2026-09-09) + candidat Experiments/exp_swarm_notices_p2p.md (mutualiser le parc d'un établissement, mesurer débit vs mono-machine).
 Cross-links : AirLLM/Colibri/kimi-k3-in-c (axe orthogonal), Kimi K3 KDA/Gated-DeltaNet (état récurrent + rollback spéculatif), fused tiny local LLMs (splitter vs fusionner), HuggingFace ecosystem (poids HF, couches cachées par device).
 index.md : laissé à inventor-lint.
+
+## [2026-09-12] ingest | LLM Wiki (nashsu) — le patron Karpathy implémenté en app desktop (Ingest/Query/Lint, graphe 4-signaux)
+Source : https://github.com/nashsu/llm_wiki (nash_su, Tauri v2, GPL-3.0 ; implémente le patron Karpathy gist/442a6bf).
+Classée dans Inspirations/kb.md (nouvelle entrée). Pas de doublon avec Karpathy LLM-wiki (celui-ci = l'app concrète, celui-là = le patron abstrait) — fortement cross-linkée à lui.
+Pas de lentille SOTA (gestion de KB, hors training/inférence) MAIS candidat testable directement sur notre base : Experiments/exp_kg_relevance_lint.md (graphe pertinence 4-signaux + Louvain pour muscler le health-check d'inventor-lint, sans vector DB).
+Cross-links : Karpathy LLM-wiki (implémentation vs patron), Deja (pertinence 4-signaux fondus), OKF v0.2 (barreau property-graph), Graphify (dossier→graphe sans vector DB), Agent Plugins (agentic.md : distribué comme capacité API/MCP/skill).
+index.md : laissé à inventor-lint.
+NOTE : commit git en attente — shell/workspace indisponible (bug Windows update 2026-09-08) ; contenu écrit via outils fichier, à committer quand le shell revient.
+
+## [2026-09-12] lint | reindex + health-check
+6 entrées ajoutées, 0 orpheline retirée (retard depuis le lint 2026-08-11 : ingests Agent Plugins, SwarmLLM, LLM Wiki + 1 Paper + 2 expériences) ; 3 constats de santé (dérive d'index récurrente, cluster « Inventor se regarde lui-même », cross-links OK) — voir Syntheses/lint_2026-09-12.md.
+NOTE : commit git non effectué (panne shell/workspace, bug Windows update 2026-09-08). À committer quand le shell revient : (a) ingest LLM Wiki, (b) ce lint (index.md + Syntheses/lint_2026-09-12.md + log.md).
