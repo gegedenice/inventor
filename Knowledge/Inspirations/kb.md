@@ -342,3 +342,39 @@ Why is it interesting?
 - **OKF v0.2** (ce fichier) : LLM Wiki *réalise* le barreau « property graph » de l'échelle OKF (nœuds, liens typés, communautés) tout en gardant le Markdown canonique et Obsidian-compatible.
 - **Graphify** (ce fichier) : même finalité « dossier → graphe interrogeable sans vector DB (topologie) », ici intégré à un cycle Ingest/Query/Lint complet.
 - **Agent Plugins** (`agentic.md`) : LLM Wiki se distribue aussi comme *capacité* (API locale + MCP + agent skill « npx skills add ») — la thèse « empaqueter la capacité, pas le serveur MCP seul ».
+
+---
+
+## Turbovec + TurboQuant — la recherche vectorielle redevient frugale et locale (quantization data-oblivious, sans train)
+
+**Turbovec** (Ryan Codrai, Rust + bindings Python, MIT) est un index vectoriel bâti sur **TurboQuant**, l'algorithme de quantization de Google Research (ICLR 2026, arXiv:2504.19874). Argument-choc : *« 10 M de documents = 31 Go en float32 ; turbovec les tient dans 4 Go — et cherche plus vite que FAISS »*. TurboQuant est un quantizer **data-oblivious** (rotation aléatoire → chaque coordonnée suit une loi connue → codebook Lloyd-Max calculé *par les maths, pas par les données*), à distorsion quasi-optimale, **sans phase d'entraînement**.
+
+Why is it interesting?
+- **Rebat les cartes du débat « RAG sans vector DB » de la base** : jusqu'ici on privilégiait le lexical (FTS5/BM25, QMD, PageFind) parce qu'un vector DB coûtait cher. Turbovec rend l'ANN vectoriel **frugal et local** : 16× de compression (1536-d : 6 144 → 384 octets à 2-bit), kernels SIMD écrits main (NEON/AVX-512 VNNI) qui **battent FAISS** (3,4× à 4-bit), **CPU**, air-gapped, aucune donnée ne sort. Le sémantique redevient jouable sur matériel possédé.
+- **Pas de train, ingest en ligne** : on ajoute des vecteurs, ils sont indexés — pas d'étape d'entraînement, pas de tuning, pas de rebuild quand le corpus grossit. **Sauvegardes incrémentales** (`sync` : un fsync, crash-safe), **filtrage au search** (allowlist d'ids honorée *dans* le kernel → hybride SQL/BM25 + rerank dense sans over-fetch). Drop-in pour LangChain/LlamaIndex/Haystack.
+- **La méthode dépasse la recherche : compression de KV-cache** (lentille opérationnelle). TurboQuant quantifie le **KV-cache à 3 bits sans train ni fine-tuning, sans perte**, avec un runtime *plus rapide* que le modèle d'origine (jusqu'à 8× sur le calcul des logits d'attention à 4-bit vs FP32, H100). S'appuie sur **QJL** (Johnson-Lindenstrauss quantifié : erreur résiduelle en 1 bit de signe, zéro overhead mémoire) et **PolarQuant** (coordonnées polaires : radius + angles, supprime l'overhead des constantes de quantization par bloc).
+- **Le « memory overhead » comme vrai problème** : la plupart des quantizers stockent des constantes en pleine précision par bloc (+1–2 bits/nombre), ce qui sabote le gain. TurboQuant l'élimine par construction — enseignement transférable à toute compression (contexte, poids, notices).
+
+### Resources
+
+- https://github.com/RyanCodrai/turbovec
+- https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/
+- Paper : https://arxiv.org/abs/2504.19874 (TurboQuant, ICLR 2026) ; QJL (arXiv:2406.03482) ; PolarQuant (arXiv:2502.02617)
+
+### Takeaway
+
+"A 10 million document corpus takes 31 GB of RAM as float32. turbovec fits it in 4 GB - and searches it faster than FAISS. [...] a data-oblivious quantizer with near-optimal distortion and no separate training phase."
+
+### Questions
+
+- **Le vector DB frugal change-t-il notre arbitrage lexical vs sémantique ?** Sur un fonds de notices/documents océrisés, turbovec (2–4 bit, CPU, air-gapped) rend le RAG sémantique abordable — à comparer en rappel/RAM à l'index FTS5/BM25 (`../Experiments/exp_fts5_index_knowledge.md`). Hybride idéal : FTS5 filtre → turbovec rerank dense ? Cf. `../Experiments/exp_turbovec_rag_notices.md`.
+- **KV-cache à 3 bits sans train** : transposable à nos runtimes CPU frugaux (Colibri, kimi-k3-in-c) pour allonger le contexte d'enrichissement de notices sans exploser la RAM ?
+- **Quantization data-oblivious (calculée par les maths, pas les données)** : même esprit que le MXFP4 « jamais déquantizé » de Kimi K3 — une brique de compression *sans calibration sur corpus*, donc reproductible et RGPD-friendly (rien à apprendre des données) ?
+
+### Random Connections
+
+- **QMD / PageFind / Graphify** (ce fichier) + weak signal « pertinence sans vector DB » (`../WeakSignals/weak_signals_2026-08-01.md`) : Turbovec est le **contre-point** — vector DB, mais si frugal et local qu'il rouvre la porte au sémantique. À opposer explicitement au lexical.
+- **Compression de contexte (Nano-Capsulator, BabelTele)** (ce fichier) : même famille « compresser une représentation » ; ici on compresse les *vecteurs stockés/le KV-cache*, là le *prompt*. TurboQuant élimine l'overhead des constantes — leçon pour BabelTele.
+- **Kimi K3 — QAT FP4 / MXFP4 sans déquantization** (`llm.md`) : TurboQuant KV-cache 3-bit rejoint la loi « ne jamais déquantizer » ; data-oblivious = pas de calibration corpus.
+- **ContextGem / LLM Wiki** (ce fichier) : la brique d'index qui manquait sous un RAG local souverain — turbovec peut être le vector store frugal de ces pipelines (intégrations LangChain/LlamaIndex/Haystack).
+- **kimi-k3-in-c / Colibri** (`llm.md`) : même ADN « kernels bas niveau (C/Rust + SIMD), CPU, souverain » appliqué cette fois à la *recherche*, pas à l'inférence de poids.

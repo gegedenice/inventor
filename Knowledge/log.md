@@ -259,3 +259,22 @@ NOTE : commit git en attente — shell/workspace indisponible (bug Windows updat
 ## [2026-09-12] lint | reindex + health-check
 6 entrées ajoutées, 0 orpheline retirée (retard depuis le lint 2026-08-11 : ingests Agent Plugins, SwarmLLM, LLM Wiki + 1 Paper + 2 expériences) ; 3 constats de santé (dérive d'index récurrente, cluster « Inventor se regarde lui-même », cross-links OK) — voir Syntheses/lint_2026-09-12.md.
 NOTE : commit git non effectué (panne shell/workspace, bug Windows update 2026-09-08). À committer quand le shell revient : (a) ingest LLM Wiki, (b) ce lint (index.md + Syntheses/lint_2026-09-12.md + log.md).
+
+## [2026-09-13] ingest | Turbovec + TurboQuant — recherche vectorielle frugale/locale (quantization data-oblivious, sans train)
+Source : https://github.com/RyanCodrai/turbovec + https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/ (TurboQuant, ICLR 2026, arXiv:2504.19874).
+Classée dans Inspirations/kb.md (nouvelle entrée, une entrée pour l'outil + la méthode).
+Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « quantization data-oblivious TurboQuant/QJL/PolarQuant » : KV-cache 3-bit sans perte + recherche vectorielle 16× CPU>FAISS, entrée datée, source, date bumpée 2026-09-13) + candidat Experiments/exp_turbovec_rag_notices.md (RAG sémantique frugal local sur notices, hybride FTS5→rerank dense).
+Cross-links : QMD/PageFind/Graphify + weak signal « pertinence sans vector DB » (turbovec = contre-point frugal), compression de contexte/BabelTele (compresser une représentation), Kimi K3 MXFP4 « ne jamais déquantizer » (data-oblivious), kimi-k3-in-c/Colibri (kernels bas-niveau CPU/SIMD).
+index.md : laissé à inventor-lint.
+NOTE : commit git en attente (panne shell/workspace, bug Windows update 2026-09-08) ; contenu écrit via outils fichier.
+
+## [2026-09-13] lint | reindex + health-check
+2 entrées ajoutées, 0 orpheline retirée (ingest Turbovec/TurboQuant depuis le lint 2026-09-12) ; 3 constats de santé (dérive minime, Turbovec bien relié, cluster frugalité inférence/recherche) — voir Syntheses/lint_2026-09-13.md.
+NOTE : skill inventor-lint ne committe plus (l'utilisateur gère git). Lots non commités : ingest LLM Wiki (12-09), lint 12-09, ingest Turbovec (13-09), ce lint 13-09.
+
+## [2026-09-13] lab | revue inférence & architectures
+1 fiche rafraîchie (StateOfTheArt/inference_archi.md : En bref réécrit sur 4 axes + ligne lab-synthèse), 5 idées appliquées, 1 nouvelle expérience. Priorité : KV-cache 3-bit data-oblivious (TurboQuant) pour allonger le contexte à RAM égale.
+Autres fiches (pretraining, posttraining, synthetic_data) revues : aucune nouvelle source depuis la dernière passe → inchangées.
+Synthèse : 2 lois de conception émergentes — (1) data-oblivious / « ne jamais déquantizer » ; (2) frugal localement, escalader/pooler au besoin.
+Sorties : Ideas/applied_ideas_2026-09-13.md (5 idées), Experiments/exp_turboquant_kvcache_notices.md (nouveau).
+NOTE : pas de commit (l'utilisateur gère git).

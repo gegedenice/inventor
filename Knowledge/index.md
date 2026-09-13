@@ -39,6 +39,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **OKF v0.2 : le dossier a un plafond** — l'échelle folder → index → search → graph : vues dérivées jetables, index FTS5/BM25 reconstruit *from scratch* à chaque commit, métamodèle graph-ready dès le frontmatter. → fulltext `Papers/medium_okf-v02-folder-ceiling.md`
 - **ContextGem** — framework open-source (Apache-2.0) d'extraction structurée déclarative depuis documents : long-contexte (anti-RAG), références paragraphe/phrase + justifications automatiques, aspects/concepts, pipelines sérialisables.
 - **LLM Wiki (nashsu)** — app desktop (Tauri) implémentant le patron LLM Wiki de Karpathy (Ingest/Query/Lint, `index.md`/`log.md`/`[[wikilinks]]`) : ingest en 2 temps, graphe de pertinence 4-signaux + Louvain + graph insights, API locale/MCP/agent skill. Jumeau packagé d'Inventor.
+- **Turbovec + TurboQuant** — index vectoriel Rust/Python (Ryan Codrai) bâti sur TurboQuant (Google, ICLR 2026) : quantization **data-oblivious sans train**, 16× (10 M docs en 4 Go), kernels CPU-SIMD > FAISS, air-gapped ; la méthode compresse aussi le **KV-cache** (3 bits sans perte). Rouvre le sémantique local frugal (contre-point au « RAG sans vector DB »).
 
 ### library.md — bibliothèques/GLAM, OpenAlex, bibliométrie, patrimoine
 - **OpenAlex snapshot** — snapshot OpenAlex en Parquet (DuckDB/Polars), filtrage par colonnes.
@@ -117,6 +118,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_needle_extraction_notices.md** — extraction de champs de notice avec Needle 2 (grammaire + confidence-gated escalation, CPU).
 - **exp_swarm_notices_p2p.md** — mutualiser le parc d'un établissement (SwarmLLM P2P navigateur) pour l'inférence : débit agrégé vs streaming disque mono-machine.
 - **exp_kg_relevance_lint.md** — graphe de pertinence 4-signaux + Louvain sur `Knowledge/` pour muscler le health-check d'inventor-lint (orphelins/bridge nodes déterministes, sans vector DB).
+- **exp_turbovec_rag_notices.md** — RAG sémantique frugal et local sur un fonds de notices (turbovec 2–4 bit, CPU, air-gapped), comparé/hybridé à l'index FTS5.
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
@@ -130,6 +132,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **lint_2026-08-03.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-08-11.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-12.md** — rapport de health-check du wiki (skill inventor-lint).
+- **lint_2026-09-13.md** — rapport de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).
