@@ -58,6 +58,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **kimi-k3-in-c** — Kimi K3 (2,78 T) en inférence sur 1 CPU / 8,24 Go, C99 mono-fichier 176 Ko : dense résident + experts streamés + MXFP4 sans déquantization (union AirLLM+Colibri).
 - **Needle 2** — modèle ouvert 45M en 14 Mo / ~28 Mo RAM (Cactus) : tool-calling + extraction contraints par grammaire byte-level (conformité au schéma garantie), confidence-gated escalation, mémoire bornée (256 tok + KV sinks), CQ2-bit ; « Simple Attention Network ».
 - **SwarmLLM** — inférence P2P layer-shardée d'un LLM dans des onglets de navigateur : chaque device tient une tranche de couches, activation 10 Ko sur WebRTC ; moteur WebGPU/WGSL maison au memory-roofline, MTP speculative decoding bit-exact ; pooler le parc vs streamer d'un disque.
+- **« System One » / decision models** — catégorie de modèles rendant une **décision typée + probabilité calibrée** en un passage (pas de génération), pour le code : Jev/TypeSafe (propriétaire, RLCD, sampler parallèle), AnyJev/Nokia (transforme tout LLM en décideur, L0/L1/L2 early-exit, CPU, sans train), GLiNER2.5-Decide/Fastino (classifieur encodeur 340M). Apport réel = calibration + contrat de type + seuil d'auto-décision, pas l'archi.
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.
@@ -91,6 +92,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **ideas_2026-08-01.md** — passe 1 « pertinence sans IA » (Deja) : 3 idées (autocomplétion UNIMARC/EAD par score fondu, RAG sans embeddings Deja×Graphify, curseur de flou recall/precision). Passe 2 « frugalité inférence » (AirLLM/Kimi K3) : 3 idées (shards de couches en HF buckets, MoE×AirLLM streaming sélectif, KV-cache streamé). Passe 3 « interface d'agents » (Orca) : 2 idées (fan-out/comparer/fusionner en cartes non-terminal, consensus multi-agent pour QA de notices).
 - **applied_ideas_2026-08-02.md** — lentille lab (opérationnelle) : 4 optimisations appliquées (enrichissement de notices nocturne via Colibri CPU, SLM bibliothécaire distillé, shards AirLLM distants, jeu Q/R biblio synthétique).
 - **ideas_2026-08-03.md** — 4 passes : (Kimi K3) steering de l'état récurrent, steering dans le latent MLA, état-signature de document ; (kimi-k3-in-c) moteur MoE mid-size en C, kernel matmul-nibbles ; (compression) model-native dedans/lisible dehors, notice à deux faces ; (portée large) compression de skills, sonde latente.
+- **applied_ideas_2026-09-13.md** — lentille lab (opérationnelle) : 5 optimisations appliquées du cluster inférence récent (KV-cache 3-bit data-oblivious, RAG hybride FTS5→turbovec, extraction Needle confidence-gated, pool de postes SwarmLLM, graphe 4-signaux pour inventor-lint).
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
@@ -119,6 +121,8 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_swarm_notices_p2p.md** — mutualiser le parc d'un établissement (SwarmLLM P2P navigateur) pour l'inférence : débit agrégé vs streaming disque mono-machine.
 - **exp_kg_relevance_lint.md** — graphe de pertinence 4-signaux + Louvain sur `Knowledge/` pour muscler le health-check d'inventor-lint (orphelins/bridge nodes déterministes, sans vector DB).
 - **exp_turbovec_rag_notices.md** — RAG sémantique frugal et local sur un fonds de notices (turbovec 2–4 bit, CPU, air-gapped), comparé/hybridé à l'index FTS5.
+- **exp_turboquant_kvcache_notices.md** — KV-cache 3-bit data-oblivious (TurboQuant) pour allonger le contexte d'enrichissement à RAM égale, sans entraînement.
+- **exp_decision_model_routing_biblio.md** — routing/classif de demandes biblio par decision model calibré (AnyJev / GLiNER2.5-Decide, CPU) : couverture auto-décidable vs prompt LLM.
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
@@ -133,6 +137,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **lint_2026-08-11.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-12.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-13.md** — rapport de health-check du wiki (skill inventor-lint).
+- **lint_2026-09-25.md** — rapport de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

@@ -330,3 +330,39 @@ Why is it interesting?
 - Fused tiny local LLMs (`../Papers/medium_fused-tiny-local-llms.md`) : autre façon d'assembler plusieurs machines/modèles — ici on **splitte un gros modèle**, là on **fusionne des petits**.
 - HuggingFace ecosystem (ce fichier) : poids/tokenizer Qwen hébergés sur HF, chaque device ne télécharge que ses couches (cachées) — séparer stockage distant et compute local, comme hf-mount.
 - Idée « KV-cache streamé » / frugalité inférence (`../Ideas/ideas_2026-08-01.md`, passe 2) : le vecteur d'activation 10 Ko sur le fil est le pendant *réseau* du streaming ; nouvelle unité à faire circuler.
+
+---
+
+## « System One » / decision models — décisions typées et calibrées en un passage, pour le *code* (pas le chat)
+
+Catégorie émergente de modèles qui, au lieu de *générer du texte*, rendent une **décision typée + une probabilité calibrée** utilisable directement par du logiciel (« un `if` flou »). Trois incarnations complémentaires : **Jev / System One Models** (TypeSafe AI, Diogo Almeida ex-OpenAI — propriétaire, early access), **AnyJev** (Nokia Applied Research, Apache-2.0 — transforme *n'importe quel* LLM ouvert en décideur, sans entraînement), et **GLiNER2.5-Decide** (Fastino, Apache-2.0 — classifieur encodeur 340M DeBERTa-v3, jeu de labels passé à l'appel).
+
+Why is it interesting?
+- **Réponse honnête à « en quoi est-ce différent d'un classifieur encodeur classique ? »** : en grande partie, ça *ne l'est pas*. GLiNER2.5-Decide **est** littéralement un classifieur encodeur zero-shot (DeBERTa, token-classification, un forward, aucun token généré). Le vrai apport n'est pas l'architecture mais **trois emphases** : (1) **probabilité calibrée qu'on peut seuiller** — la métrique qui compte est la « part de trafic auto-décidable à ≤5 % d'erreur » (AnyJev : 7,7 % → 52 % sur BANKING77) ; (2) **sortie typée garantie par schéma** (Jev : « ne peut pas halluciner », zéro type-error) ; (3) **API multi-décisions en un seul passage** (plusieurs « têtes » scorées ensemble). Autrement dit : positionnement produit + calibration + contrat de type, greffés sur de la classification zero-shot déjà connue.
+- **AnyJev = la brique opérationnelle** : lit la distribution du *next-token* sur les tokens-labels en **un prefill**, sans génération ni fine-tuning. **L0** (zéro label : débiaise l'ordre des options par rotation + divise le prior) ; **L1** (température, 100–500 labels) ; **L2** (tête *closed-form* — LDA shrinkée/ridge — sur l'état caché à ~⅔ de la profondeur, résolue en secondes sur CPU, poids gelés ; **coûte 0,68× d'un forward** grâce à l'early-exit, et se re-centre sur trafic *non labellisé* quand la question est reformulée). Un 1,7B à 64 % de sa profondeur atteint le score publié de Jev.
+- **Cas d'usage = décisions dans un pipeline, pas conversation** : router, classer, scorer, extraire, brancher, modérer, **« faut-il passer la main à un humain ? »**, **« l'agent a-t-il fini ? »**. GLiNER2.5-Decide liste tel quel : *type de document*, *genre d'un livre*, tri d'emails, routing de tickets, sévérité, urgence ordinale, question oui/non sur un passage — exactement des tâches de bibliothèque.
+- **Frugal et souverain** : GLiNER2.5-Decide (340M) et AnyJev (petits Qwen3) tournent **sur CPU**, localement, sans API ; la décision calibrée permet d'**automatiser le sûr et d'escalader le douteux** — le même motif « confidence-gated » que Needle 2, mais pour de la *classification/décision*.
+
+### Resources
+
+- https://typesafe.ai/blog/introducing-system-one-models-and-jev (Jev / System One Models ; RLCD, sampler parallèle, sorties type-safe calibrées)
+- https://github.com/nokia-applied-research/AnyJev (Apache-2.0 ; L0/L1/L2, `pip install anyjev`)
+- https://huggingface.co/fastino/GLiNER2.5-Decide (Apache-2.0, 340M DeBERTa-v3 ; GLiNER2, arXiv:2507.18546)
+
+### Takeaway
+
+"Ask any open LLM a typed question and get back a decision with a probability you can threshold, read from one prefill of its next-token distribution. No generation, no parsing, no fine-tuning. [...] the share of traffic you can safely automate goes from 7.7% to 52.0%."
+
+### Questions
+
+- **Est-ce vraiment une nouvelle catégorie ?** GLiNER2.5-Decide = classifieur encodeur ; Jev = modèle dédié + sampler parallèle ; AnyJev = lecture de logits/état caché d'un LLM. Le dénominateur commun réutilisable n'est pas l'archi mais **la calibration + le contrat de type + le seuil d'auto-décision** — à voler indépendamment du modèle.
+- **Router/trier des demandes d'usagers en bibliothèque, calibré et sur CPU** : AnyJev (L2, quelques centaines de labels, tête auto-maintenue) ou GLiNER2.5-Decide (zéro entraînement) pour le tri d'emails, le routing de demandes, le type de document, le genre d'un livre — quelle couverture auto-décidable à risque fixé vs un prompt LLM ? Cf. `../Experiments/exp_decision_model_routing_biblio.md`.
+- **La calibration comme brique transverse** : appliquer le débiais L0 (rotation d'options + prior) + seuil d'auto-décision à *nos* classifications de notices, quel que soit le modèle dessous — même esprit que la confidence-gate de Needle et le score fondu de Deja.
+
+### Random Connections
+
+- **Needle 2** (ce fichier) : cousin direct — sortie **typée/structurée, confidence calibrée, escalader sous seuil**, non conversationnel. Needle contraint par grammaire côté *génération d'appels d'outils* ; les decision models font pareil côté *classification/décision*. Même contrat « le petit décide le sûr, escalade le douteux ».
+- **SLM extraction de propositions atomiques** (ce fichier) : autre SLM spécialiste non-génératif (encodeur/distillé) ; même famille « petit modèle dédié à une tâche structurée » que GLiNER2.5-Decide.
+- **Deja — pertinence par 4 signaux fondus** (`kb.md`) : « décider sans génération, par un score seuillable » ; les decision models ajoutent la *calibration* à cette intuition frugale.
+- **ContextGem** (`kb.md`) : extraction structurée *déclarative* côté gros LLM long-contexte ; ici c'est la **décision** structurée côté petit modèle calibré — deux bouts du « texte → valeur typée ».
+- **fused tiny local LLMs** (`../Papers/medium_fused-tiny-local-llms.md`) : autre voie « exploiter des petits modèles locaux » ; AnyJev exploite en plus l'*état caché* (early-exit) plutôt que les seuls logits de sortie.

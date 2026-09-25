@@ -1,6 +1,6 @@
 # État de l'art — Optimisation de l'inférence & architectures
 
-> Dernière mise à jour : 2026-09-13 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-09-25 · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -35,10 +35,12 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **NoPE + Attention Residuals** — exploratoire — préserver l'accuracy sous forte sparsité/quantization et étendre le contexte (index de séquence implicite ; résidus par attention apprise). — `../Papers/kimi3_architecture_efficiency.md`
 - **SLM on-device contraint par grammaire (Needle 2 / Simple Attention Network)** — émergent — tool-calling + extraction structurée en **14 Mo / ~28 Mo RAM**, décodage contraint par grammaire byte-level (conformité au schéma garantie), confidence-gated (escalade sous seuil), mémoire bornée (fenêtre 256 tokens + KV sinks) ; CQ2-bit, Hadamard MLP + engram KV + GQA + hyper-connections ; extraction = tool-calling avec un seul outil. — `../Inspirations/llm.md`
 - **Inférence P2P layer-shardée dans le navigateur (SwarmLLM)** — émergent — **pooler la mémoire de plusieurs appareils** (portables/téléphones) plutôt que streamer d'un seul disque : chaque device tient une tranche de couches, activation 10 Ko sur WebRTC ; moteur WebGPU maison (~50 kernels WGSL) au memory-roofline (9→16 tok/s spéculatif sur GB10, > llama.cpp natif) ; MTP speculative decoding **bit-exact** ; goulot = prefill série (DeltaNet) + confidentialité des activations entre pairs. — `../Inspirations/llm.md`
+- **Décision typée calibrée non-générative (System One / Jev, AnyJev, GLiNER2.5-Decide)** — émergent — **ne pas générer du tout** : lire en *un seul passage* une décision typée + une probabilité **calibrée seuillable** (distribution next-token sur tokens-labels, ou tête early-exit sur l'état caché). AnyJev L2 = tête closed-form à ~⅔ de la profondeur, **0,68× d'un forward**, CPU, sans entraînement ; GLiNER2.5-Decide = classifieur encodeur 340M (DeBERTa) CPU, labels à l'appel. Pour classer/router/scorer/gater dans un pipeline. Brique réutilisable = calibration + contrat de type + seuil d'auto-décision (l'archi, elle, reste de la classif encodeur). — `../Inspirations/llm.md`
 - **Quantization data-oblivious (TurboQuant / QJL / PolarQuant ; turbovec)** — émergent — compresser KV-cache *et* vecteurs de recherche **sans phase d'entraînement ni calibration sur corpus** : rotation aléatoire → loi par-coordonnée connue → codebook Lloyd-Max calculé par les maths ; distorsion quasi-optimale, overhead des constantes de bloc éliminé (QJL = 1 bit de signe ; PolarQuant = radius+angles). KV-cache à 3 bits sans perte, jusqu'à 8× sur les logits d'attention (H100) ; côté recherche 16× de compression, kernels SIMD CPU > FAISS (turbovec). — `../Inspirations/kb.md`
 - **Infra d'inférence/stockage (HF jobs serving, endpoints, hf-mount)** — établi — servir/stocker à distance, séparer compute et stockage. — `../Inspirations/llm.md`
 
 ## Ce qui a bougé récemment
+- [2026-09-25] Ingest **decision models / « System One »** (Jev/TypeSafe, AnyJev/Nokia, GLiNER2.5-Decide/Fastino) : nouvel axe d'efficacité — **supprimer la génération autorégressive**. Là où Needle 2 *contraint* la génération, ces modèles *lisent* une décision typée calibrée en un passage (AnyJev : tête early-exit à 0,68× d'un forward, CPU, sans entraînement ; GLiNER-Decide : encodeur 340M CPU). Le vrai apport n'est pas l'architecture (GLiNER = classifieur encodeur classique) mais **calibration + contrat de type + seuil d'auto-décision** (part de trafic auto-décidable 7,7 %→52 %). Prolonge la confidence-gate de Needle côté *classification/routing*. Candidat → `../Experiments/exp_decision_model_routing_biblio.md`.
 - [2026-09-13] Passe **lab** : synthèse du cluster récent (Needle 2, SwarmLLM, TurboQuant/turbovec). Deux motifs transverses se dégagent et méritent d'être suivis comme *lois de conception* : (1) **data-oblivious / sans calibration** — TurboQuant compresse KV-cache et vecteurs par les maths, rejoint MXFP4 « ne jamais déquantizer » de Kimi K3 ; (2) **frugal localement, escalader/pooler au besoin** — Needle traite tout et escalade sous seuil de confiance, SwarmLLM mutualise le parc. Retombées appliquées → `../Ideas/applied_ideas_2026-09-13.md`.
 - [2026-09-13] Ingest **TurboQuant / turbovec** : la compression rejoint la fiche par un nouvel angle — **data-oblivious** (calculée par les maths, pas apprise des données), donc *sans train, sans calibration corpus*, reproductible et RGPD-friendly. Une même méthode sert deux fronts : **KV-cache à 3 bits sans perte** (jusqu'à 8× sur les logits d'attention) et **recherche vectorielle frugale** (16×, CPU-SIMD > FAISS). Rejoint la loi « ne jamais déquantizer » (MXFP4 de Kimi K3) et rouvre le débat lexical vs sémantique du côté `kb.md` (le vector DB redevient abordable localement).
 - [2026-09-09] Ingest **SwarmLLM** : ouvre un **axe orthogonal** à tout le reste de la fiche. Jusqu'ici « garder le chaud résident, streamer le froid » depuis le *disque d'une machine* (AirLLM/Colibri/kimi-k3-in-c) ; ici on **répartit les couches sur plusieurs machines** via WebRTC — la ressource mutualisée devient le *parc*, pas le disque local. Confirme aussi WebGPU/WGSL maison comme runtime viable (memory-roofline, > llama.cpp natif sur le même GPU) et le speculative decoding **bit-exact** comme acquis. Deux réserves : prefill série (récurrence Gated-DeltaNet) et activations non privées entre pairs.
@@ -62,6 +64,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - `../Experiments/exp_swarm_notices_p2p.md`
 - `../Experiments/exp_turbovec_rag_notices.md`
 - `../Experiments/exp_turboquant_kvcache_notices.md`
+- `../Experiments/exp_decision_model_routing_biblio.md`
 
 ## Sources dans la base
 - **AirLLM**, **Colibri**, **VLM sans encodeur**, **World models**, **HuggingFace ecosystem** — `../Inspirations/llm.md`
@@ -73,5 +76,6 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Needle 2** (SLM 14 Mo on-device, grammaire byte-level, confidence-gated, CQ2-bit) — `../Inspirations/llm.md`
 - **SwarmLLM** (inférence P2P layer-shardée navigateur/WebRTC, moteur WebGPU/WGSL maison, MTP spéculatif bit-exact) — `../Inspirations/llm.md`
 - **TurboQuant / turbovec** (quantization data-oblivious, KV-cache 3-bit + recherche vectorielle frugale CPU) — `../Inspirations/kb.md`
+- **Decision models / System One** (Jev, AnyJev, GLiNER2.5-Decide : décision typée calibrée non-générative, single-pass/early-exit, CPU) — `../Inspirations/llm.md`
 - **Compression de contexte (Nano-Capsulator, BabelTele)** — `../Inspirations/kb.md` + `../Papers/2402.18700v2.pdf`, `../Papers/2606.19857v1.pdf`
 - _À ingérer :_ Liquid LFM2 encoders (causal decoder → bidirectional encoder) — https://www.liquid.ai/blog/lfm2-5-encoders

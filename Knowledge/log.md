@@ -278,3 +278,17 @@ Autres fiches (pretraining, posttraining, synthetic_data) revues : aucune nouvel
 Synthèse : 2 lois de conception émergentes — (1) data-oblivious / « ne jamais déquantizer » ; (2) frugal localement, escalader/pooler au besoin.
 Sorties : Ideas/applied_ideas_2026-09-13.md (5 idées), Experiments/exp_turboquant_kvcache_notices.md (nouveau).
 NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-09-25] ingest | « System One » / decision models (Jev, AnyJev, GLiNER2.5-Decide)
+Source : https://typesafe.ai/blog/introducing-system-one-models-and-jev + https://github.com/nokia-applied-research/AnyJev + https://huggingface.co/fastino/GLiNER2.5-Decide.
+Classée dans Inspirations/llm.md (nouvelle entrée, une pour la catégorie + les 3 incarnations).
+Lentille opérationnelle : StateOfTheArt/inference_archi.md MàJ en place (nouvelle technique « décision typée calibrée non-générative », entrée datée = axe « ne pas générer du tout », source, date bumpée 2026-09-25) + candidat Experiments/exp_decision_model_routing_biblio.md (routing/classif biblio calibré CPU, couverture auto-décidable vs prompt LLM).
+Note : répond à la question de l'utilisateur « différence avec un classifieur encodeur classique ? » → GLiNER2.5-Decide EST un classifieur encodeur ; l'apport réel = calibration + contrat de type + seuil d'auto-décision, pas l'archi.
+Cross-links : Needle 2 (confidence-gated typé, cousin direct), SLM propositions atomiques (SLM spécialiste non-génératif), Deja (décider par score seuillable sans génération), ContextGem (extraction structurée, autre bout).
+index.md : laissé à inventor-lint.
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-09-25] lint | reindex + health-check
+4 entrées ajoutées (System One/decision models, applied_ideas_2026-09-13, exp_turboquant_kvcache_notices, exp_decision_model_routing_biblio) + ce rapport, 0 retirée ; 3 constats — voir Syntheses/lint_2026-09-25.md.
+Constat clé : cluster « sortie typée + confiance calibrée + escalade sous seuil » (Needle 2 + decision models + Deja) → candidat à une synthèse « décider, pas bavarder ».
+NOTE : pas de commit (l'utilisateur gère git).
