@@ -292,3 +292,55 @@ NOTE : pas de commit (l'utilisateur gère git).
 4 entrées ajoutées (System One/decision models, applied_ideas_2026-09-13, exp_turboquant_kvcache_notices, exp_decision_model_routing_biblio) + ce rapport, 0 retirée ; 3 constats — voir Syntheses/lint_2026-09-25.md.
 Constat clé : cluster « sortie typée + confiance calibrée + escalade sous seuil » (Needle 2 + decision models + Deja) → candidat à une synthèse « décider, pas bavarder ».
 NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-10-02] ingest | Decision models — roster open-weights jev-like (Laya, JevK5, GLiNER2.5-Decide…) — doublon, entrée enrichie
+Source : https://typesafe.ai/blog/introducing-system-one-models-and-jev (déjà ingéré le 2026-09-25).
+Doublon de l'entrée Inspirations/llm.md#System-One-decision-models : enrichie sur l'angle **open-weights** demandé — intro recentrée (Jev = phare propriétaire, écosystème open-weights autour), +1 puce « roster jev-like » (familles GLiNER2.5-Decide 340M/1B/multi, Laya ~421M, JevK5, GLiFormer, SemIf ; AnyJev = adaptateur sans poids), positions de bancs en observation (biais d'auteur signalé), +3 liens Resources (GLiNER-1B, multi-Decide, dataset fast-decisions), +1 Question (quel open-weights pour un fonds FR : GLiNER2.5-multi-Decide vs AnyJev). Aucun nouveau fichier.
+Pas de re-stack SOTA (déjà à jour) ni nouvelle expérience (exp_decision_model_routing_biblio couvre).
+Cross-links inchangés : Needle 2, SLM propositions atomiques, Deja, ContextGem.
+index.md : l'entrée existe déjà au catalogue ; résumé à rafraîchir par inventor-lint (mention open-weights).
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-10-02] lint | reindex + health-check
+0 entrée ajoutée, 0 retirée ; 1 résumé d'index rafraîchi (« System One » / decision models → mention roster open-weights). 3 constats — voir Syntheses/lint_2026-10-02.md.
+Constat clé reconduit : la synthèse « décider, pas bavarder » (Needle 2 + decision models + Deja) est désormais la pièce manquante la plus utile.
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-10-02] synthese | « Décider, pas bavarder » : contrat de type + calibration + seuil d'auto-décision
+Écrit Syntheses/synthese_decider_pas_bavarder.md — note transversale reliant decision models (System One + open-weights), Needle 2, Deja, propositions atomiques, ContextGem autour d'un triplet indépendant du modèle (type + calibration + seuil). Règle biblio : décider par défaut, bavarder seulement si un humain lit ; CPU/local/RGPD. Question ouverte : où placer le seuil d'auto-décision, et sur du français.
+Expériences rattachées : exp_decision_model_routing_biblio, exp_needle_extraction_notices.
+index.md : laissé à inventor-lint (ajouter sous Synthèses).
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-10-02] lint | reindex + health-check (b)
+1 entrée ajoutée (Syntheses/synthese_decider_pas_bavarder.md), 0 retirée ; 3 constats — voir Syntheses/lint_2026-10-02b.md.
+Constat clé : deux notes transversales structurent maintenant la base — « spectre lisible↔model-native » (représentation) et « décider, pas bavarder » (décision).
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-10-02] ideas | passe toute la base (langage clair, sans images)
+6 idées, 6 questions, 5 signaux. Meilleure piste : déduplication sémantique de notices avec turbovec (frugale, CPU, local).
+Sorties : Ideas/ideas_2026-10-02.md, OpenQuestions/open_questions_2026-10-02.md, WeakSignals/weak_signals_2026-10-02.md.
+Idées divergentes (distinctes des idées appliquées du 13-09) : dédup sémantique turbovec ; decision model comme aiguilleur interne des skills ; graphe de collection + détection de lacunes pour acquisitions ; pack d'automatisation biblio en Agent Plugin (MCP SUDOC) ; mutualisation des postes inactifs la nuit ; couche de calibration réutilisable indépendante du modèle.
+index.md : laissé à inventor-lint.
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-11-03] ingest | The JEPA Predictor: A Transferable Operator for Occluded Feature Completion
+Source : https://arxiv.org/abs/2607.16274
+Classée dans Inspirations/llm.md (pas de fulltext).
+Fiche SOTA inference_archi.md MàJ (technique + récent + source) ; candidat Experiments/exp_jepa_predictor_greffe.md.
+Cross-links : World models, « System One » / AnyJev (llm.md), OCR de 30 000 papiers (library.md).
+index.md : laissé à inventor-lint.
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-11-03] ingest | Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights
+Source : https://rikiyat.github.io/blog/weight-space-programming/
+Classée dans Inspirations/llm-training.md (pas de fulltext).
+Fiche SOTA posttraining.md MàJ (technique + récent + question + source) ; candidat Experiments/exp_weight_space_edit_slm.md.
+Cross-links : Le Steering (Papers/iaetbibliotheques_steering.md), Soup (llm-training.md), « System One » / AnyJev (llm.md).
+index.md : laissé à inventor-lint.
+NOTE : pas de commit (l'utilisateur gère git).
+
+## [2026-11-03] lint | reindex + health-check
+7 entrées ajoutées, 0 orpheline retirée, 1 rubrique corrigée (llm.md) ; 3 constats de santé (voir Syntheses/lint_2026-11-03.md).
+Constat clé : la passe ideas du 02-10 (Ideas, OpenQuestions, WeakSignals) n'était pas indexée — corrigé. Cross-links ajoutés : World models → prédicteur JEPA ; Soup → Weight-Space Programming.
+NOTE : pas de commit (l'utilisateur gère git).

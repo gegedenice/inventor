@@ -94,3 +94,38 @@ Why is it interesting?
 - AirLLM / Colibri / kimi-k3-in-c (llm.md) : streaming *à l'inférence* ; Soup apporte l'offloading/streaming *à l'entraînement* — même trend « ne pas tout tenir en mémoire ».
 - Inkling-Small (on-policy distillation) + QAT FP4 (llm-training.md, `../Papers/kimi3_architecture_efficiency.md`) : Soup outille QAT/DPO/distillation — la brique d'exécution de ces recettes.
 - Idée « SLM bibliothécaire distillé » (`../Experiments/exp_distill_slm_bibliothecaire.md`) : Soup rend son lancement trivial.
+- **Weight-Space Programming** (ce fichier) : l'autre bout du spectre — éditer quelques poids sans gradient pour *réparer* un modèle, là où Soup *entraîne*.
+
+---
+
+## Weight-Space Programming — un LLM lit, répare et écrit directement des poids de réseaux
+
+Billet (MIT CSAIL : Rikiya Takehi, Jayden Teoh, Alex Zhang, Omar Khattab, 2 novembre 2026) où un LLM généraliste de pointe (« GPT-6 Astra », non décrit publiquement) raisonne en langage naturel sur des poids bruts pour identifier ce que fait un réseau, le réparer ou l'écrire de zéro — sans descente de gradient.
+
+Why is it interesting?
+- Alternative au post-training : au lieu d'entraîner, *éditer*. Sur Qwen3.5-0.8B, le LLM relie les boucles de génération à une direction dans les MLP des couches 15 et 19, modifie 131 072 poids (0,016 %) avec 50 forward passes : MATH-500 7,9 % → 48,1 %, GSM8K 13,8 % → 67,1 %, IFEval 21,0 % → 62,3 % ; réponses tronquées à la limite de tokens 93 % → 33 %.
+- Lecture des poids : depuis 17 253 poids d'un MLP joueur, il nomme le jeu (4/4) ; il identifie la langue d'entraînement de petits transformers (7,16M) et retrouve leurs têtes de copie ; il ne repère un modèle sycophante qu'avec accès aux patterns d'attention (pas aux poids seuls).
+- Écriture de zéro : des politiques MinAtar écrites en un coup battent parfois PPO entraîné (Breakout 517 vs 25 à 500M pas), pas toujours (Seaquest 53 vs 89).
+- Résultat négatif utile (hypothèse des auteurs) : sur Gemma 3 270M, pas d'amélioration en maths (6,8 % → 7,7 %) — l'édition retire des obstacles, elle n'ajoute pas une capacité absente.
+
+### Resources
+
+- https://rikiyat.github.io/blog/weight-space-programming/
+- Logs, données et scripts : https://github.com/RikiyaT/lm_understand-logs
+- Modèle édité : https://huggingface.co/Qwen/Qwen3.5-0.8B
+
+### Takeaway
+
+"our neural network weights will soon be natively optimized by LLMs"
+
+### Questions
+
+- Un SLM biblio qui boucle ou dérive (normalisation de vedettes, indexation) : un gros LLM peut-il diagnostiquer et corriger la panne dans les poids plutôt que de relancer un fine-tuning ?
+- Renversement : « ne retire que des obstacles » → l'édition de poids comme *réparation* bon marché d'un modèle déjà compétent, le fine-tuning restant nécessaire pour ajouter une compétence ?
+- Reproductibilité : le LLM n'est pas public, les baselines PPO tiennent sur 3 à 10 seeds — que reste-t-il avec un modèle disponible (Claude, open-weights) ? Résultats « very early » selon les auteurs.
+
+### Random Connections
+
+- **Le Steering** (`../Papers/iaetbibliotheques_steering.md`) : même famille « modifier le comportement sans ré-entraîner » ; le steering agit sur les activations à l'inférence, ici l'édition est gravée dans les poids — et la boucle Qwen se ramène à *une direction*, comme un vecteur de steering.
+- **Soup** (ce fichier) : fine-tuning one-command vs édition chirurgicale sans gradient — deux coûts et deux garanties très différents pour adapter un SLM.
+- **« System One » / AnyJev** (`llm.md`) : lire l'état caché d'un modèle pour décider ; ici un LLM lit poids et activations pour diagnostiquer — l'interprétabilité comme outil d'ingénierie.

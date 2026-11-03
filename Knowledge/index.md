@@ -46,7 +46,7 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **Reading Research Papers in the age of LLMs** — techniques de lecture augmentée → fulltext `Papers/medium_reading-research-papers.md`.
 - **OCR de 30 000 papiers par un agent** — pipeline OCR de masse (PDF→Markdown) piloté par Codex : modèle OCR ouvert (Chandra-OCR-2) choisi via leaderboard, HF Jobs serverless + hf-mount/Buckets, ~850 $ vs API ; transposable à l'OCR d'un fonds patrimonial.
 
-### llm.md — pré-entraînement / fine-tuning / architecture
+### llm.md — architecture LLM/SLM/VLM, inférence, runtimes
 - **VLM trained without image encoder** — VLM sans encodeur d'image (embeddings gérés côté décodeur).
 - **World models** — modèles prédisant l'état plutôt que le token (Cosmos, Qwen AgentWorld, JEPA).
 - **SLM pre-training pipeline** — synthèse complète du pré-entraînement SLM, incl. données synthétiques.
@@ -58,12 +58,14 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **kimi-k3-in-c** — Kimi K3 (2,78 T) en inférence sur 1 CPU / 8,24 Go, C99 mono-fichier 176 Ko : dense résident + experts streamés + MXFP4 sans déquantization (union AirLLM+Colibri).
 - **Needle 2** — modèle ouvert 45M en 14 Mo / ~28 Mo RAM (Cactus) : tool-calling + extraction contraints par grammaire byte-level (conformité au schéma garantie), confidence-gated escalation, mémoire bornée (256 tok + KV sinks), CQ2-bit ; « Simple Attention Network ».
 - **SwarmLLM** — inférence P2P layer-shardée d'un LLM dans des onglets de navigateur : chaque device tient une tranche de couches, activation 10 Ko sur WebRTC ; moteur WebGPU/WGSL maison au memory-roofline, MTP speculative decoding bit-exact ; pooler le parc vs streamer d'un disque.
-- **« System One » / decision models** — catégorie de modèles rendant une **décision typée + probabilité calibrée** en un passage (pas de génération), pour le code : Jev/TypeSafe (propriétaire, RLCD, sampler parallèle), AnyJev/Nokia (transforme tout LLM en décideur, L0/L1/L2 early-exit, CPU, sans train), GLiNER2.5-Decide/Fastino (classifieur encodeur 340M). Apport réel = calibration + contrat de type + seuil d'auto-décision, pas l'archi.
+- **« System One » / decision models** — catégorie de modèles rendant une **décision typée + probabilité calibrée** en un passage (pas de génération), pour le code : Jev/TypeSafe (phare propriétaire, RLCD, sampler parallèle) + un **écosystème open-weights jev-like** (famille GLiNER2.5-Decide 340M/1B/multi, Laya ~421M, JevK5, GLiFormer, SemIf ; AnyJev = adaptateur sans poids sur tout LLM, L0/L1/L2 early-exit, CPU, sans train). Apport réel = calibration + contrat de type + seuil d'auto-décision, pas l'archi.
+- **Le prédicteur JEPA, opérateur transplantable** — arXiv 2607.16274 : le prédicteur I-JEPA/V-JEPA 2, d'ordinaire jeté, se greffe gelé sur CLIP/DINOv2/v3/MAE via un pont ridge en forme close (500 images) ; jusqu'à +36 pts sous occlusion contiguë forte, contre-productif à faible masquage.
 
 ### llm-training.md — pré-entraînement / mid-training / post-training
 - **Inkling-Small** — MoE open-weights 276B/12B actifs (Thinking Machines) qui égale Inkling à ¼ de la taille : on-policy distillation + RL, effort de raisonnement variable, multimodal encoder-free.
 - **LLM from scratch** — ressources pédagogiques pour entraîner un (S)LM de bout en bout (LLM Builder app, notebooks Colab, repos GitHub) pour démos de formation.
 - **Soup** — CLI open-source (Apache-2.0) : fine-tuning/post-training « un YAML, une commande » (SFT, DPO/GRPO/PPO…, QLoRA, export GGUF/ONNX/AWQ) ; pile d'efficacité mémoire = pendant *entraînement* du streaming d'inférence ; auto-mitigation du reward hacking en boucle fermée.
+- **Weight-Space Programming** — MIT CSAIL : un LLM de pointe (non public) lit, répare et écrit des poids sans gradient ; Qwen3.5-0.8B débloqué en éditant 0,016 % des poids (GSM8K 13,8 % → 67,1 %) ; échec sur Gemma 3 270M — réparer, pas enseigner.
 
 ### misc.md — divers
 - **autoarxiv** — remplacer `arxiv`→`autoarxiv` dans l'URL pour lancer une repro par agent.
@@ -93,16 +95,19 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **applied_ideas_2026-08-02.md** — lentille lab (opérationnelle) : 4 optimisations appliquées (enrichissement de notices nocturne via Colibri CPU, SLM bibliothécaire distillé, shards AirLLM distants, jeu Q/R biblio synthétique).
 - **ideas_2026-08-03.md** — 4 passes : (Kimi K3) steering de l'état récurrent, steering dans le latent MLA, état-signature de document ; (kimi-k3-in-c) moteur MoE mid-size en C, kernel matmul-nibbles ; (compression) model-native dedans/lisible dehors, notice à deux faces ; (portée large) compression de skills, sonde latente.
 - **applied_ideas_2026-09-13.md** — lentille lab (opérationnelle) : 5 optimisations appliquées du cluster inférence récent (KV-cache 3-bit data-oblivious, RAG hybride FTS5→turbovec, extraction Needle confidence-gated, pool de postes SwarmLLM, graphe 4-signaux pour inventor-lint).
+- **ideas_2026-10-02.md** — passe toute la base : 6 idées (déduplication sémantique de notices avec turbovec, decision model comme aiguilleur interne des skills, graphe de collection + détection de lacunes, pack Agent Plugins avec MCP SUDOC, mutualisation nocturne des postes, couche de calibration indépendante du modèle).
 
 ## Questions ouvertes
 - **open_questions_2026-07-31.md** — 9 questions (composabilité du steering, steering vs fine-tuning, définition de contradiction, tokenizer partagé, world models comme mémoire d'agent, autorité des vedettes générées…).
 - **open_questions_2026-08-01.md** — 5 questions (Markov des zones de catalogage, point de bascule features vs LLM, limites de la similarité sans embeddings, calibrage des crans de flou, demi-vie de récence en bibliothèque).
 - **open_questions_2026-08-03.md** — passes Kimi K3 / kimi-k3-in-c / compression : accès état-latent, seuil MoE mid-size, taxonomie unifiée du streaming, frontière lisible/model-native, texte vs latent…
+- **open_questions_2026-10-02.md** — 6 questions (seuils d'auto-décision par type de champ, seuil de similarité pour la dédup, lacunes réelles ou voulues d'un graphe de collection, redistribution d'un connecteur SUDOC, calibration en français, confidentialité d'un pool de postes).
 
 ## Signaux faibles
 - **weak_signals_2026-07-31.md** — 8 signaux (connaissance = artefact versionné, steering vs fine-tuning, propositions atomiques comme brique centrale, Pi couteau suisse, fusion runtime > merge, delta > temps réel, URL comme interface, le négatif est du signal).
 - **weak_signals_2026-08-01.md** — 5 signaux (« pertinence sans vector DB » comme famille, le contexte courant comme feature, le compromis dans la main de l'usager, modèles de Markov d'actions, frugalité assumée comme position).
 - **weak_signals_2026-08-03.md** — Kimi K3 / kimi-k3-in-c / compression : l'état-latent comme objet de 1re classe, « garder le chaud résident, streamer le froid » comme loi unique, ne jamais déquantizer, découpler lisibilité/décodabilité, spectre lisible↔model-native.
+- **weak_signals_2026-10-02.md** — 5 signaux (calibration + seuil comme brique détachable, le pack/dépôt comme unité, ensemble plat → graphe navigable, data-oblivious comme argument de fiabilité, le non-génératif par défaut pour les tâches internes).
 
 ## Expériences (candidats — skill inventor-lab)
 - **exp_colibri_notices_nocturne.md** — bench débit CPU-only de Colibri pour l'enrichissement nocturne.
@@ -123,6 +128,8 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 - **exp_turbovec_rag_notices.md** — RAG sémantique frugal et local sur un fonds de notices (turbovec 2–4 bit, CPU, air-gapped), comparé/hybridé à l'index FTS5.
 - **exp_turboquant_kvcache_notices.md** — KV-cache 3-bit data-oblivious (TurboQuant) pour allonger le contexte d'enrichissement à RAM égale, sans entraînement.
 - **exp_decision_model_routing_biblio.md** — routing/classif de demandes biblio par decision model calibré (AnyJev / GLiNER2.5-Decide, CPU) : couverture auto-décidable vs prompt LLM.
+- **exp_jepa_predictor_greffe.md** — greffer un prédicteur I-JEPA gelé sur DINOv2-S/CLIP (pont ridge, CPU) sous occlusion contiguë ; transfert vers des scans patrimoniaux lacunaires.
+- **exp_weight_space_edit_slm.md** — réparer un SLM qui boucle par édition de poids guidée par un LLM : repro de l'édition Qwen3.5-0.8B publiée (CPU, GSM8K 100 items), puis tentative avec un LLM disponible.
 
 ## État de l'art (fiches vivantes — skill inventor-lab)
 - **StateOfTheArt/pretraining.md** — pré-entraînement LLM/SLM frugal.
@@ -132,12 +139,15 @@ puis descendre dans le fichier concerné. Mis à jour à chaque ingest.
 
 ## Synthèses
 - **synthese_spectre_lisible_modelnative.md** — note transversale : le spectre lisible ↔ model-native (contexte, skills, mémoire, poids/latent) comme thème unifiant ; règle « source lisible + dérivé compressé ».
+- **synthese_decider_pas_bavarder.md** — note transversale : « décider, pas bavarder » — contrat de type + calibration + seuil d'auto-décision comme triplet unifiant (decision models, Needle 2, Deja, extraction) ; règle biblio « décider par défaut, bavarder si un humain lit ».
 - **lint_2026-08-02.md**, **lint_2026-08-02b.md** — rapports de health-check du wiki (skill inventor-lint).
 - **lint_2026-08-03.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-08-11.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-12.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-13.md** — rapport de health-check du wiki (skill inventor-lint).
 - **lint_2026-09-25.md** — rapport de health-check du wiki (skill inventor-lint).
+- **lint_2026-10-02.md**, **lint_2026-10-02b.md** — rapports de health-check du wiki (skill inventor-lint).
+- **lint_2026-11-03.md** — rapport de health-check du wiki (skill inventor-lint).
 
 ## Dossiers produits par l'agent
 - **Syntheses/**, **Ideas/**, **Experiments/**, **OpenQuestions/**, **WeakSignals/**, **Resources/** — remplis par les passes de synthèse et d'idées (skill `inventor-ideas`).

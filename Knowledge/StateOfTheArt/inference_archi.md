@@ -1,6 +1,6 @@
 # État de l'art — Optimisation de l'inférence & architectures
 
-> Dernière mise à jour : 2026-09-25 · Maintenu par la skill `inventor-lab`
+> Dernière mise à jour : 2026-11-03 · Maintenu par la skill `inventor-lab`
 > **Fiche vivante** : mise à jour *en place* à chaque source pertinente. On révise, on n'empile pas.
 > Contraintes du contexte : CPU only, mémoire réduite (cf. `../00_research_notes.md`).
 
@@ -30,6 +30,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Mémoire croissante pour RNN (Memory Caching)** — émergent — compromis entre récurrence efficace et attention pleine coûteuse. — `../Papers/medium_llm-rnn.md`
 - **Fusion de logits multi-modèles (fused tiny local LLMs)** — émergent — combiner plusieurs petits modèles locaux au niveau des logits. — `../Papers/medium_fused-tiny-local-llms.md`
 - **World models (prédire l'état plutôt que le token)** — exploratoire — Cosmos, Qwen AgentWorld, JEPA. — `../Inspirations/llm.md`
+- **Greffe d'un prédicteur JEPA gelé sur un encodeur tiers** — exploratoire — compléter des features masquées sous occlusion *contiguë* forte (≥ 56 %) sans entraîner aucun poids : pont linéaire ridge en forme close (500 images) entre l'encodeur hôte (CLIP, DINOv2/v3, MAE) et le prédicteur I-JEPA/V-JEPA 2 ; contre-productif à faible masquage sur tâches fines, inopérant en masquage aléatoire. — `../Inspirations/llm.md`
 - **Attention linéaire à état fixe (Kimi Delta Attention, KDA)** — émergent — long contexte à mémoire constante : remplace l'attention standard par un état de taille fixe mis à jour par token ; le KV-cache ne croît plus. Mixé à MLA en 3:1 (3 KDA + 1 Gated MLA pour la récupération exacte). — `../Papers/kimi3_architecture_efficiency.md`
 - **Stable LatentMoE (routage en espace latent compressé)** — émergent — compresser les tokens (hidden→3 584 dims) avant de router aux experts : moins d'activation mémoire et de trafic inter-nœuds ; « obligatoire » au-delà de 1 T params. — `../Papers/kimi3_architecture_efficiency.md`
 - **NoPE + Attention Residuals** — exploratoire — préserver l'accuracy sous forte sparsité/quantization et étendre le contexte (index de séquence implicite ; résidus par attention apprise). — `../Papers/kimi3_architecture_efficiency.md`
@@ -40,6 +41,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **Infra d'inférence/stockage (HF jobs serving, endpoints, hf-mount)** — établi — servir/stocker à distance, séparer compute et stockage. — `../Inspirations/llm.md`
 
 ## Ce qui a bougé récemment
+- [2026-11-03] Ingest **prédicteur JEPA transplantable** (arXiv 2607.16274) : le prédicteur JEPA, d'ordinaire jeté, se réutilise gelé sur d'autres encodeurs via un simple pont ridge (500 images) — jusqu'à +36 pts sur Stanford Dogs à 77 % de masquage. Rejoint le motif « tête closed-form sans entraînement sur modèle gelé » (AnyJev). Observation non reproduite ; le gain est conditionné à l'occlusion contiguë. Candidat → `../Experiments/exp_jepa_predictor_greffe.md`.
 - [2026-09-25] Ingest **decision models / « System One »** (Jev/TypeSafe, AnyJev/Nokia, GLiNER2.5-Decide/Fastino) : nouvel axe d'efficacité — **supprimer la génération autorégressive**. Là où Needle 2 *contraint* la génération, ces modèles *lisent* une décision typée calibrée en un passage (AnyJev : tête early-exit à 0,68× d'un forward, CPU, sans entraînement ; GLiNER-Decide : encodeur 340M CPU). Le vrai apport n'est pas l'architecture (GLiNER = classifieur encodeur classique) mais **calibration + contrat de type + seuil d'auto-décision** (part de trafic auto-décidable 7,7 %→52 %). Prolonge la confidence-gate de Needle côté *classification/routing*. Candidat → `../Experiments/exp_decision_model_routing_biblio.md`.
 - [2026-09-13] Passe **lab** : synthèse du cluster récent (Needle 2, SwarmLLM, TurboQuant/turbovec). Deux motifs transverses se dégagent et méritent d'être suivis comme *lois de conception* : (1) **data-oblivious / sans calibration** — TurboQuant compresse KV-cache et vecteurs par les maths, rejoint MXFP4 « ne jamais déquantizer » de Kimi K3 ; (2) **frugal localement, escalader/pooler au besoin** — Needle traite tout et escalade sous seuil de confiance, SwarmLLM mutualise le parc. Retombées appliquées → `../Ideas/applied_ideas_2026-09-13.md`.
 - [2026-09-13] Ingest **TurboQuant / turbovec** : la compression rejoint la fiche par un nouvel angle — **data-oblivious** (calculée par les maths, pas apprise des données), donc *sans train, sans calibration corpus*, reproductible et RGPD-friendly. Une même méthode sert deux fronts : **KV-cache à 3 bits sans perte** (jusqu'à 8× sur les logits d'attention) et **recherche vectorielle frugale** (16×, CPU-SIMD > FAISS). Rejoint la loi « ne jamais déquantizer » (MXFP4 de Kimi K3) et rouvre le débat lexical vs sémantique du côté `kb.md` (le vector DB redevient abordable localement).
@@ -65,6 +67,7 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - `../Experiments/exp_turbovec_rag_notices.md`
 - `../Experiments/exp_turboquant_kvcache_notices.md`
 - `../Experiments/exp_decision_model_routing_biblio.md`
+- `../Experiments/exp_jepa_predictor_greffe.md`
 
 ## Sources dans la base
 - **AirLLM**, **Colibri**, **VLM sans encodeur**, **World models**, **HuggingFace ecosystem** — `../Inspirations/llm.md`
@@ -78,4 +81,5 @@ _Format : technique — statut — quand l'utiliser — source(s)._
 - **TurboQuant / turbovec** (quantization data-oblivious, KV-cache 3-bit + recherche vectorielle frugale CPU) — `../Inspirations/kb.md`
 - **Decision models / System One** (Jev, AnyJev, GLiNER2.5-Decide : décision typée calibrée non-générative, single-pass/early-exit, CPU) — `../Inspirations/llm.md`
 - **Compression de contexte (Nano-Capsulator, BabelTele)** — `../Inspirations/kb.md` + `../Papers/2402.18700v2.pdf`, `../Papers/2606.19857v1.pdf`
+- **Prédicteur JEPA transplantable** (arXiv 2607.16274 : greffe gelée sur CLIP/DINO/MAE, pont ridge closed-form) — `../Inspirations/llm.md`
 - _À ingérer :_ Liquid LFM2 encoders (causal decoder → bidirectional encoder) — https://www.liquid.ai/blog/lfm2-5-encoders

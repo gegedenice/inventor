@@ -42,6 +42,8 @@ Why is it interesting?
 
 ### Random Connections
 
+- **Le prédicteur JEPA, opérateur transplantable** (ce fichier) : la pièce qui *prédit* l'état masqué d'un JEPA se réutilise seule, gelée, sur d'autres encodeurs.
+
 ---
 
 ## SLM pre-training pipeline
@@ -335,19 +337,22 @@ Why is it interesting?
 
 ## « System One » / decision models — décisions typées et calibrées en un passage, pour le *code* (pas le chat)
 
-Catégorie émergente de modèles qui, au lieu de *générer du texte*, rendent une **décision typée + une probabilité calibrée** utilisable directement par du logiciel (« un `if` flou »). Trois incarnations complémentaires : **Jev / System One Models** (TypeSafe AI, Diogo Almeida ex-OpenAI — propriétaire, early access), **AnyJev** (Nokia Applied Research, Apache-2.0 — transforme *n'importe quel* LLM ouvert en décideur, sans entraînement), et **GLiNER2.5-Decide** (Fastino, Apache-2.0 — classifieur encodeur 340M DeBERTa-v3, jeu de labels passé à l'appel).
+Catégorie émergente de modèles qui, au lieu de *générer du texte*, rendent une **décision typée + une probabilité calibrée** utilisable directement par du logiciel (« un `if` flou »). Le modèle-phare est **Jev / System One Models** (TypeSafe AI, Diogo Almeida ex-OpenAI — propriétaire, early access), mais un **écosystème open-weights « jev-like »** grandit autour (voir le roster plus bas) : on peut faire de la décision calibrée *sans* dépendre de l'API propriétaire.
 
 Why is it interesting?
 - **Réponse honnête à « en quoi est-ce différent d'un classifieur encodeur classique ? »** : en grande partie, ça *ne l'est pas*. GLiNER2.5-Decide **est** littéralement un classifieur encodeur zero-shot (DeBERTa, token-classification, un forward, aucun token généré). Le vrai apport n'est pas l'architecture mais **trois emphases** : (1) **probabilité calibrée qu'on peut seuiller** — la métrique qui compte est la « part de trafic auto-décidable à ≤5 % d'erreur » (AnyJev : 7,7 % → 52 % sur BANKING77) ; (2) **sortie typée garantie par schéma** (Jev : « ne peut pas halluciner », zéro type-error) ; (3) **API multi-décisions en un seul passage** (plusieurs « têtes » scorées ensemble). Autrement dit : positionnement produit + calibration + contrat de type, greffés sur de la classification zero-shot déjà connue.
 - **AnyJev = la brique opérationnelle** : lit la distribution du *next-token* sur les tokens-labels en **un prefill**, sans génération ni fine-tuning. **L0** (zéro label : débiaise l'ordre des options par rotation + divise le prior) ; **L1** (température, 100–500 labels) ; **L2** (tête *closed-form* — LDA shrinkée/ridge — sur l'état caché à ~⅔ de la profondeur, résolue en secondes sur CPU, poids gelés ; **coûte 0,68× d'un forward** grâce à l'early-exit, et se re-centre sur trafic *non labellisé* quand la question est reformulée). Un 1,7B à 64 % de sa profondeur atteint le score publié de Jev.
 - **Cas d'usage = décisions dans un pipeline, pas conversation** : router, classer, scorer, extraire, brancher, modérer, **« faut-il passer la main à un humain ? »**, **« l'agent a-t-il fini ? »**. GLiNER2.5-Decide liste tel quel : *type de document*, *genre d'un livre*, tri d'emails, routing de tickets, sévérité, urgence ordinale, question oui/non sur un passage — exactement des tâches de bibliothèque.
 - **Frugal et souverain** : GLiNER2.5-Decide (340M) et AnyJev (petits Qwen3) tournent **sur CPU**, localement, sans API ; la décision calibrée permet d'**automatiser le sûr et d'escalader le douteux** — le même motif « confidence-gated » que Needle 2, mais pour de la *classification/décision*.
+- **Le roster open-weights « jev-like » (à défaut d'ouvrir Jev lui-même)** : deux voies. (a) **Modèles dédiés** — famille **GLiNER2.5-Decide** (Fastino, Apache-2.0 : 340M, 1B, et **multi** 287M pour le multilingue), **Laya** (~421M, fine-tuné, « Laya Router » dans sa version routing), **JevK5**, **GLiFormer**, **SemIf** (basé Qwen3.5-4B). (b) **Adaptateur sans poids propres** — **AnyJev** greffe le comportement jev sur n'importe quel LLM ouvert. *Observation (à relativiser : chaque banc favorise son auteur)* : sur le banc `fast-decisions` de Fastino (17 domaines, exact-match), GLiNER2.5-Decide 340M ~60 % devance JevK5 ~58 %, SemIf ~56 %, GLiFormer ~49 %, Laya Router ~47 % ; sur le banc `typed-decisions` d'AnyJev, un Laya 421M fine-tuné (~0,77) dépasse le Jev publié (~0,73). Tous Apache-2.0 / open-weights sauf Jev.
 
 ### Resources
 
 - https://typesafe.ai/blog/introducing-system-one-models-and-jev (Jev / System One Models ; RLCD, sampler parallèle, sorties type-safe calibrées)
 - https://github.com/nokia-applied-research/AnyJev (Apache-2.0 ; L0/L1/L2, `pip install anyjev`)
 - https://huggingface.co/fastino/GLiNER2.5-Decide (Apache-2.0, 340M DeBERTa-v3 ; GLiNER2, arXiv:2507.18546)
+- Famille GLiNER2.5-Decide : https://huggingface.co/fastino/GLiNER2.5-Decide-1B · https://huggingface.co/fastino/GLiNER2.5-multi-Decide (multilingue) · banc https://huggingface.co/datasets/fastino/fast-decisions
+- Autres open-weights jev-like cités aux bancs : Laya (~421M, « Laya Router »), JevK5, GLiFormer, SemIf (Qwen3.5-4B)
 
 ### Takeaway
 
@@ -358,6 +363,7 @@ Why is it interesting?
 - **Est-ce vraiment une nouvelle catégorie ?** GLiNER2.5-Decide = classifieur encodeur ; Jev = modèle dédié + sampler parallèle ; AnyJev = lecture de logits/état caché d'un LLM. Le dénominateur commun réutilisable n'est pas l'archi mais **la calibration + le contrat de type + le seuil d'auto-décision** — à voler indépendamment du modèle.
 - **Router/trier des demandes d'usagers en bibliothèque, calibré et sur CPU** : AnyJev (L2, quelques centaines de labels, tête auto-maintenue) ou GLiNER2.5-Decide (zéro entraînement) pour le tri d'emails, le routing de demandes, le type de document, le genre d'un livre — quelle couverture auto-décidable à risque fixé vs un prompt LLM ? Cf. `../Experiments/exp_decision_model_routing_biblio.md`.
 - **La calibration comme brique transverse** : appliquer le débiais L0 (rotation d'options + prior) + seuil d'auto-décision à *nos* classifications de notices, quel que soit le modèle dessous — même esprit que la confidence-gate de Needle et le score fondu de Deja.
+- **Quel open-weights pour un fonds francophone ?** Le banc `fast-decisions` est anglais ; pour des notices/demandes FR, **GLiNER2.5-multi-Decide** (multilingue) ou AnyJev sur un petit LLM multilingue sont les candidats — à départager sur *nos* données plutôt que sur un leaderboard d'auteur. Un modèle dédié (GLiNER) vs un adaptateur (AnyJev sur un LLM qu'on a déjà) : lequel pour quel volume/latence ?
 
 ### Random Connections
 
@@ -366,3 +372,37 @@ Why is it interesting?
 - **Deja — pertinence par 4 signaux fondus** (`kb.md`) : « décider sans génération, par un score seuillable » ; les decision models ajoutent la *calibration* à cette intuition frugale.
 - **ContextGem** (`kb.md`) : extraction structurée *déclarative* côté gros LLM long-contexte ; ici c'est la **décision** structurée côté petit modèle calibré — deux bouts du « texte → valeur typée ».
 - **fused tiny local LLMs** (`../Papers/medium_fused-tiny-local-llms.md`) : autre voie « exploiter des petits modèles locaux » ; AnyJev exploite en plus l'*état caché* (early-exit) plutôt que les seuls logits de sortie.
+
+---
+
+## Le prédicteur JEPA, opérateur transplantable de complétion de features occultées
+
+Article (cs.CV, William Nguyen & Christopher Nguyen, v1 juillet 2026, v3 octobre 2026) montrant que le prédicteur d'I-JEPA / V-JEPA 2, d'habitude jeté après l'entraînement, se greffe gelé sur d'autres encodeurs (CLIP, DINOv2, DINOv3, MAE) pour compléter les patchs masqués.
+
+Why is it interesting?
+- Le « déchet » d'un entraînement devient un module réutilisable : aucun poids n'est entraîné, seule une projection linéaire hôte→prédicteur est calculée en forme close (ridge, λ=1e-2, 500 images ImageNet, quelques secondes).
+- Gain fort sous occlusion lourde : CLIP sur Stanford Dogs passe de 15,9 % à 52,1 % à 77 % de masquage (ImageNet-9 : 73,6 % → 97,1 %) ; le gain croît avec la fraction masquée pour toutes les paires hôte/donneur.
+- Limites nettes et documentées (observation) : gain négatif sur tâche fine à faible masquage (le coût du pont dépasse l'apport), quasi nul pour un masquage aléatoire non contigu, R² du pont faible (≈0,15–0,29), évaluation sur images naturelles seulement.
+- Motif transférable : « pont linéaire en forme close entre deux espaces de représentation gelés » — recette sans entraînement, compatible CPU pour la partie calcul.
+
+### Resources
+
+- https://arxiv.org/abs/2607.16274
+- PDF : https://arxiv.org/pdf/2607.16274v3
+- Pas de dépôt de code indiqué.
+
+### Takeaway
+
+"the frozen JEPA predictor is not specific to JEPA encoders."
+
+### Questions
+
+- Pages numérisées lacunaires (taches, déchirures, reliure, tampons) = occlusion *contiguë* : un prédicteur JEPA greffé améliore-t-il la classification ou le repérage de zones sur ces scans ?
+- Renversement : si le prédicteur est générique, peut-on n'en garder qu'un, partagé entre tous les encodeurs d'une chaîne documentaire ?
+- Équivalent texte : un « prédicteur de contexte masqué » réutilisable pour compléter, dans l'espace d'embeddings, des notices aux champs manquants ?
+
+### Random Connections
+
+- **World models** (ce fichier) : JEPA y figure comme « prédire l'état plutôt que le token » ; ce papier montre que la pièce qui prédit (le prédicteur) a une valeur propre, au-delà de l'encodeur.
+- **« System One » / decision models** (ce fichier) : même motif « tête closed-form, sans entraînement, posée sur un modèle gelé » (AnyJev L2 ↔ pont ridge).
+- **OCR de 30 000 papiers par un agent** (`library.md`) : terrain naturel des occlusions contiguës (scans abîmés) où tester la greffe.
